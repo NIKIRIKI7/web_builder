@@ -6,52 +6,31 @@ import { DND_COMPONENT_ID_KEY } from '@/shared/lib/dnd/keys';
 const canvasStore = useCanvasStore();
 const isDragOver = ref(false);
 
-/**
- * Обрабатывает клик по обертке компонента, устанавливая его как активный.
- * @param instanceId - ID экземпляра компонента.
- */
 function handleComponentClick(instanceId: number) {
   canvasStore.selectComponent(instanceId);
 }
 
-/**
- * Обрабатывает клик по самому холсту (вне компонентов), чтобы снять выделение.
- * @param event - Событие мыши.
- */
 function handleCanvasClick(event: MouseEvent) {
   if (event.target === event.currentTarget) {
     canvasStore.selectComponent(null);
   }
 }
 
-/**
- * Обрабатывает событие, когда перетаскиваемый элемент находится над холстом.
- * @param event - Событие перетаскивания.
- */
 function onDragOver(event: DragEvent) {
   event.preventDefault();
   isDragOver.value = true;
 }
 
-/**
- * Обрабатывает событие, когда перетаскиваемый элемент покидает область холста.
- */
 function onDragLeave() {
   isDragOver.value = false;
 }
 
-/**
- * Обрабатывает событие, когда элемент "брошен" на холст.
- * @param event - Событие перетаскивания.
- */
 function onDrop(event: DragEvent) {
   event.preventDefault();
   isDragOver.value = false;
-  if (event.dataTransfer) {
-    const componentId = event.dataTransfer.getData(DND_COMPONENT_ID_KEY);
-    if (componentId) {
-      canvasStore.addComponent(componentId);
-    }
+  const componentId = event.dataTransfer?.getData(DND_COMPONENT_ID_KEY);
+  if (componentId) {
+    canvasStore.addComponent(componentId);
   }
 }
 </script>
@@ -81,6 +60,7 @@ function onDrop(event: DragEvent) {
                 class="component-wrapper"
                 :class="{ 'component-wrapper--selected': item.instanceId === canvasStore.selectedComponentInstanceId }"
                 @click.stop="handleComponentClick(item.instanceId)"
+                :style="item.styles"
             >
               <component
                   :is="item.componentInfo.component"
@@ -147,7 +127,7 @@ function onDrop(event: DragEvent) {
   cursor: pointer;
   outline: 2px dashed transparent;
   outline-offset: 4px;
-  transition: outline-color 0.2s ease-in-out;
+  transition: outline-color 0.2s ease-in-out, background-color 0.2s, padding 0.2s;
 
   &:not(:last-child) {
     margin-bottom: 20px;

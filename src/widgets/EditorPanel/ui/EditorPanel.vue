@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useCanvasStore } from '@/features/Canvas/model/canvasStore';
 
 const canvasStore = useCanvasStore();
+const activeTab = ref('content'); // 'content' или 'styles'
 
-// --- Computed property для SimpleHeader: Logo Text ---
+// --- ВЫЧИСЛЯЕМЫЕ СВОЙСТВА ДЛЯ КОНТЕНТА ---
 const headerLogoText = computed({
   get: () => canvasStore.selectedComponent?.props.logoText ?? '',
   set: (value) => {
@@ -17,7 +18,6 @@ const headerLogoText = computed({
   },
 });
 
-// --- Computed property для SimpleHeader: Button Text ---
 const headerCtaText = computed({
   get: () => canvasStore.selectedComponent?.props.ctaText ?? '',
   set: (value) => {
@@ -30,7 +30,6 @@ const headerCtaText = computed({
   },
 });
 
-// --- Computed property для SimpleFooter: Copyright Text ---
 const footerCopyrightText = computed({
   get: () => canvasStore.selectedComponent?.props.copyrightText ?? '',
   set: (value) => {
@@ -42,17 +41,64 @@ const footerCopyrightText = computed({
     }
   },
 });
+
+// --- ВЫЧИСЛЯЕМЫЕ СВОЙСТВА ДЛЯ СТИЛЕЙ ---
+const backgroundColor = computed({
+  get: () => canvasStore.selectedComponent?.styles.backgroundColor ?? '#ffffff',
+  set: (value) => {
+    if (canvasStore.selectedComponent) {
+      canvasStore.updateComponentStyles({
+        instanceId: canvasStore.selectedComponent.instanceId,
+        newStyles: { backgroundColor: value },
+      });
+    }
+  },
+});
+
+const createStylePxProperty = (styleName: string) => {
+  return computed({
+    get: () => {
+      const value = canvasStore.selectedComponent?.styles[styleName] ?? '0px';
+      return parseInt(value, 10);
+    },
+    set: (value) => {
+      if (canvasStore.selectedComponent && typeof value === 'number' && !isNaN(value)) {
+        canvasStore.updateComponentStyles({
+          instanceId: canvasStore.selectedComponent.instanceId,
+          newStyles: { [styleName]: `${value}px` },
+        });
+      }
+    },
+  });
+};
+
+const paddingTop = createStylePxProperty('paddingTop');
+const paddingBottom = createStylePxProperty('paddingBottom');
+const paddingLeft = createStylePxProperty('paddingLeft');
+const paddingRight = createStylePxProperty('paddingRight');
+
 </script>
 
 <template>
   <div class="editor-panel">
-    <!-- Блок, который показывается, когда компонент выбран -->
     <div v-if="canvasStore.selectedComponent" class="editor-panel__content">
       <div class="editor-panel__header">
         <h2 class="editor-panel__title">{{ canvasStore.selectedComponent.componentInfo.name }}</h2>
+        <div class="editor-panel__tabs">
+          <button
+              class="editor-panel__tab"
+              :class="{ 'editor-panel__tab--active': activeTab === 'content' }"
+              @click="activeTab = 'content'"
+          >Content</button>
+          <button
+              class="editor-panel__tab"
+              :class="{ 'editor-panel__tab--active': activeTab === 'styles' }"
+              @click="activeTab = 'styles'"
+          >Styles</button>
+        </div>
       </div>
-      <div class="editor-panel__body">
-        <!-- Редактор для Simple Header -->
+
+      <div v-show="activeTab === 'content'" class="editor-panel__body">
         <div v-if="canvasStore.selectedComponent.componentInfo.id === 'simple-header-v1'">
           <div class="editor-panel__property">
             <label class="editor-panel__label">Logo Text</label>
@@ -64,7 +110,6 @@ const footerCopyrightText = computed({
           </div>
         </div>
 
-        <!-- Редактор для Simple Footer -->
         <div v-if="canvasStore.selectedComponent.componentInfo.id === 'simple-footer-v1'">
           <div class="editor-panel__property">
             <label class="editor-panel__label">Copyright Text</label>
@@ -72,9 +117,27 @@ const footerCopyrightText = computed({
           </div>
         </div>
       </div>
+
+      <div v-show="activeTab === 'styles'" class="editor-panel__body">
+        <div class="editor-panel__property">
+          <label class="editor-panel__label">Background Color</label>
+          <div class="editor-panel__color-input-wrapper">
+            <input v-model="backgroundColor" type="color" class="editor-panel__color-input" />
+            <span class="editor-panel__color-value">{{ backgroundColor }}</span>
+          </div>
+        </div>
+        <div class="editor-panel__property">
+          <label class="editor-panel__label">Padding (px)</label>
+          <div class="editor-panel__grid-4">
+            <input v-model.number="paddingTop" type="number" placeholder="Top" class="editor-panel__input" />
+            <input v-model.number="paddingBottom" type="number" placeholder="Bottom" class="editor-panel__input" />
+            <input v-model.number="paddingLeft" type="number" placeholder="Left" class="editor-panel__input" />
+            <input v-model.number="paddingRight" type="number" placeholder="Right" class="editor-panel__input" />
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Блок-плейсхолдер, который показывается, когда ничего не выбрано -->
     <div v-else class="editor-panel__placeholder">
       <div class="editor-panel__placeholder-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path><path d="M12 18h.01"></path><path d="M12 14v-4"></path></svg>
@@ -99,7 +162,7 @@ const footerCopyrightText = computed({
 }
 
 .editor-panel__header {
-  padding: 16px;
+  padding: 16px 16px 0;
   border-bottom: 1px solid $color-border;
   flex-shrink: 0;
 }
@@ -107,6 +170,30 @@ const footerCopyrightText = computed({
 .editor-panel__title {
   font-size: 18px;
   font-weight: 600;
+  padding: 0 0 16px 0;
+}
+
+.editor-panel__tabs {
+  display: flex;
+}
+
+.editor-panel__tab {
+  flex: 1;
+  padding: 10px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #606266;
+  transition: all 0.2s;
+  margin-bottom: -1px;
+
+  &--active {
+    color: #3498db;
+    border-bottom-color: #3498db;
+  }
 }
 
 .editor-panel__body {
@@ -116,15 +203,13 @@ const footerCopyrightText = computed({
 }
 
 .editor-panel__property {
-  display: flex;
-  flex-direction: column;
-
   &:not(:last-child) {
     margin-bottom: 16px;
   }
 }
 
 .editor-panel__label {
+  display: block;
   margin-bottom: 8px;
   font-size: 14px;
   font-weight: 500;
@@ -151,6 +236,47 @@ const footerCopyrightText = computed({
   min-height: 80px;
   resize: vertical;
   font-family: inherit;
+}
+
+.editor-panel__color-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.editor-panel__color-value {
+  font-family: monospace;
+  background-color: $color-bg-primary;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.editor-panel__color-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid $color-border;
+  border-radius: 6px;
+  background-color: transparent;
+  cursor: pointer;
+
+  &::-webkit-color-swatch {
+    border-radius: 5px;
+    border: none;
+  }
+  &::-moz-color-swatch {
+    border-radius: 5px;
+    border: none;
+  }
+}
+
+.editor-panel__grid-4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
 .editor-panel__placeholder {
