@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import TheHeader from '@/widgets/TheHeader/ui/TheHeader.vue';
 import Workspace from '@/widgets/Workspace/ui/Workspace.vue';
+import UiLibrary from '@/widgets/UiLibrary/ui/UiLibrary.vue';
 </script>
 
 <template>
@@ -8,7 +9,7 @@ import Workspace from '@/widgets/Workspace/ui/Workspace.vue';
     <TheHeader />
     <main class="builder-page__main">
       <aside class="builder-page__sidebar builder-page__sidebar--left">
-        <!-- UI Библиотека будет здесь -->
+        <UiLibrary />
       </aside>
       <Workspace class="builder-page__workspace" />
       <aside class="builder-page__sidebar builder-page__sidebar--right">
