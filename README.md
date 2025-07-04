@@ -75,7 +75,7 @@ graph TD
     class Header,Library,Workspace,Editor,Canvas widget
     class E_Component,E_Model,E_Vue entity
     class CanvasStore,LibraryStore,Persist,ExportRenderer,ExportCSS store
-    class F_Search, F_LibraryState feature
+    class F_Search,F_LibraryState feature
 ```
 
 ## Описание Компонентов
