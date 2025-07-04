@@ -1,3 +1,5 @@
+// src/entities/UiComponent/model/libraryComponents.ts
+
 import { defineAsyncComponent } from 'vue';
 import type { UiComponentInfo } from './types';
 
@@ -10,7 +12,6 @@ export const libraryComponents: UiComponentInfo[] = [
         name: 'Simple Header',
         category: 'Headers',
         component: defineAsyncComponent(SimpleHeaderLoader),
-        // Определяем пропсы по умолчанию для хедера
         defaultProps: {
             logoText: 'MyWebsite',
             ctaText: 'Get Started',
@@ -20,16 +21,50 @@ export const libraryComponents: UiComponentInfo[] = [
                 { id: 3, text: 'Contact', url: '#' },
             ]
         },
+        editorTabs: [
+            {
+                name: 'Content',
+                target: 'props',
+                fields: [
+                    { name: 'logoText', label: 'Logo Text', type: 'text' },
+                    { name: 'ctaText', label: 'Button Text', type: 'text' },
+                ]
+            },
+            {
+                name: 'Styles',
+                target: 'styles',
+                fields: [
+                    { name: 'backgroundColor', label: 'Background Color', type: 'color' },
+                    { name: 'paddingTop', label: 'Padding Top (px)', type: 'number' },
+                    { name: 'paddingBottom', label: 'Padding Bottom (px)', type: 'number' },
+                ]
+            }
+        ]
     },
     {
         id: 'simple-footer-v1',
         name: 'Simple Footer',
         category: 'Footers',
         component: defineAsyncComponent(SimpleFooterLoader),
-        // Определяем пропсы по умолчанию для футера
         defaultProps: {
             copyrightText: `© ${new Date().getFullYear()} Web Builder Inc. All rights reserved.`
-        }
+        },
+        editorTabs: [
+            {
+                name: 'Content',
+                target: 'props',
+                fields: [
+                    { name: 'copyrightText', label: 'Copyright Text', type: 'textarea' },
+                ]
+            },
+            {
+                name: 'Styles',
+                target: 'styles',
+                fields: [
+                    { name: 'backgroundColor', label: 'Background Color', type: 'color' },
+                ]
+            }
+        ]
     },
 ];
 
