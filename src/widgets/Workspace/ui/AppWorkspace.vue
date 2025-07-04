@@ -3,13 +3,13 @@ import Canvas from './Canvas.vue';
 </script>
 
 <template>
-  <div class="workspace">
+  <div class="app-workspace">
     <Canvas />
   </div>
 </template>
 
 <style scoped lang="scss">
-.workspace {
+.app-workspace {
   display: flex;
   justify-content: center;
   align-items: flex-start;

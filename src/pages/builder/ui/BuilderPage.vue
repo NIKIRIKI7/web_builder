@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import TheHeader from '@/widgets/TheHeader/ui/TheHeader.vue';
-import Workspace from '@/widgets/Workspace/ui/Workspace.vue';
+// ИЗМЕНЕНИЕ: импортируем переименованный компонент
+import AppWorkspace from '@/widgets/Workspace/ui/AppWorkspace.vue';
 import UiLibrary from '@/widgets/UiLibrary/ui/UiLibrary.vue';
-// 1. Импортируем наш новый виджет
 import EditorPanel from '@/widgets/EditorPanel/ui/EditorPanel.vue';
 </script>
 
@@ -13,9 +13,9 @@ import EditorPanel from '@/widgets/EditorPanel/ui/EditorPanel.vue';
       <aside class="builder-page__sidebar builder-page__sidebar--left">
         <UiLibrary />
       </aside>
-      <Workspace class="builder-page__workspace" />
+      <!-- ИЗМЕНЕНИЕ: используем новый компонент -->
+      <AppWorkspace class="builder-page__workspace" />
       <aside class="builder-page__sidebar builder-page__sidebar--right">
-        <!-- 2. Заменяем комментарий на компонент -->
         <EditorPanel />
       </aside>
     </main>

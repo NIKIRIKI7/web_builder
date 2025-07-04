@@ -14,10 +14,10 @@ const localSearchTerm = computed({
 <template>
   <div class="filter-input">
     <input
+        v-model.trim="localSearchTerm"
         type="text"
         class="filter-input__field"
         placeholder="Search components..."
-        v-model.trim="localSearchTerm"
     />
   </div>
 </template>
