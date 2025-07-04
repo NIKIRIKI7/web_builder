@@ -1,11 +1,6 @@
-
-Архитектура приложения Web Builder 
-
----
-
 # Архитектура Приложения "Web Builder"
 
-Этот документ описывает высокоуровневую архитектуру веб-конструктора. Диаграмма иллюстрирует ключевые компоненты, их взаимодействие и потоки данных в приложении.
+Этот документ описывает высокоуровневую архитектуру созданного нами веб-конструктора. Диаграмма иллюстрирует ключевые компоненты, их взаимодействие и потоки данных в приложении.
 
 ## UML Диаграмма (Mermaid)
 
@@ -46,18 +41,18 @@ graph TD
 
     %% Data Flow & Interactions
     Library -- "Reads list from" --> E_Model
-    Canvas -- "1. Drag & Drop" --> Store
+    Canvas -- "Drag & Drop event" --> Store
     
-    Store -- "2. Provides component list" --> Canvas
+    Store -- "Provides component list" --> Canvas
     Canvas -- "Renders" --> E_Vue
-    Canvas -- "3. Selects component" --> Store
+    Canvas -- "Selects component" --> Store
     
-    Store -- "4. Provides selected data" --> Editor
-    Editor -- "5. Updates props/styles" --> Store
+    Store -- "Provides selected data" --> Editor
+    Editor -- "Updates props/styles" --> Store
     
-    Canvas -- "Updates via vuedraggable" <--> Store
+    Canvas -- "Updates order via vuedraggable" <--> Store
     
-    Header -- "6. Triggers Export Action" --> Store
+    Header -- "Triggers Export Action" --> Store
     Store -- "Uses" --> ExportRenderer
     Store -- "Uses" --> ExportCSS
 
@@ -120,5 +115,3 @@ graph TD
         -   Применяет пользовательские стили.
     -   Собирает весь CSS страницы с помощью утилиты `getCss`.
     -   Формирует финальный `.html` файл и возвращает его в `TheHeader.vue` для скачивания.
-
----
