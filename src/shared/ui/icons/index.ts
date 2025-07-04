@@ -1,2 +1,8 @@
 export { default as HeaderIcon } from './HeaderIcon.vue';
 export { default as FooterIcon } from './FooterIcon.vue';
+export { default as DefaultPreviewIcon } from './DefaultPreviewIcon.vue';
+export { default as AddIcon } from './AddIcon.vue';
+export { default as InfoIcon } from './InfoIcon.vue';
+export { default as DragHandleIcon } from './DragHandleIcon.vue';
+export { default as CloneIcon } from './CloneIcon.vue';
+export { default as DeleteIcon } from './DeleteIcon.vue';

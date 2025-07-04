@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import { useCanvasStore } from '@/features/Canvas/model/canvasStore';
+import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
 import EditorControl from './EditorControl.vue';
+import { InfoIcon } from '@/shared/ui/icons';
 
-const canvasStore = useCanvasStore();
+const canvasManager = useCanvasManager();
 
 const activeTabName = ref('');
-const selectedComponent = computed(() => canvasStore.selectedComponent);
+const selectedComponent = canvasManager.selectedComponent;
 
-watch(selectedComponent, (newComponent) => {
-  if (newComponent?.componentInfo.editorTabs?.length) {
-    activeTabName.value = newComponent.componentInfo.editorTabs[0].name;
+watch(() => canvasManager.selectedComponentInstanceId.value, (newInstanceId) => {
+  if (newInstanceId && selectedComponent.value?.componentInfo.editorTabs?.length) {
+    activeTabName.value = selectedComponent.value.componentInfo.editorTabs[0].name;
   } else {
     activeTabName.value = '';
   }
@@ -23,15 +24,15 @@ function updateValue(target: 'props' | 'styles', fieldName: string, value: any) 
   const payload = { instanceId, newValues: { [fieldName]: value } };
 
   if (target === 'props') {
-    canvasStore.updateComponentProps(payload);
+    canvasManager.updateComponentProps(payload);
   } else {
-    canvasStore.updateComponentStyles(payload);
+    canvasManager.updateComponentStyles(payload);
   }
 }
 
 function handleDelete() {
   if (selectedComponent.value) {
-    canvasStore.deleteComponent(selectedComponent.value.instanceId);
+    canvasManager.deleteComponent(selectedComponent.value.instanceId);
   }
 }
 </script>
@@ -78,7 +79,7 @@ function handleDelete() {
 
     <div v-else class="editor-panel__placeholder">
       <div class="editor-panel__placeholder-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"></path><path d="M12 18h.01"></path><path d="M12 14v-4"></path></svg>
+        <InfoIcon />
       </div>
       <p class="editor-panel__placeholder-text">Select a component to edit</p>
     </div>

@@ -1,130 +1,115 @@
 # Архитектура Приложения "Web Builder"
 
-Этот документ описывает высокоуровневую архитектуру созданного нами веб-конструктора. Диаграмма иллюстрирует ключевые компоненты, их взаимодействие и потоки данных в приложении.
+Этот документ описывает высокоуровневую архитектуру созданного нами веб-конструктора. Диаграмма иллюстрирует ключевые компоненты, их взаимодействие и потоки данных в приложении после проведения рефакторинга.
 
 ## UML Диаграмма (Mermaid)
 
 ```mermaid
 graph TD
-    subgraph "Global State & Logic (Pinia)"
-        CanvasStore[("canvasStore.ts")]
-        LibraryStore[("features/FilterableUiLibrary/model/store.ts")]
-        Persist[("localStorage (via plugin)")]
-        CanvasStore <--> Persist
+    subgraph "UI Layer (Widgets & Pages)"
+        Page[BuilderPage.vue]
+        Header[TheHeader.vue]
+        Library[UiLibrary.vue]
+        Workspace[Workspace.vue]
+        EditorPanel[EditorPanel.vue]
+        Canvas[Canvas.vue]
+
+        Page --> Header & Library & Workspace & EditorPanel
+        Workspace --> Canvas
     end
 
-    subgraph "Features (src/features)"
-        subgraph "FilterableUiLibrary"
-            F_FilterInput[UI: FilterInput.vue]
-            F_LibraryModel[Model: store.ts]
-        end
-        F_FilterInput -- "Updates search term in" --> F_LibraryModel
+    subgraph "Business Logic (Facades & Features)"
+        CanvasManager[("useCanvasManager.ts")]
+        ExportManager[("features/ExportManager")]
+        FilterableLibrary[("features/FilterableUiLibrary")]
     end
 
-    subgraph "Core Entities (src/entities)"
-        E_Component[UiComponent]
-        E_Model[Model: libraryComponents.ts]
-        E_Config[Config: /config/*.ts]
-        E_Vue[UI: SimpleHeader.vue, SimpleFooter.vue]
-        
-        E_Component -- "defined by" --> E_Config
-        E_Model -- "aggregates" --> E_Config
-        E_Component -- "contains" --> E_Vue
-    end
-    
-    subgraph "Main Application (src/app, src/pages)"
-        App[App.vue] --> Page[BuilderPage.vue]
+    subgraph "Data Layer (Pinia & Entities)"
+        CanvasStore[("canvasStore.ts <br/> Raw State")]
+        LibraryStore[(".../store.ts <br/> Raw State")]
+        Persist[("localStorage")]
+        UiComponent[UiComponent Entity]
     end
 
-    subgraph "Widgets (src/widgets)"
-        Page --> Header[TheHeader.vue]
-        Page --> Library[UiLibrary.vue]
-        Page --> Workspace[Workspace.vue]
-        Page --> Editor[EditorPanel.vue]
-    end
-    
-    subgraph "Shared Resources (src/shared)"
-        S_Icons[UI: /icons/*.vue]
-        S_Virtualizer["@tanstack/vue-virtual"]
-        S_FuzzySearch["fuse.js"]
+    subgraph "Shared Resources"
+        SharedIcons[UI: /icons/*.vue]
+        SharedLibs["3rd Party Libs <br/> (fuse.js, vuedraggable, etc.)"]
     end
 
-
-    Workspace --> Canvas[Canvas.vue]
-
-    %% Data Flow & Interactions
-    F_LibraryModel -- "Reads configs from" --> E_Model
-    F_LibraryModel -- "Uses for search" --> S_FuzzySearch
+    %% Interactions
+    Header -- "onExportClick" --> ExportManager
+    ExportManager -- "Gets data from" --> CanvasManager
     
-    Library -- "Includes feature" --> F_FilterInput
-    Library -- "Uses for rendering" --> S_Virtualizer
-    Library -- "Gets flattened list from" --> F_LibraryModel
+    Library -- "Uses feature" --> FilterableLibrary
+    FilterableLibrary -- "Manages state in" --> LibraryStore
+    FilterableLibrary -- "Uses for search" --> SharedLibs
     
-    Canvas -- "Drag & Drop event" --> CanvasStore
-    CanvasStore -- "Provides component list" --> Canvas
-    Canvas -- "Renders" --> E_Vue
-    Canvas -- "Selects component" --> CanvasStore
+    Canvas -- "Interacts with" --> CanvasManager
+    EditorPanel -- "Interacts with" --> CanvasManager
     
-    CanvasStore -- "Provides selected data" --> Editor
-    Editor -- "Updates props/styles" --> CanvasStore
+    CanvasManager -- "Orchestrates logic" --> CanvasStore
     
-    Header -- "Triggers Export Action" --> CanvasStore
-    E_Config -- "uses" --> S_Icons
+    CanvasStore -- "Saves state to" --> Persist
     
-
+    CanvasManager -- "Renders" --> UiComponent
+    UiComponent -- "Uses" --> SharedIcons
+    
     %% Styling
     classDef widget fill:#e1effa,stroke:#a6c5e3,stroke-width:2px;
-    classDef entity fill:#d5fada,stroke:#93e3a4,stroke-width:2px;
+    classDef logic fill:#fce8d5,stroke:#e3b593,stroke-width:2px;
     classDef store fill:#f9f3d5,stroke:#e3d593,stroke-width:2px;
-    classDef feature fill:#fce8d5,stroke:#e3b593,stroke-width:2px;
+    classDef entity fill:#d5fada,stroke:#93e3a4,stroke-width:2px;
     classDef shared fill:#e8d5f9,stroke:#b593e3,stroke-width:2px;
     
-    class Header,Library,Workspace,Editor,Canvas widget
-    class E_Component,E_Model,E_Vue,E_Config entity
-    class CanvasStore,LibraryStore,Persist store
-    class F_FilterInput,F_LibraryModel feature
-    class S_Icons,S_Virtualizer,S_FuzzySearch shared
+    class Page,Header,Library,Workspace,EditorPanel,Canvas widget;
+    class CanvasManager,ExportManager,FilterableLibrary logic;
+    class CanvasStore,LibraryStore,Persist store;
+    class UiComponent entity;
+    class SharedIcons,SharedLibs shared;
 ```
 
-## Описание Компонентов
+## Описание Архитектурных Слоев
 
-### 1. Глобальное Состояние (Pinia)
+### 1. Слой Данных (Data Layer)
 
--   **`canvasStore.ts`**: Мозг приложения, отвечающий за состояние холста. Хранит массив `componentInstances`, `selectedComponentInstanceId` и все `actions` для манипуляции с холстом.
--   **`features/FilterableUiLibrary/model/store.ts`**: Отвечает за состояние панели с компонентами. Хранит исходный список компонентов, поисковый запрос и предоставляет отфильтрованные и **сгруппированные в плоский список** данные для высокопроизводительного виджета. Использует **`fuse.js`** для нечеткого поиска (fuzzy search).
--   **`localStorage`**: Благодаря плагину `pinia-plugin-persistedstate`, состояние `canvasStore` автоматически сохраняется в `localStorage`, обеспечивая персистентность данных между сессиями.
+Этот слой отвечает исключительно за хранение "сырого" состояния. Он не содержит сложной бизнес-логики.
 
-### 2. Features (Фичи)
+-   **`canvasStore.ts` (refactored)**: После рефакторинга стор стал предельно простым. Он хранит только массив `componentInstances` и `selectedComponentInstanceId`. Все сложные геттеры и экшены (`addComponent`, `cloneComponent`) были из него удалены. Его задача — быть "глупым" хранилищем данных.
+-   **`features/FilterableUiLibrary/model/store.ts`**: Аналогично хранит состояние библиотеки: поисковый запрос и список компонентов.
+-   **`UiComponent` (Entity)**: Ключевая бизнес-сущность. Её конфигурация полностью декларативна, а все UI-ресурсы (включая **все иконки**) вынесены в `shared` слой для устранения циклических зависимостей и максимального переиспользования.
 
--   **`FilterableUiLibrary`**: Единая, целостная фича, отвечающая за всю логику библиотеки компонентов.
-    -   **Модель (`store.ts`)**: Является единым источником правды для библиотеки, инкапсулируя логику **нечеткого поиска**, фильтрации и преобразования данных в плоский список для виртуализации.
-    -   **UI (`FilterInput.vue`)**: UI-компонент, предоставляющий поле ввода для поиска и взаимодействующий со `store` для обновления состояния.
+### 2. Слой Бизнес-Логики (Business Logic Layer)
 
-### 3. Основные Виджеты (Widgets)
+Это новый, выделенный слой, который выступает в роли "мозгового центра" приложения. Он изолирует UI от данных.
 
--   **`UiLibrary.vue` (refactored)**: Левая панель. Этот виджет был кардинально переработан и теперь является **высокопроизводительным**. Вместо простого перебора всех элементов он использует библиотеку **`@tanstack/vue-virtual`** для реализации **виртуального скроллинга**. Это означает, что в DOM рендерятся только видимые пользователю элементы, что гарантирует мгновенную работу интерфейса даже с сотнями компонентов в библиотеке.
--   **`EditorPanel.vue`**: Правая панель для редактирования свойств выбранного компонента. Этот виджет является полностью **управляемым данными (data-driven)** и не содержит логики, специфичной для отдельных компонентов.
--   **Другие виджеты**: `TheHeader.vue`, `Workspace.vue`, `Canvas.vue` формируют остальную структуру приложения.
+-   **`useCanvasManager.ts` (new)**: Является **фасадом** для всей логики холста. UI-компоненты (`Canvas.vue`, `EditorPanel.vue`) взаимодействуют только с ним. Он содержит:
+    -   `computed`-свойства для получения обогащенных данных (например, `renderedComponents`).
+    -   Методы (`addComponent`, `cloneComponent`), которые инкапсулируют всю логику по созданию и модификации экземпляров.
+    -   Оркестрирует вызовы к "глупому" `canvasStore` для обновления состояния.
+-   **`features/ExportManager` (new)**: Изолированный модуль, отвечающий только за экспорт. Он не является частью `canvasStore`, что позволяет легко добавлять новые форматы экспорта (например, ZIP, React-проект), не затрагивая ядро приложения.
+-   **`features/FilterableUiLibrary`**: Содержит логику нечеткого поиска (`fuse.js`) и преобразования данных для виртуализированного списка.
 
-### 4. Сущности (Entities)
+### 3. Слой Представления (UI Layer)
 
--   **`UiComponent`**: Ключевая бизнес-сущность. Её структура была улучшена для повышения удобства разработки (DX) и гибкости:
-    -   **Конфигурация (`/config/*.ts`)**: Описание каждого компонента (его `id`, `props`, `editorTabs` и т.д.) вынесено в отдельный файл конфигурации. Это соответствует Принципу единственной ответственности и упрощает добавление новых компонентов.
-    -   **Модель (`libraryComponents.ts`)**: Больше не хранит "сырые" данные, а лишь агрегирует конфигурации из `/config` и создает `Map` для быстрого доступа.
-    -   **Иконки (`shared/ui/icons`)**: Иконки для превью в библиотеке теперь являются независимыми компонентами в `shared` слое, что устраняет циклические зависимости и способствует переиспользованию.
-    -   **Оптимизация**: Все компоненты, передаваемые в конфигурации, обернуты в `markRaw`, чтобы избежать ненужных накладных расходов на реактивность Vue.
+-   **`EditorPanel.vue` (refactored)**: Компонент был улучшен за счет декомпозиции `EditorControl` на мелкие, специализированные компоненты (`TextInput.vue`, `ColorInput.vue` и т.д.), что соответствует **Принципу единственной ответственности**.
+-   **`UiLibrary.vue`**: Высокопроизводительный виджет, использующий **`@tanstack/vue-virtual`** для виртуального скроллинга.
+-   **Иконки (refactored)**: **Все** иконки были вынесены из виджетов и централизованы в `shared/ui/icons`, что делает код виджетов чище и способствует переиспользованию.
 
 ## Потоки Данных (Data Flow)
 
-1.  **Поиск и фильтрация компонентов (new high-performance flow)**:
-    -   Пользователь вводит текст в `FilterInput.vue`.
-    -   Компонент вызывает `action` `setSearchTerm` в `store`.
-    -   `getter` в `store` использует **`fuse.js`** для выполнения нечеткого поиска по списку компонентов.
-    -   Другой `getter` `flatListItems` преобразует отфильтрованные и сгруппированные результаты в **плоский массив**, где каждый элемент является либо заголовком категории, либо рядом с компонентами.
-    -   `UiLibrary.vue` получает этот плоский массив.
-    -   Хук `useVirtualizer` из `@tanstack/vue-virtual` вычисляет, какие элементы из плоского массива видны в данный момент, и передает в шаблон только их.
-    -   Шаблон рендерит минимально необходимое количество DOM-узлов, обеспечивая высочайшую производительность.
+1.  **Поиск и фильтрация компонентов**:
+    -   `FilterInput.vue` -> обновляет `store` библиотеки.
+    -   `store` -> использует `fuse.js` -> отдает `UiLibrary.vue` плоский, виртуализированный список.
+    -   `@tanstack/vue-virtual` рендерит только видимые элементы.
 
-2.  **Добавление компонента**: Пользователь перетаскивает компонент из `UiLibrary.vue`. `Canvas.vue` "ловит" событие и вызывает `action` `addComponent` в `canvasStore`.
+2.  **Добавление и Редактирование компонента (new facade flow)**:
+    -   `Canvas.vue` (UI) вызывает метод `addComponent` у `useCanvasManager` (Logic).
+    -   `useCanvasManager` создает новый экземпляр компонента, используя данные из `UiComponent` (Entity).
+    -   `useCanvasManager` вызывает простой экшен `_addInstance` у `canvasStore` (Data) для сохранения нового экземпляра.
+    -   При редактировании `EditorPanel.vue` вызывает `updateComponentStyles` у `useCanvasManager`, который, в свою очередь, делегирует вызов `canvasStore`.
 
-3.  **Выделение и Редактирование**: Поток данных для редактирования остался прежним (data-driven), где `EditorPanel.vue` динамически рендерит поля на основе метаданных `editorTabs` выбранного компонента.
+3.  **Экспорт (new decoupled flow)**:
+    -   Пользователь нажимает кнопку в `TheHeader.vue`.
+    -   Вызывается функция из модуля `ExportManager`.
+    -   `ExportManager` запрашивает актуальные данные `renderedComponents` у `useCanvasManager`.
+    -   `ExportManager` генерирует HTML-строку и инициирует скачивание файла. Логика стора и холста не затрагивается.

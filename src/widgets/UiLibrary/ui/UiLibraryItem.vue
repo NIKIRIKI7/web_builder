@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { UiComponentInfo } from '@/entities/UiComponent/model/types';
 import { DND_COMPONENT_ID_KEY } from '@/shared/lib/dnd/keys';
-import DefaultPreviewIcon from './DefaultPreviewIcon.vue';
+import { DefaultPreviewIcon } from '@/shared/ui/icons';
 
 const props = defineProps<{
   componentInfo: UiComponentInfo;
@@ -21,7 +21,6 @@ function onDragStart(event: DragEvent) {
       @dragstart="onDragStart"
   >
     <div class="ui-library-item__preview">
-      <!-- Используем динамический компонент для отображения иконки -->
       <component :is="componentInfo.previewIcon || DefaultPreviewIcon" />
     </div>
     <span class="ui-library-item__name">{{ componentInfo.name }}</span>

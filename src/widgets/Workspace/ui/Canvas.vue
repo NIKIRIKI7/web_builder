@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useCanvasStore } from '@/features/Canvas/model/canvasStore';
+import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
 import { DND_COMPONENT_ID_KEY } from '@/shared/lib/dnd/keys';
 import draggable from 'vuedraggable';
+import { AddIcon, DragHandleIcon, CloneIcon, DeleteIcon } from '@/shared/ui/icons';
 
-const canvasStore = useCanvasStore();
+const canvasManager = useCanvasManager();
 const isDragOver = ref(false);
 
 const draggableComponents = computed({
   get() {
-    return canvasStore.renderedComponents;
+    return canvasManager.renderedComponents.value;
   },
   set(newOrder) {
     const newInstances = newOrder.map(item => ({
@@ -18,22 +19,26 @@ const draggableComponents = computed({
       props: item.props,
       styles: item.styles,
     }));
-    canvasStore.setComponentInstances(newInstances);
+    canvasManager.setComponentInstances(newInstances);
   }
 });
 
 function handleComponentClick(instanceId: number) {
-  canvasStore.selectComponent(instanceId);
+  canvasManager.selectComponent(instanceId);
 }
 
 function handleCanvasClick(event: MouseEvent) {
   if (event.target === event.currentTarget) {
-    canvasStore.selectComponent(null);
+    canvasManager.selectComponent(null);
   }
 }
 
+function handleClone(instanceId: number) {
+  canvasManager.cloneComponent(instanceId);
+}
+
 function handleDelete(instanceId: number) {
-  canvasStore.deleteComponent(instanceId);
+  canvasManager.deleteComponent(instanceId);
 }
 
 function onDragOver(event: DragEvent) {
@@ -50,7 +55,7 @@ function onDrop(event: DragEvent) {
   isDragOver.value = false;
   const componentId = event.dataTransfer?.getData(DND_COMPONENT_ID_KEY);
   if (componentId) {
-    canvasStore.addComponent(componentId);
+    canvasManager.addComponent(componentId);
   }
 }
 </script>
@@ -64,9 +69,9 @@ function onDrop(event: DragEvent) {
       @drop="onDrop"
       @click="handleCanvasClick"
   >
-    <div v-if="!canvasStore.renderedComponents.length" class="canvas__placeholder">
+    <div v-if="!canvasManager.renderedComponents.value.length" class="canvas__placeholder">
       <div class="canvas__placeholder-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="8" y1="12" x2="16" y2="12"></line><line x1="12" y1="8" x2="12" y2="16"></line></svg>
+        <AddIcon />
       </div>
       <p class="canvas__placeholder-text">Drag and drop components here</p>
     </div>
@@ -79,26 +84,40 @@ function onDrop(event: DragEvent) {
               class="draggable-container"
               ghost-class="ghost-component"
               animation="200"
+              handle=".component-wrapper__drag-handle"
           >
             <template #item="{ element: item }">
               <div
                   class="component-wrapper"
-                  :class="{ 'component-wrapper--selected': item.instanceId === canvasStore.selectedComponentInstanceId }"
+                  :class="{ 'component-wrapper--selected': item.instanceId === canvasManager.selectedComponentInstanceId.value }"
                   @click.stop="handleComponentClick(item.instanceId)"
-                  :style="item.styles"
               >
-                <button
-                    class="component-wrapper__delete-btn"
-                    title="Delete Component"
-                    @click.stop="handleDelete(item.instanceId)"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                </button>
-                <component
-                    :is="item.componentInfo.component"
-                    class="canvas__component"
-                    v-bind="item.props"
-                />
+                <div class="component-wrapper__controls">
+                  <div class="component-wrapper__drag-handle" title="Drag to reorder">
+                    <DragHandleIcon />
+                  </div>
+                  <button
+                      class="component-wrapper__control-btn component-wrapper__control-btn--clone"
+                      title="Clone Component"
+                      @click.stop="handleClone(item.instanceId)"
+                  >
+                    <CloneIcon />
+                  </button>
+                  <button
+                      class="component-wrapper__control-btn component-wrapper__control-btn--delete"
+                      title="Delete Component"
+                      @click.stop="handleDelete(item.instanceId)"
+                  >
+                    <DeleteIcon />
+                  </button>
+                </div>
+                <div :style="item.styles">
+                  <component
+                      :is="item.componentInfo.component"
+                      class="canvas__component"
+                      v-bind="item.props"
+                  />
+                </div>
                 <div class="component-wrapper__overlay"></div>
               </div>
             </template>
@@ -150,7 +169,6 @@ function onDrop(event: DragEvent) {
   font-size: 16px;
   font-weight: 500;
 }
-
 .draggable-container {
   width: 100%;
 }
@@ -159,58 +177,85 @@ function onDrop(event: DragEvent) {
   background: #c8ebfb;
   border: 2px dashed #3498db;
   border-radius: 4px;
+  & > * {
+    visibility: hidden;
+  }
 }
 .component-wrapper {
   position: relative;
-  cursor: move;
-  outline: 2px dashed transparent;
-  outline-offset: 4px;
-  transition: outline-color 0.2s ease-in-out, background-color 0.2s, padding 0.2s;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition: outline-color 0.2s ease-in-out;
+  border-radius: 4px;
 
   &:not(:last-child) {
     margin-bottom: 20px;
   }
-
-  // ИСПРАВЛЕНИЕ:
-  // 1. Задаем общий стиль для наведения.
   &:hover {
     outline-color: #d5eafb;
   }
-
-  // 2. Задаем стиль для выбранного элемента.
-  // Он будет иметь приоритет над :hover из-за того, что идет позже в коде,
-  // что дает нам желаемый визуальный эффект.
   &--selected {
     outline-color: #3498db;
+    .component-wrapper__controls {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
   }
 }
-
-.component-wrapper__delete-btn {
+.component-wrapper__controls {
   position: absolute;
-  top: -12px;
-  right: -12px;
+  top: -34px;
+  right: 0;
   z-index: 25;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background-color: $color-bg-secondary;
+  border: 1px solid $color-border;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-5px);
+  transition: all 0.2s ease-in-out;
+}
+.component-wrapper:hover .component-wrapper__controls {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.component-wrapper__drag-handle {
+  cursor: grab;
+  color: #606266;
+  padding: 4px;
+  &:active {
+    cursor: grabbing;
+  }
+}
+.component-wrapper__control-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 28px;
   height: 28px;
-  background-color: #f56c6c;
-  color: white;
-  border: 2px solid $color-bg-secondary;
-  border-radius: 50%;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  opacity: 0;
-  transform: scale(0.8);
-  visibility: hidden;
-  transition: all 0.2s ease-in-out;
-}
-.component-wrapper:hover .component-wrapper__delete-btn,
-.component-wrapper--selected .component-wrapper__delete-btn {
-  opacity: 1;
-  transform: scale(1);
-  visibility: visible;
+  background-color: transparent;
+  transition: all 0.2s;
+  color: #606266;
+
+  &:hover {
+    background-color: $color-bg-primary;
+  }
+  &--clone:hover {
+    color: #3498db;
+  }
+  &--delete:hover {
+    color: #f56c6c;
+  }
 }
 .component-wrapper__overlay {
   position: absolute;
@@ -219,6 +264,7 @@ function onDrop(event: DragEvent) {
   width: 100%;
   height: 100%;
   z-index: 10;
+  cursor: pointer;
 }
 .canvas__component {
   pointer-events: none;

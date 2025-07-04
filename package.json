@@ -14,6 +14,7 @@
     "@vue/server-renderer": "^3.5.17",
     "eslint-plugin-prettier": "^5.5.1",
     "fuse.js": "^7.1.0",
+    "klona": "^2.0.6",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.4.1",
     "prettier": "^3.6.2",
@@ -40,5 +41,6 @@
     "vitest": "^3.2.4",
     "vue-eslint-parser": "^10.2.0",
     "vue-tsc": "^2.2.10"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

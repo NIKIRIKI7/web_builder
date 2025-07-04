@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useCanvasStore } from '@/features/Canvas/model/canvasStore';
+// 1. Импортируем нашу новую функцию-экспортер
+import { exportToHtml } from '@/features/ExportManager/model/htmlExporter';
 
 const canvasStore = useCanvasStore();
 
@@ -13,16 +15,14 @@ function downloadFile(filename: string, content: string) {
   document.body.removeChild(element);
 }
 
-/**
- * Обработчик теперь асинхронный
- */
 async function handleExport() {
-  // Добавляем await, чтобы дождаться генерации HTML
-  const htmlContent = await canvasStore.generateHtmlString();
+  // 2. Получаем данные напрямую из геттера стора
+  const componentsToExport = canvasStore.renderedComponents;
+  // 3. Вызываем внешнюю функцию-экспортер, передавая ей данные
+  const htmlContent = await exportToHtml(componentsToExport);
   downloadFile('my-page.html', htmlContent);
 }
 </script>
-
 
 <template>
   <header class="the-header">
@@ -39,7 +39,7 @@ async function handleExport() {
 .the-header {
   display: flex;
   align-items: center;
-  justify-content: space-between; // Располагаем элементы по краям
+  justify-content: space-between;
   flex-shrink: 0;
   height: $header-height;
   padding: 0 24px;
