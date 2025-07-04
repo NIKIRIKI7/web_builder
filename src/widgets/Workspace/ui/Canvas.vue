@@ -6,16 +6,46 @@ import { DND_COMPONENT_ID_KEY } from '@/shared/lib/dnd/keys';
 const canvasStore = useCanvasStore();
 const isDragOver = ref(false);
 
-// ... (функции onDragOver, onDragLeave, onDrop остаются без изменений)
+/**
+ * Обрабатывает клик по обертке компонента, устанавливая его как активный.
+ * @param instanceId - ID экземпляра компонента.
+ */
+function handleComponentClick(instanceId: number) {
+  canvasStore.selectComponent(instanceId);
+}
+
+/**
+ * Обрабатывает клик по самому холсту (вне компонентов), чтобы снять выделение.
+ * @param event - Событие мыши.
+ */
+function handleCanvasClick(event: MouseEvent) {
+  // Проверяем, что клик был именно по холсту, а не по его дочерним элементам.
+  if (event.target === event.currentTarget) {
+    canvasStore.selectComponent(null);
+  }
+}
+
+/**
+ * Обрабатывает событие, когда перетаскиваемый элемент находится над холстом.
+ * @param event - Событие перетаскивания.
+ */
 function onDragOver(event: DragEvent) {
+  // preventDefault() необходим, чтобы разрешить срабатывание события 'drop'.
   event.preventDefault();
   isDragOver.value = true;
 }
 
+/**
+ * Обрабатывает событие, когда перетаскиваемый элемент покидает область холста.
+ */
 function onDragLeave() {
   isDragOver.value = false;
 }
 
+/**
+ * Обрабатывает событие, когда элемент "брошен" на холст.
+ * @param event - Событие перетаскивания.
+ */
 function onDrop(event: DragEvent) {
   event.preventDefault();
   isDragOver.value = false;
@@ -35,8 +65,8 @@ function onDrop(event: DragEvent) {
       @dragover="onDragOver"
       @dragleave="onDragLeave"
       @drop="onDrop"
+      @click="handleCanvasClick"
   >
-    <!-- ИЗМЕНЕНИЕ: Используем геттер `renderedComponents` -->
     <div v-if="!canvasStore.renderedComponents.length" class="canvas__placeholder">
       <div class="canvas__placeholder-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="8" y1="12" x2="16" y2="12"></line><line x1="12" y1="8" x2="12" y2="16"></line></svg>
@@ -44,19 +74,41 @@ function onDrop(event: DragEvent) {
       <p class="canvas__placeholder-text">Drag and drop components here</p>
     </div>
     <template v-else>
-      <!-- ИЗМЕНЕНИЕ: Итерируемся по геттеру `renderedComponents` -->
-      <component
-          :is="item.componentInfo.component"
-          v-for="item in canvasStore.renderedComponents"
-          :key="item.instanceId"
-          class="canvas__component"
-      />
+      <!--
+        Оборачиваем список в <Suspense>.
+        Это необходимо для корректной работы с асинхронными (динамически импортируемыми) компонентами.
+      -->
+      <Suspense>
+        <!-- #default слот рендерится, когда все асинхронные зависимости внутри него загружены -->
+        <template #default>
+          <div> <!-- Suspense требует одного корневого элемента внутри слота -->
+            <div
+                v-for="item in canvasStore.renderedComponents"
+                :key="item.instanceId"
+                class="component-wrapper"
+                :class="{ 'component-wrapper--selected': item.instanceId === canvasStore.selectedComponentInstanceId }"
+                @click.stop="handleComponentClick(item.instanceId)"
+            >
+              <component
+                  :is="item.componentInfo.component"
+                  class="canvas__component"
+              />
+              <div class="component-wrapper__overlay"></div>
+            </div>
+          </div>
+        </template>
+        <!-- #fallback слот показывается, ПОКА асинхронные компоненты загружаются -->
+        <template #fallback>
+          <div class="canvas__loading">
+            Loading Component...
+          </div>
+        </template>
+      </Suspense>
     </template>
   </div>
 </template>
 
 <style scoped lang="scss">
-/* Стили остаются без изменений */
 .canvas {
   width: 100%;
   max-width: 1200px;
@@ -67,13 +119,15 @@ function onDrop(event: DragEvent) {
   position: relative;
   transition: all $transition-duration ease;
   border: 2px dashed transparent;
+  padding: 20px;
 
   &--drag-over {
     border-color: #3498db;
     box-shadow: 0 8px 16px rgba(52, 152, 219, 0.2);
   }
 
-  &__placeholder {
+  &__placeholder,
+  &__loading { // Объединяем стили для плейсхолдера и загрузчика
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -93,9 +147,39 @@ function onDrop(event: DragEvent) {
     font-size: 16px;
     font-weight: 500;
   }
+}
 
-  &__component + &__component {
-    margin-top: 20px;
+.component-wrapper {
+  position: relative;
+  cursor: pointer;
+  outline: 2px dashed transparent;
+  outline-offset: 4px;
+  transition: outline-color 0.2s ease-in-out;
+
+  &:not(:last-child) {
+    margin-bottom: 20px;
   }
+
+  &--selected {
+    outline-color: #3498db;
+  }
+
+  &:hover:not(&--selected) {
+    outline-color: #d5eafb;
+  }
+}
+
+.component-wrapper__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+.canvas__component {
+  pointer-events: none;
+  width: 100%;
 }
 </style>
