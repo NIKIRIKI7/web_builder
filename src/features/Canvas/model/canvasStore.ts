@@ -139,10 +139,15 @@ export const useCanvasStore = defineStore('canvas', {
         /**
          * Заменяет текущий массив компонентов новым.
          * Используется для синхронизации с vuedraggable после сортировки.
-         * @param newInstances - Новый, отсортированный массив экземпляров.
          */
         setComponentInstances(newInstances: CanvasInstanceState[]) {
             this.componentInstances = newInstances;
         }
     },
+
+    /**
+     * Включает сохранение состояния для этого стора в Local Storage.
+     * Требует установки и подключения `pinia-plugin-persistedstate`.
+     */
+    persist: true,
 });
