@@ -4,6 +4,7 @@ import type { UiComponentInfo } from '@/entities/UiComponent/model/types';
 
 /**
  * Описывает состояние одного экземпляра компонента на холсте.
+ * Это "сырые" данные, которые мы храним.
  */
 interface CanvasInstanceState {
     instanceId: number;
@@ -13,7 +14,8 @@ interface CanvasInstanceState {
 }
 
 /**
- * Описывает полный объект компонента, который используется для рендеринга и в редакторе.
+ * Описывает полный, обогащенный объект компонента, который используется
+ * геттерами для передачи в UI (в Canvas и EditorPanel).
  */
 export interface FullRenderedComponent {
     instanceId: number;
@@ -78,7 +80,6 @@ export const useCanvasStore = defineStore('canvas', {
     actions: {
         /**
          * Добавляет новый компонент на холст.
-         * @param componentId - ID компонента из библиотеки.
          */
         addComponent(componentId: string) {
             const componentInfo = componentsMap.get(componentId);
@@ -87,9 +88,7 @@ export const useCanvasStore = defineStore('canvas', {
             const newInstance: CanvasInstanceState = {
                 instanceId: Date.now(),
                 componentId: componentId,
-                // Копируем пропсы по умолчанию
                 props: { ...(componentInfo.defaultProps || {}) },
-                // Инициализируем стили со значениями по умолчанию
                 styles: {
                     backgroundColor: '#ffffff',
                     paddingTop: '20px',
@@ -104,7 +103,6 @@ export const useCanvasStore = defineStore('canvas', {
         },
         /**
          * Устанавливает ID выбранного компонента.
-         * @param instanceId - ID экземпляра или null для снятия выделения.
          */
         selectComponent(instanceId: number | null) {
             this.selectedComponentInstanceId = instanceId;
@@ -126,6 +124,25 @@ export const useCanvasStore = defineStore('canvas', {
             if (component) {
                 component.styles = { ...component.styles, ...payload.newStyles };
             }
+        },
+        /**
+         * Удаляет компонент с холста по его ID.
+         */
+        deleteComponent(instanceId: number) {
+            if (this.selectedComponentInstanceId === instanceId) {
+                this.selectedComponentInstanceId = null;
+            }
+            this.componentInstances = this.componentInstances.filter(
+                (instance) => instance.instanceId !== instanceId
+            );
+        },
+        /**
+         * Заменяет текущий массив компонентов новым.
+         * Используется для синхронизации с vuedraggable после сортировки.
+         * @param newInstances - Новый, отсортированный массив экземпляров.
+         */
+        setComponentInstances(newInstances: CanvasInstanceState[]) {
+            this.componentInstances = newInstances;
         }
     },
 });
