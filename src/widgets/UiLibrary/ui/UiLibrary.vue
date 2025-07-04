@@ -1,20 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { libraryComponents } from '@/entities/UiComponent/model/libraryComponents';
-import type { UiComponentInfo } from '@/entities/UiComponent/model/types';
+import { useUiLibraryStore } from '@/features/UiLibraryState/model/uiLibraryStore';
+import SearchComponents from '@/features/UiLibrarySearch/ui/SearchComponents.vue';
 import UiLibraryItem from './UiLibraryItem.vue';
 
-// Группируем компоненты по категориям для отображения
-const groupedComponents = computed(() => {
-  return libraryComponents.reduce((acc, component) => {
-    const category = component.category;
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(component);
-    return acc;
-  }, {} as Record<string, UiComponentInfo[]>);
-});
+const uiLibraryStore = useUiLibraryStore();
 </script>
 
 <template>
@@ -22,20 +11,28 @@ const groupedComponents = computed(() => {
     <div class="ui-library__header">
       <h2 class="ui-library__title">Components</h2>
     </div>
+    <SearchComponents />
     <div class="ui-library__content">
       <div
-          v-for="(components, category) in groupedComponents"
-          :key="category"
-          class="ui-library__category"
+          v-if="Object.keys(uiLibraryStore.filteredGroupedComponents).length > 0"
       >
-        <h3 class="ui-library__category-title">{{ category }}</h3>
-        <div class="ui-library__list">
-          <UiLibraryItem
-              v-for="component in components"
-              :key="component.id"
-              :component-info="component"
-          />
+        <div
+            v-for="(components, category) in uiLibraryStore.filteredGroupedComponents"
+            :key="category"
+            class="ui-library__category"
+        >
+          <h3 class="ui-library__category-title">{{ category }}</h3>
+          <div class="ui-library__list">
+            <UiLibraryItem
+                v-for="component in components"
+                :key="component.id"
+                :component-info="component"
+            />
+          </div>
         </div>
+      </div>
+      <div v-else class="ui-library__no-results">
+        <p>No components found.</p>
       </div>
     </div>
   </div>
@@ -47,10 +44,10 @@ const groupedComponents = computed(() => {
   flex-direction: column;
   height: 100%;
   color: $color-text-primary;
+  background-color: $color-bg-secondary;
 
   &__header {
     padding: 16px;
-    border-bottom: 1px solid $color-border;
     flex-shrink: 0;
   }
 
@@ -84,6 +81,15 @@ const groupedComponents = computed(() => {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
+  }
+
+  &__no-results {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: #909399;
+    font-size: 15px;
   }
 }
 </style>
