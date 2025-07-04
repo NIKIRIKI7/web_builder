@@ -1,5 +1,12 @@
 <script setup lang="ts">
-defineProps<{ modelValue: string }>();
+// ИСПРАВЛЕНИЕ: Используем withDefaults для защиты от undefined.
+// Если modelValue не будет передан или будет undefined,
+// компонент использует '#000000' в качестве запасного варианта.
+// Это полностью устраняет предупреждение о несоответствии типа.
+withDefaults(defineProps<{ modelValue: string }>(), {
+  modelValue: '#000000',
+});
+
 const emit = defineEmits(['update:modelValue']);
 const onInput = (event: Event) => {
   emit('update:modelValue', (event.target as HTMLInputElement).value);

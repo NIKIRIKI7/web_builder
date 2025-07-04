@@ -1,27 +1,56 @@
+// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\features\ExportManager\model\htmlExporter.ts
 import { createSSRApp } from 'vue';
 import { renderToString } from '@vue/server-renderer';
-import { getDocumentCss } from '@/shared/lib/export/getCss';
-import { stylesObjectToString } from '@/shared/lib/utils';
 import type { FullRenderedComponent } from '@/features/Canvas/model/canvasStore';
+import { generateCssFromComponents } from '@/shared/lib/export/generateCssFromComponents';
+import { getComponentConfig } from '@/entities/UiComponent/model/registry';
+import { generateRuntimeScripts } from '@/shared/lib/sandbox/scriptExecutor';
 
-/**
- * Генерирует полную HTML-строку на основе массива компонентов.
- * @param components - Массив компонентов для рендеринга.
- * @returns Промис, который разрешается в виде готовой HTML-строки.
- */
+async function aggregateStaticCss(components: FullRenderedComponent[]): Promise<string> {
+    if (!components.length) return '';
+
+    const uniqueIds = [...new Set(components.map(c => c.componentInfo.id))];
+    const configs = await Promise.all(uniqueIds.map(id => getComponentConfig(id)));
+
+    const allStaticCss = configs
+        .filter(config => config.staticCss)
+        .map(config => `/* --- Styles for ${config.name} --- */\n${config.staticCss}`);
+
+    return allStaticCss.join('\n\n');
+}
+
 export async function exportToHtml(components: FullRenderedComponent[]): Promise<string> {
+    if (!components.length) {
+        return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Exported Page</title>
+</head>
+<body>
+    <!-- Canvas is empty -->
+</body>
+</html>`;
+    }
+
+    const { allCss: dynamicCss, classMap } = generateCssFromComponents(components);
+
     const renderedComponentsHtml = await Promise.all(
         components.map(async (component) => {
             const app = createSSRApp(component.componentInfo.component, component.props);
             const renderedHtml = await renderToString(app);
-            return `
-      <div style="${stylesObjectToString(component.styles)}">
-        ${renderedHtml}
-      </div>`;
+            const dynamicClassName = classMap.get(component.instanceId) || '';
+            const elementId = `wb-inst-${component.instanceId}`;
+            return `<div id="${elementId}" class="${dynamicClassName}">${renderedHtml}</div>`;
         })
     );
 
-    const allCss = getDocumentCss();
+    const allStaticComponentCss = await aggregateStaticCss(components);
+    const allScripts = generateRuntimeScripts(components);
+
+    const globalWrapperCss = `body { margin: 0; background-color: #f0f2f5; }`;
 
     return `
 <!DOCTYPE html>
@@ -31,12 +60,19 @@ export async function exportToHtml(components: FullRenderedComponent[]): Promise
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Exported Page</title>
     <style>
-        ${allCss}
-        body { margin: 0; background-color: #f0f2f5; }
+        /* --- Global Styles --- */
+        ${globalWrapperCss}
+
+        /* --- Static Component Styles (Auto-aggregated) --- */
+        ${allStaticComponentCss}
+
+        /* --- Dynamically Generated Styles --- */
+        ${dynamicCss}
     </style>
 </head>
 <body>
     ${renderedComponentsHtml.join('\n')}
+    ${allScripts}
 </body>
 </html>`;
 }

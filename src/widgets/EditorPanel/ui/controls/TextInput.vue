@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import { debounce } from '@/shared/lib/utils';
+
 defineProps<{ modelValue: string }>();
 const emit = defineEmits(['update:modelValue']);
-const onInput = (event: Event) => {
+
+// ИЗМЕНЕНИЕ: Применяем debounce прямо здесь, в дочернем компоненте.
+const onInput = debounce((event: Event) => {
   emit('update:modelValue', (event.target as HTMLInputElement).value);
-};
+}, 300);
 </script>
 
 <template>

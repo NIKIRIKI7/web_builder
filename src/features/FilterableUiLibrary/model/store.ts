@@ -1,17 +1,18 @@
+// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\features\FilterableUiLibrary\model\store.ts
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
-import Fuse from 'fuse.js';
-import { libraryComponents } from '@/entities/UiComponent/model/libraryComponents';
-import type { UiComponentInfo } from '@/entities/UiComponent/model/types';
+import Fuse, { type FuseResult } from 'fuse.js';
+import { libraryPreviews } from '@/entities/UiComponent/model/registry';
+import type { UiComponentPreview } from '@/entities/UiComponent/model/types';
 
-type GroupedComponents = Record<string, UiComponentInfo[]>;
+type GroupedComponents = Record<string, UiComponentPreview[]>;
 
 export type LibraryListItem =
     | { type: 'category'; key: string; name: string }
-    | { type: 'component_row'; key: string; items: UiComponentInfo[] };
+    | { type: 'component_row'; key: string; items: UiComponentPreview[] };
 
 export const useFilterableLibraryStore = defineStore('filterableUiLibrary', () => {
-    const components = ref<UiComponentInfo[]>(libraryComponents);
+    const components = ref<UiComponentPreview[]>(libraryPreviews);
     const searchTerm = ref('');
 
     const fuse = new Fuse(components.value, {
@@ -19,22 +20,16 @@ export const useFilterableLibraryStore = defineStore('filterableUiLibrary', () =
         threshold: 0.4,
     });
 
-    const setComponents = (newComponents: UiComponentInfo[]) => {
-        components.value = newComponents;
-    };
-
     const setSearchTerm = (term: string) => {
         searchTerm.value = term.toLowerCase();
     };
 
     const filteredGroupedComponents = computed((): GroupedComponents => {
-        const filtered: UiComponentInfo[] = searchTerm.value === ''
+        const filtered: UiComponentPreview[] = searchTerm.value === ''
             ? components.value
-            // ИЗМЕНЕНИЕ 1: Явно типизируем параметр 'result'
-            : fuse.search(searchTerm.value).map((result: Fuse.FuseResult<UiComponentInfo>) => result.item);
+            : fuse.search(searchTerm.value).map((result: FuseResult<UiComponentPreview>) => result.item);
 
-        // ИЗМЕНЕНИЕ 2: Явно типизируем параметры 'acc' и 'component'
-        return filtered.reduce((acc: GroupedComponents, component: UiComponentInfo) => {
+        return filtered.reduce((acc: GroupedComponents, component: UiComponentPreview) => {
             const { category } = component;
             if (!acc[category]) {
                 acc[category] = [];
@@ -72,8 +67,6 @@ export const useFilterableLibraryStore = defineStore('filterableUiLibrary', () =
     return {
         searchTerm,
         setSearchTerm,
-        setComponents,
-        filteredGroupedComponents,
         flatListItems,
     };
 });

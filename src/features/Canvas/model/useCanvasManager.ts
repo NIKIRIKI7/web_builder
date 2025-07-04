@@ -1,26 +1,27 @@
+// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\features\Canvas\model\useCanvasManager.ts
 import { computed } from 'vue';
-import { useCanvasStore, type FullRenderedComponent } from './canvasStore';
-import { componentsMap } from '@/entities/UiComponent/model/libraryComponents';
+import { useCanvasStore, type FullRenderedComponent, type CanvasInstanceState } from './canvasStore';
+import { getComponentConfig, getCachedComponentConfig } from '@/entities/UiComponent/model/registry';
 import { klona } from 'klona/lite';
 
 export function useCanvasManager() {
     const store = useCanvasStore();
 
-    // --- COMPUTED (бывшие геттеры) ---
-
     const renderedComponents = computed((): FullRenderedComponent[] => {
         return store.componentInstances.map((instance) => {
-            const componentInfo = componentsMap.get(instance.componentId);
+            const componentInfo = getCachedComponentConfig(instance.componentId);
             if (!componentInfo) {
-                console.error(`Component with id ${instance.componentId} not found in map.`);
+                console.error(`Config for component id ${instance.componentId} not preloaded. Canvas may not render correctly.`);
                 return null;
             }
-            return {
+            const renderedComponent: FullRenderedComponent = {
                 instanceId: instance.instanceId,
                 componentInfo: componentInfo,
                 props: instance.props,
                 styles: instance.styles,
+                scripts: instance.scripts || [],
             };
+            return renderedComponent;
         }).filter((c): c is FullRenderedComponent => c !== null);
     });
 
@@ -33,17 +34,32 @@ export function useCanvasManager() {
         ) || null;
     });
 
-    // --- ACTIONS (сложная логика) ---
+    const draggableComponents = computed<FullRenderedComponent[]>({
+        get() {
+            return renderedComponents.value;
+        },
+        set(newOrder: FullRenderedComponent[]) {
+            const newInstances: CanvasInstanceState[] = newOrder.map(c => ({
+                instanceId: c.instanceId,
+                componentId: c.componentInfo.id,
+                props: c.props,
+                styles: c.styles,
+                scripts: c.scripts,
+            }));
+            store.setComponentInstances(newInstances);
+        }
+    });
 
-    function addComponent(componentId: string) {
-        const componentInfo = componentsMap.get(componentId);
+    async function addComponent(componentId: string) {
+        const componentInfo = await getComponentConfig(componentId);
         if (!componentInfo) return;
 
-        const newInstance = {
+        const newInstance: CanvasInstanceState = {
             instanceId: Date.now(),
             componentId: componentId,
             props: klona(componentInfo.defaultProps || {}),
             styles: klona(componentInfo.defaultStyles || {}),
+            scripts: [],
         };
 
         store._addInstance(newInstance);
@@ -70,22 +86,27 @@ export function useCanvasManager() {
         store.selectComponent(newInstance.instanceId);
     }
 
+    async function preloadCanvasConfigs() {
+        if (store.componentInstances.length === 0) return;
+        const uniqueIds = [...new Set(store.componentInstances.map(i => i.componentId))];
+        await Promise.all(uniqueIds.map(id => getComponentConfig(id)));
+    }
+
     return {
-        // --- State / Computed ---
         renderedComponents,
         selectedComponent,
-        // Прокидываем ID для прямого доступа, если нужно
+        draggableComponents,
         selectedComponentInstanceId: computed(() => store.selectedComponentInstanceId),
-
-        // --- Actions ---
         addComponent,
         cloneComponent,
-
-        // --- Пере-экспорт простых экшенов из стора ---
+        preloadCanvasConfigs,
         selectComponent: store.selectComponent,
         updateComponentProps: store.updateComponentProps,
         updateComponentStyles: store.updateComponentStyles,
         deleteComponent: store.deleteComponent,
         setComponentInstances: store.setComponentInstances,
+        addScript: store.addScript,
+        updateScript: store.updateScript,
+        deleteScript: store.deleteScript,
     };
 }

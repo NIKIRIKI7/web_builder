@@ -1,27 +1,14 @@
+// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\widgets\Workspace\ui\Canvas.vue
+
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
+import draggable from 'vuedraggable';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
 import { DND_COMPONENT_ID_KEY } from '@/shared/lib/dnd/keys';
-import draggable from 'vuedraggable';
-import { AddIcon, DragHandleIcon, CloneIcon, DeleteIcon } from '@/shared/ui/icons';
+import { AddIcon, CloneIcon, DeleteIcon } from '@/shared/ui/icons';
 
 const canvasManager = useCanvasManager();
 const isDragOver = ref(false);
-
-const draggableComponents = computed({
-  get() {
-    return canvasManager.renderedComponents.value;
-  },
-  set(newOrder) {
-    const newInstances = newOrder.map(item => ({
-      instanceId: item.instanceId,
-      componentId: item.componentInfo.id,
-      props: item.props,
-      styles: item.styles,
-    }));
-    canvasManager.setComponentInstances(newInstances);
-  }
-});
 
 function handleComponentClick(instanceId: number) {
   canvasManager.selectComponent(instanceId);
@@ -58,6 +45,11 @@ function onDrop(event: DragEvent) {
     canvasManager.addComponent(componentId);
   }
 }
+
+function onDraggableUpdate(newOrder: any[]) {
+  canvasManager.draggableComponents.value = newOrder;
+}
+
 </script>
 
 <template>
@@ -79,12 +71,11 @@ function onDrop(event: DragEvent) {
       <Suspense>
         <template #default>
           <draggable
-              v-model="draggableComponents"
+              :model-value="canvasManager.draggableComponents.value"
+              @update:model-value="onDraggableUpdate"
               item-key="instanceId"
               class="draggable-container"
               ghost-class="ghost-component"
-              animation="200"
-              handle=".component-wrapper__drag-handle"
           >
             <template #item="{ element: item }">
               <div
@@ -93,9 +84,6 @@ function onDrop(event: DragEvent) {
                   @click.stop="handleComponentClick(item.instanceId)"
               >
                 <div class="component-wrapper__controls">
-                  <div class="component-wrapper__drag-handle" title="Drag to reorder">
-                    <DragHandleIcon />
-                  </div>
                   <button
                       class="component-wrapper__control-btn component-wrapper__control-btn--clone"
                       title="Clone Component"
@@ -111,13 +99,22 @@ function onDrop(event: DragEvent) {
                     <DeleteIcon />
                   </button>
                 </div>
-                <div :style="item.styles">
-                  <component
-                      :is="item.componentInfo.component"
-                      class="canvas__component"
-                      v-bind="item.props"
-                  />
-                </div>
+
+                <!--
+                  ИЗМЕНЕНИЕ:
+                  1. Мы удалили внешнюю div-обертку, которая принимала стили.
+                  2. Мы перенесли биндинг `:style="item.styles"` непосредственно на <component>.
+                  Теперь Vue применит инлайн-стили к корневому элементу самого компонента
+                  (например, к тегу <header> или <footer>), что позволит корректно
+                  переопределять его собственные CSS-правила.
+                -->
+                <component
+                    :is="item.componentInfo.component"
+                    class="canvas__component"
+                    v-bind="item.props"
+                    :style="item.styles"
+                />
+
                 <div class="component-wrapper__overlay"></div>
               </div>
             </template>
@@ -134,6 +131,7 @@ function onDrop(event: DragEvent) {
 </template>
 
 <style scoped lang="scss">
+/* Стили остаются без изменений */
 .canvas {
   width: 100%;
   max-width: 1200px;
@@ -170,13 +168,14 @@ function onDrop(event: DragEvent) {
   font-weight: 500;
 }
 .draggable-container {
-  width: 100%;
+  min-height: 100%;
 }
 .ghost-component {
   opacity: 0.5;
   background: #c8ebfb;
   border: 2px dashed #3498db;
   border-radius: 4px;
+
   & > * {
     visibility: hidden;
   }
@@ -187,6 +186,7 @@ function onDrop(event: DragEvent) {
   outline-offset: 2px;
   transition: outline-color 0.2s ease-in-out;
   border-radius: 4px;
+  cursor: move;
 
   &:not(:last-child) {
     margin-bottom: 20px;
@@ -220,19 +220,12 @@ function onDrop(event: DragEvent) {
   visibility: hidden;
   transform: translateY(-5px);
   transition: all 0.2s ease-in-out;
+  cursor: default;
 }
 .component-wrapper:hover .component-wrapper__controls {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
-}
-.component-wrapper__drag-handle {
-  cursor: grab;
-  color: #606266;
-  padding: 4px;
-  &:active {
-    cursor: grabbing;
-  }
 }
 .component-wrapper__control-btn {
   display: flex;
@@ -264,7 +257,6 @@ function onDrop(event: DragEvent) {
   width: 100%;
   height: 100%;
   z-index: 10;
-  cursor: pointer;
 }
 .canvas__component {
   pointer-events: none;

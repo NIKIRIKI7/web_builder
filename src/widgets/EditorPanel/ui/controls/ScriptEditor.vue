@@ -1,20 +1,18 @@
+// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\widgets\EditorPanel\ui\controls\ScriptEditor.vue
 <script setup lang="ts">
-import { debounce } from '@/shared/lib/utils';
-
 defineProps<{ modelValue: string }>();
 const emit = defineEmits(['update:modelValue']);
-
-// ИЗМЕНЕНИЕ: Аналогично TextInput, добавляем debounce.
-const onInput = debounce((event: Event) => {
+const onInput = (event: Event) => {
   emit('update:modelValue', (event.target as HTMLTextAreaElement).value);
-}, 300);
+};
 </script>
 
 <template>
   <textarea
       :value="modelValue"
-      class="editor-control__input editor-control__textarea"
+      class="editor-control__input script-editor"
       @input="onInput"
+      placeholder="e.g., alert('Header clicked!');"
   ></textarea>
 </template>
 
@@ -25,8 +23,9 @@ const onInput = debounce((event: Event) => {
   font-size: 14px;
   border: 1px solid $color-border;
   border-radius: 4px;
-  background-color: $color-bg-secondary;
-  color: $color-text-primary;
+  background-color: #2d2d2d; // Темный фон для кода
+  color: #f8f8f2; // Светлый текст
+  font-family: 'Courier New', Courier, monospace;
   transition: border-color 0.2s;
 
   &:focus {
@@ -35,9 +34,8 @@ const onInput = debounce((event: Event) => {
   }
 }
 
-.editor-control__textarea {
-  min-height: 80px;
+.script-editor {
+  min-height: 150px;
   resize: vertical;
-  font-family: inherit;
 }
 </style>

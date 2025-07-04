@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useCanvasStore } from '@/features/Canvas/model/canvasStore';
-// 1. Импортируем нашу новую функцию-экспортер
+import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
 import { exportToHtml } from '@/features/ExportManager/model/htmlExporter';
 
-const canvasStore = useCanvasStore();
+// Создаем экземпляр фасада для управления холстом.
+const canvasManager = useCanvasManager();
 
 function downloadFile(filename: string, content: string) {
   const element = document.createElement('a');
@@ -16,9 +16,11 @@ function downloadFile(filename: string, content: string) {
 }
 
 async function handleExport() {
-  // 2. Получаем данные напрямую из геттера стора
-  const componentsToExport = canvasStore.renderedComponents;
-  // 3. Вызываем внешнюю функцию-экспортер, передавая ей данные
+  // Получаем данные из computed-свойства фасада, используя .value.
+  // Это гарантирует, что мы работаем с актуальным и правильно сформированным массивом.
+  const componentsToExport = canvasManager.renderedComponents.value;
+
+  // Вызываем внешнюю функцию-экспортер, передавая ей данные.
   const htmlContent = await exportToHtml(componentsToExport);
   downloadFile('my-page.html', htmlContent);
 }

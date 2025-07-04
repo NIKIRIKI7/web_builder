@@ -1,11 +1,20 @@
+// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\features\Canvas\model\canvasStore.ts
 import { defineStore } from 'pinia';
 import type { UiComponentInfo } from '@/entities/UiComponent/model/types';
 
-interface CanvasInstanceState {
+export interface ComponentScript {
+    id: string;
+    eventName: string;
+    targetSelector: string; // CSS-селектор для дочернего элемента
+    code: string;
+}
+
+export interface CanvasInstanceState {
     instanceId: number;
     componentId: string;
     props: Record<string, any>;
     styles: Record<string, any>;
+    scripts: ComponentScript[];
 }
 
 export interface FullRenderedComponent {
@@ -13,6 +22,7 @@ export interface FullRenderedComponent {
     componentInfo: UiComponentInfo;
     props: Record<string, any>;
     styles: Record<string, any>;
+    scripts: ComponentScript[];
 }
 
 interface CanvasState {
@@ -25,7 +35,6 @@ export const useCanvasStore = defineStore('canvas', {
         componentInstances: [],
         selectedComponentInstanceId: null,
     }),
-
 
     actions: {
         _addInstance(instance: CanvasInstanceState) {
@@ -50,6 +59,39 @@ export const useCanvasStore = defineStore('canvas', {
             }
         },
 
+        addScript(instanceId: number) {
+            const component = this.componentInstances.find(c => c.instanceId === instanceId);
+            if (component) {
+                const newScript: ComponentScript = {
+                    id: `script_${Date.now()}`,
+                    eventName: 'click',
+                    targetSelector: '',
+                    code: `// 'element' is the DOM element this script is attached to.\n// 'api' provides safe methods to interact with the component.\n\nalert('Element clicked!');`
+                };
+                if (!component.scripts) {
+                    component.scripts = [];
+                }
+                component.scripts.push(newScript);
+            }
+        },
+
+        updateScript(payload: { instanceId: number; script: ComponentScript }) {
+            const component = this.componentInstances.find(c => c.instanceId === payload.instanceId);
+            if (!component || !component.scripts) return;
+
+            const scriptIndex = component.scripts.findIndex(s => s.id === payload.script.id);
+            if (scriptIndex !== -1) {
+                component.scripts[scriptIndex] = payload.script;
+            }
+        },
+
+        deleteScript(payload: { instanceId: number; scriptId: string }) {
+            const component = this.componentInstances.find(c => c.instanceId === payload.instanceId);
+            if (component && component.scripts) {
+                component.scripts = component.scripts.filter(s => s.id !== payload.scriptId);
+            }
+        },
+
         deleteComponent(instanceId: number) {
             if (this.selectedComponentInstanceId === instanceId) {
                 this.selectedComponentInstanceId = null;
@@ -59,7 +101,6 @@ export const useCanvasStore = defineStore('canvas', {
             );
         },
 
-        // Этот экшен важен для drag-and-drop
         setComponentInstances(newInstances: CanvasInstanceState[]) {
             this.componentInstances = newInstances;
         },

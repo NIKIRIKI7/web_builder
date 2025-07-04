@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
+import type { ComponentScript } from '@/features/Canvas/model/canvasStore';
 import EditorControl from './EditorControl.vue';
+import ScriptManager from './ScriptManager.vue';
 import { InfoIcon } from '@/shared/ui/icons';
 
 const canvasManager = useCanvasManager();
-
 const activeTabName = ref('');
 const selectedComponent = canvasManager.selectedComponent;
 
@@ -19,15 +20,26 @@ watch(() => canvasManager.selectedComponentInstanceId.value, (newInstanceId) => 
 
 function updateValue(target: 'props' | 'styles', fieldName: string, value: any) {
   if (!selectedComponent.value) return;
-
   const { instanceId } = selectedComponent.value;
   const payload = { instanceId, newValues: { [fieldName]: value } };
-
   if (target === 'props') {
     canvasManager.updateComponentProps(payload);
   } else {
     canvasManager.updateComponentStyles(payload);
   }
+}
+
+function handleAddScript() {
+  if (!selectedComponent.value) return;
+  canvasManager.addScript(selectedComponent.value.instanceId);
+}
+function handleUpdateScript(script: ComponentScript) {
+  if (!selectedComponent.value) return;
+  canvasManager.updateScript({ instanceId: selectedComponent.value.instanceId, script });
+}
+function handleDeleteScript(scriptId: string) {
+  if (!selectedComponent.value) return;
+  canvasManager.deleteScript({ instanceId: selectedComponent.value.instanceId, scriptId });
 }
 
 function handleDelete() {
@@ -58,13 +70,23 @@ function handleDelete() {
       <div class="editor-panel__body">
         <template v-for="tab in selectedComponent.componentInfo.editorTabs" :key="tab.name">
           <div v-show="activeTabName === tab.name">
-            <EditorControl
-                v-for="field in tab.fields"
-                :key="field.name"
-                :field="field"
-                :model-value="selectedComponent[tab.target][field.name]"
-                @update:model-value="updateValue(tab.target, field.name, $event)"
-            />
+            <template v-if="tab.target === 'props' || tab.target === 'styles'">
+              <EditorControl
+                  v-for="field in tab.fields"
+                  :key="field.name"
+                  :field="field"
+                  :model-value="selectedComponent[tab.target][field.name]"
+                  @update:model-value="updateValue(tab.target, field.name, $event)"
+              />
+            </template>
+            <template v-else-if="tab.target === 'script'">
+              <ScriptManager
+                  :scripts="selectedComponent.scripts"
+                  @add-script="handleAddScript"
+                  @update-script="handleUpdateScript"
+                  @delete-script="handleDeleteScript"
+              />
+            </template>
           </div>
         </template>
       </div>
