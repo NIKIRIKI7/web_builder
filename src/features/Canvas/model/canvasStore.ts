@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia';
+import { createSSRApp } from 'vue';
+import { renderToString } from '@vue/server-renderer';
 import { componentsMap } from '@/entities/UiComponent/model/libraryComponents';
 import type { UiComponentInfo } from '@/entities/UiComponent/model/types';
+import { getDocumentCss } from '@/shared/lib/export/getCss';
 
 /**
  * Описывает состояние одного экземпляра компонента на холсте.
@@ -39,9 +42,6 @@ export const useCanvasStore = defineStore('canvas', {
     }),
 
     getters: {
-        /**
-         * Геттер, возвращающий полный список компонентов для рендеринга на холсте.
-         */
         renderedComponents(state): FullRenderedComponent[] {
             return state.componentInstances.map((instance) => {
                 const componentInfo = componentsMap.get(instance.componentId);
@@ -53,9 +53,6 @@ export const useCanvasStore = defineStore('canvas', {
                 };
             });
         },
-        /**
-         * Геттер, возвращающий полную информацию о выбранном в данный момент компоненте.
-         */
         selectedComponent(state): FullRenderedComponent | null {
             if (state.selectedComponentInstanceId === null) {
                 return null;
@@ -78,9 +75,6 @@ export const useCanvasStore = defineStore('canvas', {
     },
 
     actions: {
-        /**
-         * Добавляет новый компонент на холст.
-         */
         addComponent(componentId: string) {
             const componentInfo = componentsMap.get(componentId);
             if (!componentInfo) return;
@@ -101,33 +95,21 @@ export const useCanvasStore = defineStore('canvas', {
             this.componentInstances.push(newInstance);
             this.selectComponent(newInstance.instanceId);
         },
-        /**
-         * Устанавливает ID выбранного компонента.
-         */
         selectComponent(instanceId: number | null) {
             this.selectedComponentInstanceId = instanceId;
         },
-        /**
-         * Обновляет пропсы (контент) для указанного компонента.
-         */
         updateComponentProps(payload: { instanceId: number, newProps: Record<string, any> }) {
             const component = this.componentInstances.find(c => c.instanceId === payload.instanceId);
             if (component) {
                 component.props = { ...component.props, ...payload.newProps };
             }
         },
-        /**
-         * Обновляет стили для указанного компонента.
-         */
         updateComponentStyles(payload: { instanceId: number, newStyles: Record<string, any> }) {
             const component = this.componentInstances.find(c => c.instanceId === payload.instanceId);
             if (component) {
                 component.styles = { ...component.styles, ...payload.newStyles };
             }
         },
-        /**
-         * Удаляет компонент с холста по его ID.
-         */
         deleteComponent(instanceId: number) {
             if (this.selectedComponentInstanceId === instanceId) {
                 this.selectedComponentInstanceId = null;
@@ -136,18 +118,56 @@ export const useCanvasStore = defineStore('canvas', {
                 (instance) => instance.instanceId !== instanceId
             );
         },
-        /**
-         * Заменяет текущий массив компонентов новым.
-         * Используется для синхронизации с vuedraggable после сортировки.
-         */
         setComponentInstances(newInstances: CanvasInstanceState[]) {
             this.componentInstances = newInstances;
+        },
+        /**
+         * Асинхронно генерирует HTML-строку, рендеря каждый компонент в памяти.
+         * @returns {Promise<string>} Промис, который разрешается в готовую HTML-строку.
+         */
+        async generateHtmlString(): Promise<string> {
+            const stylesObjectToString = (styles: Record<string, any>): string => {
+                return Object.entries(styles)
+                    .map(([key, value]) => {
+                        const kebabKey = key.replace(/[A-Z]/g, match => `-${match.toLowerCase()}`);
+                        return `${kebabKey}: ${value};`;
+                    })
+                    .join(' ');
+            };
+
+            const renderedComponentsHtml = [];
+            for (const component of this.renderedComponents) {
+                const app = createSSRApp(component.componentInfo.component, component.props);
+                const renderedHtml = await renderToString(app);
+
+                const componentWrapper = `
+          <div style="${stylesObjectToString(component.styles)}">
+            ${renderedHtml}
+          </div>`;
+
+                renderedComponentsHtml.push(componentWrapper);
+            }
+
+            const allCss = getDocumentCss();
+
+            return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Exported Page</title>
+    <style>
+        ${allCss}
+        body { margin: 0; background-color: #f0f2f5; }
+    </style>
+</head>
+<body>
+    ${renderedComponentsHtml.join('\n')}
+</body>
+</html>`;
         }
     },
 
-    /**
-     * Включает сохранение состояния для этого стора в Local Storage.
-     * Требует установки и подключения `pinia-plugin-persistedstate`.
-     */
     persist: true,
 });

@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@vue/server-renderer": "^3.5.17",
     "eslint-plugin-prettier": "^5.5.1",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.4.1",
