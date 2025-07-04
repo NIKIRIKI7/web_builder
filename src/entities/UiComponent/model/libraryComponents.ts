@@ -19,3 +19,11 @@ export const libraryComponents: UiComponentInfo[] = [
         component: shallowRef(SimpleFooter as any),
     },
 ];
+
+/**
+ * Создаем Map для быстрого доступа к компонентам по их ID.
+ * Это эффективнее, чем каждый раз искать в массиве.
+ */
+export const componentsMap = new Map<string, UiComponentInfo>(
+    libraryComponents.map(c => [c.id, c])
+);
