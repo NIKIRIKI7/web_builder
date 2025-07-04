@@ -6,7 +6,8 @@ export interface UiComponentInfo {
     id: string;
     name: string;
     category: UiComponentCategory;
-    // ИСПРАВЛЕНИЕ: Компонент больше не обернут в ShallowRef.
-    // Мы используем DefineComponent, чтобы охватить как обычные, так и асинхронные компоненты.
     component: DefineComponent<{}, {}, any>;
+    // Добавляем поле для пропсов по умолчанию.
+    // Оно необязательное, так как у некоторых компонентов их может не быть.
+    defaultProps?: Record<string, any>;
 }

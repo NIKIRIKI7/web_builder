@@ -1,5 +1,8 @@
 <script setup lang="ts">
-const currentYear = new Date().getFullYear();
+// Принимаем пропс с текстом копирайта
+defineProps<{
+  copyrightText: string;
+}>();
 </script>
 
 <template>
@@ -11,13 +14,14 @@ const currentYear = new Date().getFullYear();
         <a href="#">Contact Us</a>
       </div>
       <div class="simple-footer__copyright">
-        © {{ currentYear }} Web Builder Inc. All rights reserved.
+        {{ copyrightText }}
       </div>
     </div>
   </footer>
 </template>
 
 <style scoped lang="scss">
+/* Стили остаются без изменений */
 .simple-footer {
   width: 100%;
   padding: 2rem;

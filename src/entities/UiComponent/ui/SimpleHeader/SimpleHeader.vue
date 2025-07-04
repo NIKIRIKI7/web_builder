@@ -1,22 +1,31 @@
 <script setup lang="ts">
-// В будущем здесь может быть логика компонента, например, управление состоянием бургер-меню
+// Принимаем пропсы, которые будут приходить с Canvas
+defineProps<{
+  logoText: string;
+  ctaText: string;
+  links: Array<{ id: number, text: string, url: string }>;
+}>();
 </script>
 
 <template>
   <header class="simple-header">
     <div class="simple-header__container">
-      <a href="#" class="simple-header__logo">Logo</a>
+      <a href="#" class="simple-header__logo">{{ logoText }}</a>
       <nav class="simple-header__nav">
-        <a href="#" class="simple-header__link">Home</a>
-        <a href="#" class="simple-header__link">About</a>
-        <a href="#" class="simple-header__link">Contact</a>
+        <a
+            v-for="link in links"
+            :key="link.id"
+            :href="link.url"
+            class="simple-header__link"
+        >{{ link.text }}</a>
       </nav>
-      <button class="simple-header__cta">Get Started</button>
+      <button class="simple-header__cta">{{ ctaText }}</button>
     </div>
   </header>
 </template>
 
 <style scoped lang="scss">
+/* Стили остаются без изменений */
 .simple-header {
   width: 100%;
   padding: 1rem 2rem;

@@ -2,6 +2,8 @@
 import TheHeader from '@/widgets/TheHeader/ui/TheHeader.vue';
 import Workspace from '@/widgets/Workspace/ui/Workspace.vue';
 import UiLibrary from '@/widgets/UiLibrary/ui/UiLibrary.vue';
+// 1. Импортируем наш новый виджет
+import EditorPanel from '@/widgets/EditorPanel/ui/EditorPanel.vue';
 </script>
 
 <template>
@@ -13,7 +15,8 @@ import UiLibrary from '@/widgets/UiLibrary/ui/UiLibrary.vue';
       </aside>
       <Workspace class="builder-page__workspace" />
       <aside class="builder-page__sidebar builder-page__sidebar--right">
-        <!-- Редактор будет здесь -->
+        <!-- 2. Заменяем комментарий на компонент -->
+        <EditorPanel />
       </aside>
     </main>
   </div>

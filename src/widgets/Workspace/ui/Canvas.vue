@@ -19,7 +19,6 @@ function handleComponentClick(instanceId: number) {
  * @param event - Событие мыши.
  */
 function handleCanvasClick(event: MouseEvent) {
-  // Проверяем, что клик был именно по холсту, а не по его дочерним элементам.
   if (event.target === event.currentTarget) {
     canvasStore.selectComponent(null);
   }
@@ -30,7 +29,6 @@ function handleCanvasClick(event: MouseEvent) {
  * @param event - Событие перетаскивания.
  */
 function onDragOver(event: DragEvent) {
-  // preventDefault() необходим, чтобы разрешить срабатывание события 'drop'.
   event.preventDefault();
   isDragOver.value = true;
 }
@@ -74,14 +72,9 @@ function onDrop(event: DragEvent) {
       <p class="canvas__placeholder-text">Drag and drop components here</p>
     </div>
     <template v-else>
-      <!--
-        Оборачиваем список в <Suspense>.
-        Это необходимо для корректной работы с асинхронными (динамически импортируемыми) компонентами.
-      -->
       <Suspense>
-        <!-- #default слот рендерится, когда все асинхронные зависимости внутри него загружены -->
         <template #default>
-          <div> <!-- Suspense требует одного корневого элемента внутри слота -->
+          <div>
             <div
                 v-for="item in canvasStore.renderedComponents"
                 :key="item.instanceId"
@@ -92,12 +85,12 @@ function onDrop(event: DragEvent) {
               <component
                   :is="item.componentInfo.component"
                   class="canvas__component"
+                  v-bind="item.props"
               />
               <div class="component-wrapper__overlay"></div>
             </div>
           </div>
         </template>
-        <!-- #fallback слот показывается, ПОКА асинхронные компоненты загружаются -->
         <template #fallback>
           <div class="canvas__loading">
             Loading Component...
@@ -127,7 +120,7 @@ function onDrop(event: DragEvent) {
   }
 
   &__placeholder,
-  &__loading { // Объединяем стили для плейсхолдера и загрузчика
+  &__loading {
     display: flex;
     flex-direction: column;
     justify-content: center;

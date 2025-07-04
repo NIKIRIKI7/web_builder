@@ -1,10 +1,19 @@
 import { defineStore } from 'pinia';
 import { componentsMap } from '@/entities/UiComponent/model/libraryComponents';
-import type { RenderedComponent } from './types';
+import type { UiComponentInfo } from '@/entities/UiComponent/model/types';
 
 interface CanvasInstanceState {
     instanceId: number;
     componentId: string;
+    // У каждого экземпляра теперь есть свои пропсы
+    props: Record<string, any>;
+}
+
+// Тип RenderedComponent теперь тоже должен включать пропсы
+export interface FullRenderedComponent {
+    instanceId: number;
+    componentInfo: UiComponentInfo;
+    props: Record<string, any>;
 }
 
 interface CanvasState {
@@ -19,71 +28,65 @@ export const useCanvasStore = defineStore('canvas', {
     }),
 
     getters: {
-        renderedComponents(state): RenderedComponent[] {
+        // Геттеры теперь возвращают новый, более полный тип
+        renderedComponents(state): FullRenderedComponent[] {
             return state.componentInstances.map((instance) => {
                 const componentInfo = componentsMap.get(instance.componentId);
-                // Мы уверены, что componentInfo существует
                 return {
                     instanceId: instance.instanceId,
                     componentInfo: componentInfo!,
+                    props: instance.props,
                 };
             });
         },
-
-        /**
-         * Геттер для получения информации о выбранном компоненте.
-         * В будущем будет использоваться редактором.
-         */
-        // ИСПРАВЛЕНИЕ:
-        // 1. Четко указываем тип возвращаемого значения: RenderedComponent | null.
-        // 2. Логика теперь зависит только от 'state', а не от 'this'.
-        selectedComponent(state): RenderedComponent | null {
+        selectedComponent(state): FullRenderedComponent | null {
             if (state.selectedComponentInstanceId === null) {
                 return null;
             }
-
-            // Находим нужный экземпляр в состоянии
             const selectedInstance = state.componentInstances.find(
                 (instance) => instance.instanceId === state.selectedComponentInstanceId
             );
+            if (!selectedInstance) return null;
 
-            if (!selectedInstance) {
-                return null;
-            }
-
-            // Получаем полную информацию о компоненте из 'componentsMap'
             const componentInfo = componentsMap.get(selectedInstance.componentId);
-
-            if (!componentInfo) {
-                // Такого быть не должно, если логика добавления верна, но это безопасная проверка
-                return null;
-            }
+            if (!componentInfo) return null;
 
             return {
                 instanceId: selectedInstance.instanceId,
                 componentInfo: componentInfo,
+                props: selectedInstance.props,
             };
         },
     },
 
     actions: {
         addComponent(componentId: string) {
-            if (!componentsMap.has(componentId)) {
-                console.error(`Component with id "${componentId}" not found in library.`);
-                return;
-            }
+            const componentInfo = componentsMap.get(componentId);
+            if (!componentInfo) return;
 
             const newInstance: CanvasInstanceState = {
                 instanceId: Date.now(),
                 componentId: componentId,
+                // Копируем пропсы по умолчанию в новый экземпляр
+                props: { ...(componentInfo.defaultProps || {}) },
             };
 
             this.componentInstances.push(newInstance);
             this.selectComponent(newInstance.instanceId);
         },
-
         selectComponent(instanceId: number | null) {
             this.selectedComponentInstanceId = instanceId;
         },
+        /**
+         * Новый action для обновления пропсов конкретного компонента.
+         * @param payload - содержит ID экземпляра и новые значения пропсов
+         */
+        updateComponentProps(payload: { instanceId: number, newProps: Record<string, any> }) {
+            const component = this.componentInstances.find(c => c.instanceId === payload.instanceId);
+            if (component) {
+                // Обновляем пропсы, сохраняя старые, если они не были изменены
+                component.props = { ...component.props, ...payload.newProps };
+            }
+        }
     },
 });
