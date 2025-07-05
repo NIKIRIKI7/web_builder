@@ -5,7 +5,22 @@
     "languageSelector": "Выберите язык",
     "export": "Экспорт в HTML",
     "editLayout": "Редактировать интерфейс",
-    "resetLayout": "Сбросить"
+    "resetLayout": "Сбросить",
+    "backToProjects": "Вернуться к проектам"
+  },
+  "dashboard": {
+    "title": "Мои проекты",
+    "createProject": "Создать новый сайт",
+    "prompts": {
+      "newProjectTitle": "Введите название нового проекта:",
+      "newProjectDefaultName": "Новый сайт"
+    },
+    "card": {
+      "edit": "Редактировать сайт",
+      "createdOn": "Создан:",
+      "delete": "Удалить",
+      "deleteConfirmation": "Вы уверены, что хотите удалить проект «{name}»? Это действие необратимо."
+    }
   },
   "sidebar": {
     "library": {

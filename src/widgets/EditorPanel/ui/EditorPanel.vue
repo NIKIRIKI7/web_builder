@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import { ref, watch, shallowRef } from 'vue';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
+import { useEditorStore } from '../model/editorStore';
 import { getEditorConfig } from '@/entities/UiComponent/model/registry';
 import type { EditorConfiguration } from '@/entities/UiComponent/model/types';
 import type { ComponentScript } from '@/features/Canvas/model/canvasStore';
 import EditorControl from './EditorControl.vue';
 import ScriptManager from './ScriptManager.vue';
-import { SelectIcon } from '@/shared/ui/icons';
+import { SelectIcon, CloseIcon } from '@/shared/ui/icons';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 const canvasManager = useCanvasManager();
 const { selectedComponent } = canvasManager;
 const { t } = useI18nManager();
+const editorStore = useEditorStore();
 
 const activeTabName = ref('');
 const editorConfig = shallowRef<EditorConfiguration | null>(null);
@@ -71,17 +73,21 @@ function handleDelete() {
     <div v-if="selectedComponent && editorConfig" class="editor-panel__content">
       <div class="editor-panel__header">
         <h2 class="editor-panel__title">{{ t(`components.names.${selectedComponent.componentDefinition.name}`) }}</h2>
-        <div v-if="editorConfig.tabs.length > 1" class="editor-panel__tabs">
-          <button
-            v-for="tab in editorConfig.tabs"
-            :key="tab.name"
-            class="editor-panel__tab"
-            :class="{ 'editor-panel__tab--active': activeTabName === tab.name }"
-            @click="activeTabName = tab.name"
-          >
-            {{ t(`editor.tabs.${tab.name.toLowerCase()}`) }}
-          </button>
-        </div>
+        <button class="editor-panel__close-btn" @click="editorStore.closeEditor()" :title="t('buttons.close', 'Close')">
+          <CloseIcon class="editor-panel__close-icon"/>
+        </button>
+      </div>
+
+      <div class="editor-panel__tabs">
+        <button
+          v-for="tab in editorConfig.tabs"
+          :key="tab.name"
+          class="editor-panel__tab"
+          :class="{ 'editor-panel__tab--active': activeTabName === tab.name }"
+          @click="activeTabName = tab.name"
+        >
+          {{ t(`editor.tabs.${tab.name.toLowerCase()}`) }}
+        </button>
       </div>
 
       <div class="editor-panel__body">
@@ -139,19 +145,42 @@ function handleDelete() {
   height: 100%;
 }
 .editor-panel__header {
-  padding: 16px 16px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--color-border);
   flex-shrink: 0;
 }
 .editor-panel__title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
-  padding: 0 0 16px 0;
+}
+.editor-panel__close-btn {
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-primary);
+  opacity: 0.6;
+  transition: all 0.2s;
+
+  .editor-panel__close-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    opacity: 1;
+    background-color: var(--color-bg-primary);
+    transform: rotate(90deg);
+  }
 }
 .editor-panel__tabs {
   display: flex;
-  margin: 0 -16px;
   padding: 0 16px;
+  border-bottom: 1px solid var(--color-border);
 }
 .editor-panel__tab {
   flex: 1;

@@ -65,7 +65,7 @@
 @include responsive($tablet) {
   .simple-header {
     &__nav {
-      position: absolute;
+      position: fixed; /* Изменено с 'absolute' */
       top: 0;
       left: 0;
       width: 100%;
@@ -81,6 +81,7 @@
       visibility: hidden;
       transform: translateY(-100%);
       transition: opacity $transition-duration ease, visibility $transition-duration ease, transform $transition-duration ease;
+      z-index: $z-index-dropdown + 10;
 
       &--is-open {
         opacity: 1;

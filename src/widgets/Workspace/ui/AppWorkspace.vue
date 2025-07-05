@@ -1,10 +1,19 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+import { usePreviewStore } from '@/shared/preview/previewStore';
 import Canvas from './Canvas.vue';
+
+const previewStore = usePreviewStore();
+const canvasStyle = computed(() => ({
+  maxWidth: previewStore.currentWidth || 'none',
+}));
 </script>
 
 <template>
   <div class="app-workspace">
-    <Canvas />
+    <div class="app-workspace__viewport">
+      <Canvas :style="canvasStyle" />
+    </div>
   </div>
 </template>
 
@@ -13,9 +22,22 @@ import Canvas from './Canvas.vue';
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 24px;
-  overflow: auto;
+  padding: 0;
   height: 100%;
   background-color: var(--color-bg-primary);
+
+  &__viewport {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+:deep(.canvas) {
+  transition: max-width 0.4s ease;
+  width: 100%;
 }
 </style>

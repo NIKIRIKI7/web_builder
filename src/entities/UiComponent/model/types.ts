@@ -32,6 +32,7 @@ export interface UiComponentPreview {
 export interface UiComponentDefinition extends UiComponentPreview {
   component: Component;
   staticCss?: string;
+  clientScript?: string;
   defaultProps?: Record<string, any>;
   defaultStyles?: Record<string, any>;
 }

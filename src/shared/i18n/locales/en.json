@@ -5,7 +5,22 @@
     "languageSelector": "Select Language",
     "export": "Export to HTML",
     "editLayout": "Edit Layout",
-    "resetLayout": "Reset Layout"
+    "resetLayout": "Reset Layout",
+    "backToProjects": "Back to projects"
+  },
+  "dashboard": {
+    "title": "My Projects",
+    "createProject": "Create new site",
+    "prompts": {
+      "newProjectTitle": "Enter new project name:",
+      "newProjectDefaultName": "New Site"
+    },
+    "card": {
+      "edit": "Edit site",
+      "createdOn": "Created:",
+      "delete": "Delete",
+      "deleteConfirmation": "Are you sure you want to delete the project \"{name}\"? This action cannot be undone."
+    }
   },
   "sidebar": {
     "library": {

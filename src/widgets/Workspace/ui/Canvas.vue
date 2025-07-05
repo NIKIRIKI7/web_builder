@@ -2,18 +2,26 @@
 import { ref } from 'vue';
 import draggable from 'vuedraggable';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
+import { useEditorStore } from '@/widgets/EditorPanel/model/editorStore';
 import { DND_COMPONENT_ID_KEY } from '@/shared/lib/dnd/keys';
-import { AddIcon, CloneIcon, DeleteIcon, DragHandleIcon } from '@/shared/ui/icons';
+import { AddIcon, CloneIcon, DeleteIcon, DragHandleIcon, EditIcon } from '@/shared/ui/icons';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 const canvasManager = useCanvasManager();
+const editorStore = useEditorStore();
 const { t } = useI18nManager();
+
 const isDragOver = ref(false);
 const dropTargetInstanceId = ref<number | null>(null);
 const dropPosition = ref<'before' | 'after' | null>(null);
 
 function handleComponentClick(instanceId: number) {
   canvasManager.selectComponent(instanceId);
+}
+
+function handleEdit(instanceId: number) {
+  canvasManager.selectComponent(instanceId);
+  editorStore.openEditor();
 }
 
 function handleCanvasClick(event: MouseEvent) {
@@ -37,8 +45,7 @@ function onDragOver(event: DragEvent) {
 
 function onDragLeave() {
   isDragOver.value = false;
-  dropTargetInstanceId.value = null;
-  dropPosition.value = null;
+  handleDragLeaveItem();
 }
 
 function onDrop(event: DragEvent) {
@@ -61,13 +68,14 @@ function onDrop(event: DragEvent) {
 }
 
 function onDraggableUpdate(newOrder: any[]) {
-  canvasManager.setComponentInstances(newOrder.map(c => ({
-    instanceId: c.instanceId,
-    componentId: c.componentDefinition.id,
-    props: c.props,
-    styles: c.styles,
-    scripts: c.scripts,
-  })));
+  const newInstances = newOrder.map(item => ({
+    instanceId: item.instanceId,
+    componentId: item.componentDefinition.id,
+    props: item.props,
+    styles: item.styles,
+    scripts: item.scripts,
+  }));
+  canvasManager.setComponentInstances(newInstances);
 }
 
 function handleDragOverItem(event: DragEvent, instanceId: number) {
@@ -107,6 +115,7 @@ function handleDragLeaveItem() {
             :model-value="canvasManager.draggableComponents.value"
             @update:model-value="onDraggableUpdate"
             item-key="instanceId"
+            handle=".component-wrapper__drag-handle"
             class="draggable-container"
             ghost-class="ghost-component"
           >
@@ -119,16 +128,22 @@ function handleDragLeaveItem() {
                   'component-wrapper--drop-after': dropTargetInstanceId === item.instanceId && dropPosition === 'after',
                 }"
                 @dragover="handleDragOverItem($event, item.instanceId)"
-                @dragleave="handleDragLeaveItem"
+                @dragleave.stop="handleDragLeaveItem"
               >
                 <div class="component-wrapper__controls">
                   <div
                     class="component-wrapper__control-btn component-wrapper__drag-handle"
                     :title="t('canvas.actions.drag')"
-                    @click.stop
                   >
                     <DragHandleIcon />
                   </div>
+                  <button
+                    class="component-wrapper__control-btn component-wrapper__control-btn--edit"
+                    :title="t('editor.tabs.content')"
+                    @click.stop="handleEdit(item.instanceId)"
+                  >
+                    <EditIcon />
+                  </button>
                   <button
                     class="component-wrapper__control-btn component-wrapper__control-btn--clone"
                     :title="t('canvas.actions.clone')"
@@ -172,8 +187,6 @@ function handleDragLeaveItem() {
 
 <style scoped lang="scss">
 .canvas {
-  width: 100%;
-  max-width: 1200px;
   min-height: 100%;
   background-color: var(--color-bg-secondary);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -248,7 +261,6 @@ function handleDragLeaveItem() {
 .component-wrapper--selected .component-wrapper__overlay {
   pointer-events: none;
 }
-
 .component-wrapper__controls {
   position: absolute;
   top: -34px;
@@ -293,6 +305,9 @@ function handleDragLeaveItem() {
   background-color: var(--color-bg-primary);
   opacity: 1;
 }
+.component-wrapper__control-btn--edit:hover {
+  color: var(--color-success);
+}
 .component-wrapper__control-btn--clone:hover {
   color: var(--color-accent);
 }
@@ -312,7 +327,6 @@ function handleDragLeaveItem() {
   width: 100%;
   pointer-events: none;
 }
-
 .component-wrapper::before,
 .component-wrapper::after {
   content: '';

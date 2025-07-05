@@ -35,6 +35,7 @@ function onDragStart(event: DragEvent) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   padding: 12px;
   background-color: var(--color-bg-primary);
   border: 1px solid var(--color-border);
@@ -42,6 +43,7 @@ function onDragStart(event: DragEvent) {
   cursor: grab;
   transition: all $transition-duration ease;
   text-align: center;
+  min-height: 100px;
 
   &:active {
     cursor: grabbing;
@@ -62,12 +64,16 @@ function onDragStart(event: DragEvent) {
     margin-bottom: 8px;
     color: var(--color-text-primary);
     opacity: 0.6;
+    flex-shrink: 0;
   }
 
   &__name {
     font-size: 13px;
     color: var(--color-text-primary);
     font-weight: 500;
+    line-height: 1.3;
+    white-space: normal;
+    word-break: break-word;
   }
 }
 </style>

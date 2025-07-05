@@ -30,3 +30,14 @@ body {
   flex-direction: column;
   height: 100vh;
 }
+
+// Анимация для выезжающей панели редактора
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: transform 0.4s ease;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(100%);
+}

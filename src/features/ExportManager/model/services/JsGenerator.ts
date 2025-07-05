@@ -7,7 +7,7 @@ export function generateJs(components: FullRenderedComponent[]): string {
 
   const componentData = components.map(c => ({
     instanceId: c.instanceId,
-    componentId: c.componentDefinition.id,
+    clientScript: c.componentDefinition.clientScript || null,
     props: c.props,
     scripts: c.scripts || [],
   }));
@@ -19,15 +19,17 @@ export function generateJs(components: FullRenderedComponent[]): string {
     document.addEventListener('DOMContentLoaded', () => {
         const allComponentData = ${executionData};
 
-        const toggleMenu = (rootElement) => {
-            const nav = rootElement.querySelector('.simple-header__nav');
-            const burgerBtn = rootElement.querySelector('.simple-header__burger-btn');
-            if (nav && burgerBtn) {
-                nav.classList.toggle('simple-header__nav--is-open');
-                const isExpanded = nav.classList.contains('simple-header__nav--is-open');
-                burgerBtn.setAttribute('aria-expanded', isExpanded);
+        const createSandboxApi = (data, rootElement) => ({
+            getProp(propName) {
+                return data.props[propName];
+            },
+            toggleClass(selector, className) {
+                const element = rootElement.querySelector(selector);
+                if (element) {
+                    element.classList.toggle(className);
+                }
             }
-        };
+        });
 
         allComponentData.forEach(data => {
             try {
@@ -37,27 +39,16 @@ export function generateJs(components: FullRenderedComponent[]): string {
                   return;
                 }
 
-                if (data.componentId === 'simple-header-v1') {
-                    const burgerBtn = rootElement.querySelector('.simple-header__burger-btn');
-                    const navLinks = rootElement.querySelectorAll('.simple-header__link');
-
-                    if (burgerBtn) {
-                        burgerBtn.addEventListener('click', (e) => {
-                          e.stopPropagation();
-                          toggleMenu(rootElement);
-                        });
+                if (data.clientScript) {
+                    try {
+                        new Function('rootElement', data.clientScript)(rootElement);
+                    } catch (e) {
+                        console.error(\`Error executing client script for component #\${data.instanceId}: \${e.message}\`);
                     }
-                    navLinks.forEach(link => {
-                       link.addEventListener('click', () => {
-                           const nav = rootElement.querySelector('.simple-header__nav');
-                           if(nav && nav.classList.contains('simple-header__nav--is-open')) {
-                               toggleMenu(rootElement);
-                           }
-                       })
-                    });
                 }
 
                 if (data.scripts && data.scripts.length > 0) {
+                    const api = createSandboxApi(data, rootElement);
                     data.scripts.forEach(script => {
                         const targetElement = script.targetSelector && script.targetSelector.trim() !== ''
                             ? rootElement.querySelector(script.targetSelector)
@@ -69,21 +60,8 @@ export function generateJs(components: FullRenderedComponent[]): string {
                         }
 
                         targetElement.addEventListener(script.eventName, (event) => {
-                            const api = {
-                                getProp(propName) {
-                                    return data.props[propName];
-                                },
-                                toggleClass(selector, className) {
-                                    const element = rootElement.querySelector(selector);
-                                    if (element) {
-                                        element.classList.toggle(className);
-                                    }
-                                },
-                                event: event
-                            };
-
                             try {
-                                new Function('api', script.code)(api);
+                                new Function('api', 'event', script.code)(api, event);
                             } catch (e) {
                                 console.error(\`Error executing script for component #\${data.instanceId}: \${e.message}\`);
                             }

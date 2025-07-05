@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
 import { exportPageAsHtml } from '@/features/ExportManager/model';
 import { useThemeManager } from '@/shared/theme/useThemeManager';
@@ -7,27 +8,30 @@ import { themeOptions } from '@/shared/theme/defaults';
 import type { Theme } from '@/shared/theme/types';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 import { useLayoutStore } from '@/shared/layout/layoutStore';
+import { usePreviewStore } from '@/shared/preview/previewStore';
+import { downloadFile } from '@/shared/lib/utils';
 import DropdownMenu from '@/shared/ui/DropdownMenu/DropdownMenu.vue';
+import { DesktopIcon, TabletIcon, MobileIcon, ArrowLeftIcon } from '@/shared/ui/icons';
 
 const canvasManager = useCanvasManager();
 const { theme, setTheme } = useThemeManager();
 const { t, currentLocale, localeOptions } = useI18nManager();
 const layoutStore = useLayoutStore();
+const previewStore = usePreviewStore();
+const route = useRoute();
+
+const isBuilderPage = computed(() => route.name === 'Builder');
 
 const activeTheme = computed<Theme>({
   get: () => theme.value,
   set: (newTheme) => setTheme(newTheme),
 });
 
-function downloadFile(filename: string, content: string) {
-  const element = document.createElement('a');
-  element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(content));
-  element.setAttribute('download', filename);
-  element.style.display = 'none';
-  document.body.appendChild(element);
-  element.click();
-  document.body.removeChild(element);
-}
+const deviceIconMap = {
+  desktop: DesktopIcon,
+  tablet: TabletIcon,
+  mobile: MobileIcon,
+};
 
 async function handleExport() {
   const componentsToExport = canvasManager.renderedComponents.value;
@@ -38,35 +42,57 @@ async function handleExport() {
 
 <template>
   <header class="the-header">
-    <div class="the-header__logo">{{ t('header.title') }}</div>
-    <div class="the-header__actions">
-      <button
-        v-if="layoutStore.isEditMode"
-        class="the-header__layout-reset"
-        @click="layoutStore.resetLayout()"
-      >
-        {{ t('header.resetLayout') }}
-      </button>
-      <button
-        class="the-header__layout-toggle"
-        :class="{'the-header__layout-toggle--active': layoutStore.isEditMode}"
-        @click="layoutStore.toggleEditMode()"
-      >
-        {{ t('header.editLayout') }}
-      </button>
-      <DropdownMenu
-        v-model="currentLocale"
-        :options="localeOptions"
-        :placeholder="t('header.languageSelector')"
-      />
-      <DropdownMenu
-        v-model="activeTheme"
-        :options="themeOptions"
-        :placeholder="t('header.themeSelector')"
-      />
-      <button class="the-header__export-btn" @click="handleExport">
-        {{ t('header.export') }}
-      </button>
+    <div class="the-header__left">
+      <RouterLink v-if="isBuilderPage" :to="{ name: 'Dashboard' }" class="the-header__back-btn" :title="t('header.backToProjects')">
+        <ArrowLeftIcon />
+      </RouterLink>
+      <div class="the-header__logo">{{ t('header.title') }}</div>
+    </div>
+
+    <div class="the-header__center">
+      <template v-if="isBuilderPage">
+        <button
+          v-for="device in previewStore.deviceOptions"
+          :key="device.id"
+          class="the-header__preview-btn"
+          :class="{ 'the-header__preview-btn--active': previewStore.activeDevice === device.id }"
+          @click="previewStore.setDevice(device.id)"
+        >
+          <component :is="deviceIconMap[device.id]" />
+        </button>
+      </template>
+    </div>
+
+    <div class="the-header__right">
+      <template v-if="isBuilderPage">
+        <button
+          v-if="layoutStore.isEditMode"
+          class="the-header__action-btn the-header__action-btn--danger"
+          @click="layoutStore.resetLayout()"
+        >
+          {{ t('header.resetLayout') }}
+        </button>
+        <button
+          class="the-header__action-btn"
+          :class="{'the-header__action-btn--active': layoutStore.isEditMode}"
+          @click="layoutStore.toggleEditMode()"
+        >
+          {{ t('header.editLayout') }}
+        </button>
+        <DropdownMenu
+          v-model="currentLocale"
+          :options="localeOptions"
+          :placeholder="t('header.languageSelector')"
+        />
+        <DropdownMenu
+          v-model="activeTheme"
+          :options="themeOptions"
+          :placeholder="t('header.themeSelector')"
+        />
+        <button class="the-header__action-btn the-header__action-btn--primary" @click="handleExport">
+          {{ t('header.export') }}
+        </button>
+      </template>
     </div>
   </header>
 </template>
@@ -83,36 +109,79 @@ async function handleExport() {
   border-bottom: 1px solid var(--color-border);
   z-index: $z-index-header;
 
+  &__left, &__right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1 1 0;
+  }
+
+  &__left {
+    justify-content: flex-start;
+  }
+
+  &__right {
+    justify-content: flex-end;
+  }
+
+  &__center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-primary);
+    padding: 4px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: var(--color-bg-primary);
+    }
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
   &__logo {
     font-size: 20px;
     font-weight: 600;
     color: var(--color-text-primary);
   }
 
-  &__actions {
+  &__preview-btn {
     display: flex;
     align-items: center;
-    gap: 16px;
-  }
-
-  &__layout-reset {
-    padding: 8px 16px;
-    background-color: transparent;
-    color: var(--color-danger);
-    border: 1px solid var(--color-danger);
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: var(--color-text-primary);
+    border: 1px solid transparent;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
     transition: all 0.2s;
+    opacity: 0.6;
 
     &:hover {
-      background-color: var(--color-danger);
-      color: var(--color-text-secondary);
+      background-color: var(--color-bg-primary);
+      opacity: 1;
+    }
+
+    &--active {
+      opacity: 1;
+      color: var(--color-accent);
+      background-color: var(--color-bg-primary);
     }
   }
 
-  &__layout-toggle {
+  &__action-btn {
     padding: 8px 16px;
     background-color: transparent;
     color: var(--color-text-primary);
@@ -122,6 +191,7 @@ async function handleExport() {
     font-size: 14px;
     font-weight: 500;
     transition: all 0.2s;
+    white-space: nowrap;
 
     &:hover {
       background-color: var(--color-bg-primary);
@@ -132,21 +202,24 @@ async function handleExport() {
       color: var(--color-text-secondary);
       border-color: var(--color-accent);
     }
-  }
 
-  &__export-btn {
-    padding: 8px 16px;
-    background-color: var(--color-accent);
-    color: var(--color-text-secondary);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: background-color 0.2s;
+    &--danger {
+      color: var(--color-danger);
+      border-color: var(--color-border);
+      &:hover {
+        background-color: var(--color-danger);
+        color: var(--color-text-secondary);
+        border-color: var(--color-danger);
+      }
+    }
 
-    &:hover {
-      background-color: var(--color-accent-hover);
+    &--primary {
+      background-color: var(--color-accent);
+      color: var(--color-text-secondary);
+      border-color: var(--color-accent);
+      &:hover {
+        background-color: var(--color-accent-hover);
+      }
     }
   }
 }

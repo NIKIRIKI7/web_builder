@@ -20,11 +20,11 @@ const defaultLayout: LayoutNode = {
   type: 'row',
   size: 100,
   children: [
-    { type: 'panel', id: 'panel-1', widgetId: 'UiLibrary', size: 20 },
-    { type: 'panel', id: 'panel-2', widgetId: 'AppWorkspace', size: 55 },
-    { type: 'panel', id: 'panel-3', widgetId: 'EditorPanel', size: 25 },
+    { type: 'panel', id: 'panel-1', widgetId: 'UiLibrary', size: 25 },
+    { type: 'panel', id: 'panel-2', widgetId: 'AppWorkspace', size: 75 },
   ]
 };
+
 export const useLayoutStore = defineStore('layout', {
   state: (): LayoutState => ({
     isEditMode: false,
