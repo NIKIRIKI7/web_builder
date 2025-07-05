@@ -1,9 +1,9 @@
 import { createSSRApp } from 'vue';
 import { renderToString } from '@vue/server-renderer';
-import type { FullRenderedComponent } from '@/features/Canvas/model/canvasStore';
+import type { ExportableComponent } from '../types';
 
 export async function renderComponentsToHtml(
-  components: FullRenderedComponent[],
+  components: ExportableComponent[],
   classMap: Map<number, string>
 ): Promise<string> {
   const renderedHtmlPromises = components.map(async (component) => {

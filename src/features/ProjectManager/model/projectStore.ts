@@ -2,8 +2,10 @@ import { defineStore } from 'pinia';
 import { ref, type Ref } from 'vue';
 import type { Project } from '@/entities/Project/model/types';
 import { klona } from 'klona/lite';
+import { runMigrations, LATEST_PROJECT_STORE_VERSION } from '@/shared/lib/migrations';
 
 export const useProjectStore = defineStore('projects', () => {
+  const version = ref(LATEST_PROJECT_STORE_VERSION);
   const projects: Ref<Project[]> = ref([]);
 
   function findProject(id: string): Project | undefined {
@@ -11,13 +13,16 @@ export const useProjectStore = defineStore('projects', () => {
   }
 
   function createProject(name: string) {
+    const now = Date.now();
     const newProject: Project = {
-      id: `project_${Date.now()}`,
+      id: `project_${now}`,
       name: name,
-      createdAt: Date.now(),
+      createdAt: now,
+      updatedAt: now,
       canvasState: {
         componentInstances: [],
         selectedComponentInstanceId: null,
+        isEditorOpen: false,
       },
     };
     projects.value.unshift(newProject);
@@ -28,6 +33,7 @@ export const useProjectStore = defineStore('projects', () => {
     const project = findProject(projectId);
     if (project) {
       project.canvasState = klona(canvasState);
+      project.updatedAt = Date.now();
     }
   }
 
@@ -36,6 +42,7 @@ export const useProjectStore = defineStore('projects', () => {
   }
 
   return {
+    version,
     projects,
     findProject,
     createProject,
@@ -43,5 +50,18 @@ export const useProjectStore = defineStore('projects', () => {
     deleteProject
   };
 }, {
-  persist: true,
+  persist: {
+    serializer: {
+      serialize: JSON.stringify,
+      deserialize: (value: string) => {
+        try {
+          const parsed = JSON.parse(value);
+          return runMigrations(parsed);
+        } catch (error) {
+          console.error('Failed to parse or migrate persisted state', error);
+          return { version: LATEST_PROJECT_STORE_VERSION, projects: [] };
+        }
+      }
+    }
+  },
 });

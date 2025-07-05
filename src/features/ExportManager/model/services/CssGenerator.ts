@@ -1,8 +1,8 @@
-import type { FullRenderedComponent } from '@/features/Canvas/model/canvasStore';
+import type { ExportableComponent } from '../types';
 import { getComponentDefinition } from '@/entities/UiComponent/model/registry';
 import { stylesObjectToString } from '@/shared/lib/utils';
 
-function generateDynamicCss(components: FullRenderedComponent[]): { css: string, classMap: Map<number, string> } {
+function generateDynamicCss(components: ExportableComponent[]): { css: string, classMap: Map<number, string> } {
   const classMap = new Map<number, string>();
   const cssRules: string[] = [];
 
@@ -20,7 +20,7 @@ function generateDynamicCss(components: FullRenderedComponent[]): { css: string,
   };
 }
 
-async function aggregateStaticCss(components: FullRenderedComponent[]): Promise<string> {
+async function aggregateStaticCss(components: ExportableComponent[]): Promise<string> {
   if (!components.length) return '';
   const uniqueIds = [...new Set(components.map(c => c.componentDefinition.id))];
   const definitions = await Promise.all(uniqueIds.map(id => getComponentDefinition(id)));
@@ -30,7 +30,7 @@ async function aggregateStaticCss(components: FullRenderedComponent[]): Promise<
     .join('\n\n');
 }
 
-export async function generateAllCss(components: FullRenderedComponent[]): Promise<{ allCss: string, classMap: Map<number, string> }> {
+export async function generateAllCss(components: ExportableComponent[]): Promise<{ allCss: string, classMap: Map<number, string> }> {
   const { css: dynamicCss, classMap } = generateDynamicCss(components);
   const staticCss = await aggregateStaticCss(components);
   const globalWrapperCss = `body { margin: 0; background-color: #f0f2f5; }`;

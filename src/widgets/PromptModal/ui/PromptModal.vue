@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 const props = defineProps<{
   title: string;
@@ -9,6 +10,7 @@ const props = defineProps<{
 }>();
 
 const modalStore = useModalStore();
+const { t } = useI18nManager();
 const inputValue = ref(props.initialValue || '');
 
 const handleConfirm = () => {
@@ -35,10 +37,10 @@ const handleCancel = () => {
     />
     <div class="prompt-modal__actions">
       <button type="button" class="prompt-modal__button prompt-modal__button--cancel" @click="handleCancel">
-        Cancel
+        {{ t('buttons.cancel') }}
       </button>
       <button type="submit" class="prompt-modal__button prompt-modal__button--confirm">
-        OK
+        {{ t('buttons.ok') }}
       </button>
     </div>
   </form>

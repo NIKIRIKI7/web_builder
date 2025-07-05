@@ -1,10 +1,10 @@
-import type { FullRenderedComponent } from '@/features/Canvas/model/canvasStore';
+import type { ExportableComponent } from './types';
 import { generateAllCss } from './services/CssGenerator';
 import { generateJs } from './services/JsGenerator';
 import { renderComponentsToHtml } from './services/ComponentRenderer';
 import { buildHtml } from './services/HtmlBuilder';
 
-export async function exportPageAsHtml(components: FullRenderedComponent[]): Promise<string> {
+export async function exportPageAsHtml(components: ExportableComponent[]): Promise<string> {
   if (!components.length) {
     return buildHtml({ title: 'My Exported Page', css: '', js: '', bodyHtml: '<!-- Empty page -->'});
   }

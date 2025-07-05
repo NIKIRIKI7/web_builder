@@ -87,5 +87,10 @@
       "simpleHeader": "Простая шапка",
       "simpleFooter": "Простой подвал"
     }
+  },
+  "buttons": {
+    "confirm": "Подтвердить",
+    "cancel": "Отмена",
+    "ok": "ОК"
   }
 }

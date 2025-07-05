@@ -27,25 +27,29 @@ export interface FullRenderedComponent {
 interface CanvasState {
   componentInstances: CanvasInstanceState[];
   selectedComponentInstanceId: number | null;
+  isEditorOpen: boolean;
 }
 
 export const useCanvasStore = defineStore('canvas', {
   state: (): CanvasState => ({
     componentInstances: [],
     selectedComponentInstanceId: null,
+    isEditorOpen: false,
   }),
   actions: {
     resetState() {
       this.$patch({
         componentInstances: [],
         selectedComponentInstanceId: null,
+        isEditorOpen: false,
       });
     },
 
-    setState(newState: { componentInstances: CanvasInstanceState[]; selectedComponentInstanceId: number | null }) {
+    setState(newState: CanvasStoreState) {
       this.$patch({
         componentInstances: newState.componentInstances,
         selectedComponentInstanceId: newState.selectedComponentInstanceId,
+        isEditorOpen: newState.isEditorOpen,
       });
     },
 
@@ -65,6 +69,14 @@ export const useCanvasStore = defineStore('canvas', {
 
     selectComponent(instanceId: number | null) {
       this.selectedComponentInstanceId = instanceId;
+      if (instanceId !== null) {
+        this.isEditorOpen = true;
+      }
+    },
+
+    closeEditor() {
+      this.selectedComponentInstanceId = null;
+      this.isEditorOpen = false;
     },
 
     updateComponentProps(payload: { instanceId: number; newValues: Record<string, any> }) {
@@ -115,7 +127,7 @@ export const useCanvasStore = defineStore('canvas', {
 
     deleteComponent(instanceId: number) {
       if (this.selectedComponentInstanceId === instanceId) {
-        this.selectedComponentInstanceId = null;
+        this.closeEditor();
       }
       this.componentInstances = this.componentInstances.filter(
         (instance) => instance.instanceId !== instanceId

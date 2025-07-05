@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { defineAsyncComponent, markRaw, computed, type Component } from 'vue';
-import type { LayoutNode, LayoutPanel } from '../types';
+import type { LayoutNode, LayoutPanel, WidgetId } from '../types';
 import { useLayoutStore } from '../layoutStore';
 import { DND_LAYOUT_PANEL_ID_KEY } from '../dnd';
+import { WIDGET_ID } from '../constants';
 import { DragHandleIcon } from '@/shared/ui/icons';
 
 const props = defineProps<{
@@ -14,10 +15,10 @@ const layoutStore = useLayoutStore();
 
 const isBeingDragged = computed(() => layoutStore.draggedPanelId === props.panel.id);
 
-const widgetMap: Record<LayoutPanel['widgetId'], Component> = {
-  UiLibrary: markRaw(defineAsyncComponent(() => import('@/widgets/UiLibrary/ui/UiLibrary.vue'))),
-  AppWorkspace: markRaw(defineAsyncComponent(() => import('@/widgets/Workspace/ui/AppWorkspace.vue'))),
-  EditorPanel: markRaw(defineAsyncComponent(() => import('@/widgets/EditorPanel/ui/EditorPanel.vue'))),
+const widgetMap: Record<WidgetId, Component> = {
+  [WIDGET_ID.UI_LIBRARY]: markRaw(defineAsyncComponent(() => import('@/widgets/UiLibrary/ui/UiLibrary.vue'))),
+  [WIDGET_ID.APP_WORKSPACE]: markRaw(defineAsyncComponent(() => import('@/widgets/Workspace/ui/AppWorkspace.vue'))),
+  [WIDGET_ID.EDITOR_PANEL]: markRaw(defineAsyncComponent(() => import('@/widgets/EditorPanel/ui/EditorPanel.vue'))),
 };
 
 const widgetComponent = computed(() => widgetMap[props.panel.widgetId]);

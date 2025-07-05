@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 defineProps<{
   title: string;
@@ -7,6 +8,7 @@ defineProps<{
 }>();
 
 const modalStore = useModalStore();
+const { t } = useI18nManager();
 
 const handleConfirm = () => {
   modalStore.resolve(true);
@@ -23,10 +25,10 @@ const handleCancel = () => {
     <p class="confirm-modal__message" v-html="message"></p>
     <div class="confirm-modal__actions">
       <button class="confirm-modal__button confirm-modal__button--cancel" @click="handleCancel">
-        Cancel
+        {{ t('buttons.cancel') }}
       </button>
       <button class="confirm-modal__button confirm-modal__button--confirm" @click="handleConfirm">
-        Confirm
+        {{ t('buttons.confirm') }}
       </button>
     </div>
   </div>

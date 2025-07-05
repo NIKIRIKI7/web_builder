@@ -2,13 +2,11 @@
 import { ref } from 'vue';
 import draggable from 'vuedraggable';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
-import { useEditorStore } from '@/widgets/EditorPanel/model/editorStore';
 import { DND_COMPONENT_ID_KEY } from '@/shared/lib/dnd/keys';
 import { AddIcon, CloneIcon, DeleteIcon, DragHandleIcon, EditIcon } from '@/shared/ui/icons';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 const canvasManager = useCanvasManager();
-const editorStore = useEditorStore();
 const { t } = useI18nManager();
 
 const isDragOver = ref(false);
@@ -21,7 +19,6 @@ function handleComponentClick(instanceId: number) {
 
 function handleEdit(instanceId: number) {
   canvasManager.selectComponent(instanceId);
-  editorStore.openEditor();
 }
 
 function handleCanvasClick(event: MouseEvent) {

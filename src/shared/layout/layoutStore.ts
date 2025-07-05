@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { klona } from 'klona/lite';
 import type { LayoutNode } from './types';
 import { LayoutService } from './layout.service';
+import { WIDGET_ID } from './constants';
 
 interface DropTarget {
   panelId: string;
@@ -20,8 +21,8 @@ const defaultLayout: LayoutNode = {
   type: 'row',
   size: 100,
   children: [
-    { type: 'panel', id: 'panel-1', widgetId: 'UiLibrary', size: 25 },
-    { type: 'panel', id: 'panel-2', widgetId: 'AppWorkspace', size: 75 },
+    { type: 'panel', id: 'panel-1', widgetId: WIDGET_ID.UI_LIBRARY, size: 25 },
+    { type: 'panel', id: 'panel-2', widgetId: WIDGET_ID.APP_WORKSPACE, size: 75 },
   ]
 };
 

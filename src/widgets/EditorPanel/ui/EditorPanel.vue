@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref, watch, shallowRef } from 'vue';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
-import { useEditorStore } from '../model/editorStore';
 import { getEditorConfig } from '@/entities/UiComponent/model/registry';
-import type { EditorConfiguration } from '@/entities/UiComponent/model/types';
+import type { EditorConfiguration, EditorTarget } from '@/entities/UiComponent/model/types';
 import type { ComponentScript } from '@/features/Canvas/model/canvasStore';
 import { EDITOR_TARGET } from '@/entities/UiComponent/model/constants';
 import EditorControl from './EditorControl.vue';
@@ -12,9 +11,8 @@ import { SelectIcon, CloseIcon } from '@/shared/ui/icons';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 const canvasManager = useCanvasManager();
-const { selectedComponent } = canvasManager;
+const { selectedComponent, closeEditor } = canvasManager;
 const { t } = useI18nManager();
-const editorStore = useEditorStore();
 
 const activeTabName = ref('');
 const editorConfig = shallowRef<EditorConfiguration | null>(null);
@@ -23,7 +21,7 @@ watch(selectedComponent, async (newComponent, oldComponent) => {
   const newComponentId = newComponent?.componentDefinition.id;
   const oldComponentId = oldComponent?.componentDefinition.id;
 
-  if (newComponentId === oldComponentId) {
+  if (newComponentId === oldComponentId && newComponent) {
     return;
   }
 
@@ -38,13 +36,13 @@ watch(selectedComponent, async (newComponent, oldComponent) => {
   }
 }, { immediate: true });
 
-function updateValue(target: 'props' | 'styles', fieldName: string, value: any) {
+function updateValue(target: EditorTarget, fieldName: string, value: any) {
   if (!selectedComponent.value) return;
   const { instanceId } = selectedComponent.value;
   const payload = { instanceId, newValues: { [fieldName]: value } };
   if (target === EDITOR_TARGET.PROPS) {
     canvasManager.updateComponentProps(payload);
-  } else {
+  } else if (target === EDITOR_TARGET.STYLES) {
     canvasManager.updateComponentStyles(payload);
   }
 }
@@ -74,7 +72,7 @@ function handleDelete() {
     <div v-if="selectedComponent && editorConfig" class="editor-panel__content">
       <div class="editor-panel__header">
         <h2 class="editor-panel__title">{{ t(`components.names.${selectedComponent.componentDefinition.name}`) }}</h2>
-        <button class="editor-panel__close-btn" @click="editorStore.closeEditor()" :title="t('buttons.close', 'Close')">
+        <button class="editor-panel__close-btn" @click="closeEditor" :title="t('buttons.close', 'Close')">
           <CloseIcon class="editor-panel__close-icon"/>
         </button>
       </div>

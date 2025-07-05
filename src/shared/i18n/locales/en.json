@@ -87,5 +87,10 @@
       "simpleHeader": "Simple Header",
       "simpleFooter": "Simple Footer"
     }
+  },
+  "buttons": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "ok": "OK"
   }
 }

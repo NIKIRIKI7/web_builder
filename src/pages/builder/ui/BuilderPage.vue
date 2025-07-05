@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { watch, toRef } from 'vue';
+import { toRef } from 'vue';
 import TheHeader from '@/widgets/TheHeader/ui/TheHeader.vue';
 import LayoutManager from '@/shared/layout/ui/LayoutManager.vue';
 import EditorPanel from '@/widgets/EditorPanel/ui/EditorPanel.vue';
 import { useLayoutStore } from '@/shared/layout/layoutStore';
-import { useEditorStore } from '@/widgets/EditorPanel/model/editorStore';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
 import { useProjectLoader } from '@/features/ProjectManager/model/useProjectLoader';
 
@@ -13,16 +12,10 @@ const props = defineProps<{
 }>();
 
 const layoutStore = useLayoutStore();
-const editorStore = useEditorStore();
-const { selectedComponentInstanceId } = useCanvasManager();
+const { isEditorOpen } = useCanvasManager();
 
 useProjectLoader(toRef(props, 'projectId'));
 
-watch(selectedComponentInstanceId, (newId) => {
-  if (newId === null) {
-    editorStore.closeEditor();
-  }
-});
 </script>
 
 <template>
@@ -32,7 +25,7 @@ watch(selectedComponentInstanceId, (newId) => {
       <LayoutManager :node="layoutStore.layout" />
     </main>
     <transition name="slide-fade">
-      <EditorPanel v-if="editorStore.isOpen" class="builder-page__editor-panel"/>
+      <EditorPanel v-if="isEditorOpen" class="builder-page__editor-panel"/>
     </transition>
   </div>
 </template>

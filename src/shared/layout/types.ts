@@ -1,13 +1,17 @@
+import type { WidgetId } from './constants';
+
+export type { WidgetId } from './constants';
+
 export interface LayoutPanel {
   type: 'panel';
   id: string;
-  widgetId: 'UiLibrary' | 'AppWorkspace' | 'EditorPanel';
+  widgetId: WidgetId;
   size: number;
 }
 
 export interface LayoutNode {
   type: 'row' | 'col';
-  id: string;
+  id:string;
   size: number;
   children: (LayoutNode | LayoutPanel)[];
 }

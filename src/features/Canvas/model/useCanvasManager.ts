@@ -123,6 +123,10 @@ export function useCanvasManager() {
     store.selectComponent(instanceId);
   }
 
+  function closeEditor() {
+    store.closeEditor();
+  }
+
   function updateComponentProps(payload: { instanceId: number; newValues: Record<string, any> }) {
     store.updateComponentProps(payload);
   }
@@ -156,10 +160,12 @@ export function useCanvasManager() {
     selectedComponent,
     draggableComponents,
     selectedComponentInstanceId: computed(() => store.selectedComponentInstanceId),
+    isEditorOpen: computed(() => store.isEditorOpen),
     addComponent,
     addComponentAt,
     cloneComponent,
     selectComponent,
+    closeEditor,
     updateComponentProps,
     updateComponentStyles,
     deleteComponent,

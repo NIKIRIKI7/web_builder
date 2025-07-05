@@ -1,6 +1,6 @@
-import type { FullRenderedComponent } from '@/features/Canvas/model/canvasStore';
+import type { ExportableComponent } from '../types';
 
-export function generateJs(components: FullRenderedComponent[]): string {
+export function generateJs(components: ExportableComponent[]): string {
   if (components.length === 0) {
     return '';
   }

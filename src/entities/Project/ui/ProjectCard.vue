@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, defineAsyncComponent } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { computed, ref, defineAsyncComponent, defineEmits } from 'vue';
 import type { Project } from '../model/types';
-import { useProjectStore } from '@/features/ProjectManager/model/projectStore';
 import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
 import { useClickOutside } from '@/shared/lib/hooks/useClickOutside';
 import { EditIcon, MoreHorizontalIcon, DeleteIcon } from '@/shared/ui/icons';
@@ -12,10 +10,11 @@ const props = defineProps<{
   project: Project;
 }>();
 
-const projectStore = useProjectStore();
+const emit = defineEmits<{
+  (e: 'delete', projectId: string): void;
+}>();
+
 const modalStore = useModalStore();
-const router = useRouter();
-const route = useRoute();
 const { t } = useI18nManager();
 
 const cardRef = ref<HTMLElement | null>(null);
@@ -45,12 +44,8 @@ async function handleDelete() {
       message: message,
     });
 
-    const projectIdToDelete = props.project.id;
-    projectStore.deleteProject(projectIdToDelete);
+    emit('delete', props.project.id);
 
-    if (route.name === 'Builder' && route.params.projectId === projectIdToDelete) {
-      router.push({ name: 'Dashboard' });
-    }
   } catch (error) {
     // User cancelled
   }
