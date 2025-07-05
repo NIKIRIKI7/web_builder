@@ -16,6 +16,6 @@ import Canvas from './Canvas.vue';
   padding: 24px;
   overflow: auto;
   height: 100%;
-  background-color: $color-bg-primary;
+  background-color: var(--color-bg-primary);
 }
 </style>

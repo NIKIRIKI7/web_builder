@@ -12,10 +12,10 @@ const onInput = (event: Event) => {
 <template>
   <div class="editor-control__color-wrapper">
     <input
-        :value="modelValue"
-        type="color"
-        class="editor-control__color-input"
-        @input="onInput"
+      :value="modelValue"
+      type="color"
+      class="editor-control__color-input"
+      @input="onInput"
     />
     <span class="editor-control__color-value">{{ modelValue }}</span>
   </div>
@@ -30,9 +30,10 @@ const onInput = (event: Event) => {
 
 .editor-control__color-value {
   font-family: monospace;
-  background-color: $color-bg-primary;
+  background-color: var(--color-bg-primary);
   padding: 4px 8px;
   border-radius: 4px;
+  color: var(--color-text-primary);
 }
 
 .editor-control__color-input {
@@ -42,7 +43,7 @@ const onInput = (event: Event) => {
   width: 32px;
   height: 32px;
   padding: 0;
-  border: 1px solid $color-border;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   background-color: transparent;
   cursor: pointer;

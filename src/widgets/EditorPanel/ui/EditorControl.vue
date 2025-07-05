@@ -49,10 +49,10 @@ const localValue = computed({
   <div class="editor-control">
     <label class="editor-control__label">{{ field.label }}</label>
     <component
-        v-if="activeControl"
-        :is="activeControl"
-        v-model="localValue"
-        :unit="field.unit"
+      v-if="activeControl"
+      :is="activeControl"
+      v-model="localValue"
+      :unit="field.unit"
     />
   </div>
 </template>
@@ -68,7 +68,8 @@ const localValue = computed({
     margin-bottom: 8px;
     font-size: 14px;
     font-weight: 500;
-    color: #606266;
+    color: var(--color-text-primary);
+    opacity: 0.9;
   }
 }
 </style>

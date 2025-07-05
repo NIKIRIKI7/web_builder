@@ -11,9 +11,9 @@ const onInput = debounce((event: Event) => {
 
 <template>
   <textarea
-      :value="modelValue"
-      class="editor-control__input editor-control__textarea"
-      @input="onInput"
+    :value="modelValue"
+    class="editor-control__input editor-control__textarea"
+    @input="onInput"
   ></textarea>
 </template>
 
@@ -22,15 +22,15 @@ const onInput = debounce((event: Event) => {
   width: 100%;
   padding: 8px 12px;
   font-size: 14px;
-  border: 1px solid $color-border;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
-  background-color: $color-bg-secondary;
-  color: $color-text-primary;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
   transition: border-color 0.2s;
 
   &:focus {
     outline: none;
-    border-color: #3498db;
+    border-color: var(--color-accent);
   }
 }
 

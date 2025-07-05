@@ -40,19 +40,19 @@ const createEditorField = (name: string, label: string, type: EditorField['type'
 
       <div class="script-item__fields">
         <EditorControl
-            :field="createEditorField('eventName', 'Event Name', 'text')"
-            :model-value="script.eventName"
-            @update:model-value="handleUpdate(script, { eventName: $event })"
+          :field="createEditorField('eventName', 'Event Name', 'text')"
+          :model-value="script.eventName"
+          @update:model-value="handleUpdate(script, { eventName: $event })"
         />
         <EditorControl
-            :field="createEditorField('targetSelector', 'Target Selector (optional)', 'text')"
-            :model-value="script.targetSelector"
-            @update:model-value="handleUpdate(script, { targetSelector: $event })"
+          :field="createEditorField('targetSelector', 'Target Selector (optional)', 'text')"
+          :model-value="script.targetSelector"
+          @update:model-value="handleUpdate(script, { targetSelector: $event })"
         />
         <EditorControl
-            :field="createEditorField('code', 'JavaScript Code', 'code-editor')"
-            :model-value="script.code"
-            @update:model-value="handleUpdate(script, { code: $event })"
+          :field="createEditorField('code', 'JavaScript Code', 'code-editor')"
+          :model-value="script.code"
+          @update:model-value="handleUpdate(script, { code: $event })"
         />
       </div>
     </div>
@@ -71,16 +71,17 @@ const createEditorField = (name: string, label: string, type: EditorField['type'
 }
 .script-manager__placeholder {
   text-align: center;
-  color: #909399;
+  color: var(--color-text-primary);
+  opacity: 0.6;
   padding: 20px;
-  border: 1px dashed $color-border;
+  border: 1px dashed var(--color-border);
   border-radius: 4px;
 }
 .script-item {
-  border: 1px solid $color-border;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   padding: 16px;
-  background-color: #fafafa;
+  background-color: var(--color-bg-primary);
 }
 .script-item__header {
   display: flex;
@@ -88,7 +89,7 @@ const createEditorField = (name: string, label: string, type: EditorField['type'
   align-items: center;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid $color-border;
+  border-bottom: 1px solid var(--color-border);
 }
 .script-item__title {
   font-weight: 600;
@@ -96,15 +97,15 @@ const createEditorField = (name: string, label: string, type: EditorField['type'
 }
 .script-item__delete-btn {
   background: none;
-  border: 1px solid #fbc4c4;
-  color: #f56c6c;
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
   border-radius: 4px;
   padding: 4px 8px;
   cursor: pointer;
   transition: all 0.2s;
   &:hover {
-    background-color: #f56c6c;
-    color: white;
+    background-color: var(--color-danger);
+    color: var(--color-text-secondary);
   }
 }
 .script-item__fields {
@@ -115,16 +116,16 @@ const createEditorField = (name: string, label: string, type: EditorField['type'
 .script-manager__add-btn {
   width: 100%;
   padding: 10px;
-  background-color: #f0f9eb;
-  border: 1px solid #e1f3d8;
-  color: #67c23a;
+  background-color: transparent;
+  border: 1px solid var(--color-success);
+  color: var(--color-success);
   border-radius: 4px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
   &:hover {
-    background-color: #67c23a;
-    color: white;
+    background-color: var(--color-success);
+    color: var(--color-text-secondary);
   }
 }
 </style>

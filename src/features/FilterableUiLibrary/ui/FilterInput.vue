@@ -13,10 +13,10 @@ const localSearchTerm = computed({
 <template>
   <div class="filter-input">
     <input
-        v-model.trim="localSearchTerm"
-        type="text"
-        class="filter-input__field"
-        placeholder="Search components..."
+      v-model.trim="localSearchTerm"
+      type="text"
+      class="filter-input__field"
+      placeholder="Search components..."
     />
   </div>
 </template>
@@ -24,22 +24,22 @@ const localSearchTerm = computed({
 <style scoped lang="scss">
 .filter-input {
   padding: 0 16px 16px;
-  border-bottom: 1px solid $color-border;
+  border-bottom: 1px solid var(--color-border);
 
   &__field {
     width: 100%;
     padding: 10px 14px;
     font-size: 14px;
-    border: 1px solid $color-border;
+    border: 1px solid var(--color-border);
     border-radius: 6px;
-    background-color: $color-bg-primary;
-    color: $color-text-primary;
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
     transition: border-color $transition-duration, box-shadow $transition-duration;
 
     &:focus {
       outline: none;
-      border-color: #3498db;
-      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 2px rgba(var(--color-accent), 0.2);
     }
   }
 }

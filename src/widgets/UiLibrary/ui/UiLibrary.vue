@@ -79,8 +79,8 @@ const renderableItems = computed(() => {
   display: flex;
   flex-direction: column;
   height: 100%;
-  color: $color-text-primary;
-  background-color: $color-bg-secondary;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-secondary);
 }
 .ui-library__header {
   padding: 16px;
@@ -111,7 +111,8 @@ const renderableItems = computed(() => {
   padding-top: 12px;
   font-size: 14px;
   font-weight: 600;
-  color: #606266;
+  color: var(--color-text-primary);
+  opacity: 0.7;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -129,7 +130,8 @@ const renderableItems = computed(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #909399;
+  color: var(--color-text-primary);
+  opacity: 0.5;
   font-size: 15px;
 }
 </style>

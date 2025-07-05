@@ -16,21 +16,21 @@ const debouncedCodeUpdate = debounce((code: string) => {
 
 <template>
   <Codemirror
-      :model-value="modelValue"
-      @update:model-value="debouncedCodeUpdate"
-      placeholder="Code goes here..."
-      :style="{ height: '200px' }"
-      :autofocus="true"
-      :indent-with-tab="true"
-      :tab-size="2"
-      :extensions="codeExtensions"
-      class="code-editor-instance"
+    :model-value="modelValue"
+    @update:model-value="debouncedCodeUpdate"
+    placeholder="Code goes here..."
+    :style="{ height: '200px' }"
+    :autofocus="true"
+    :indent-with-tab="true"
+    :tab-size="2"
+    :extensions="codeExtensions"
+    class="code-editor-instance"
   />
 </template>
 
 <style lang="scss">
 .code-editor-instance {
-  border: 1px solid $color-border;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   overflow: hidden;
 

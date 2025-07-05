@@ -3,10 +3,10 @@ import { ref, watch, shallowRef } from 'vue';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
 import { getEditorConfig } from '@/entities/UiComponent/model/registry';
 import type { EditorConfiguration } from '@/entities/UiComponent/model/types';
-import type { ComponentScript } from '@/features/Canvas/model/canvasStore';
+import type { ComponentScript, FullRenderedComponent } from '@/features/Canvas/model/canvasStore';
 import EditorControl from './EditorControl.vue';
 import ScriptManager from './ScriptManager.vue';
-import { InfoIcon } from '@/shared/ui/icons';
+import { SelectIcon } from '@/shared/ui/icons';
 
 const canvasManager = useCanvasManager();
 const { selectedComponent } = canvasManager;
@@ -14,9 +14,16 @@ const { selectedComponent } = canvasManager;
 const activeTabName = ref('');
 const editorConfig = shallowRef<EditorConfiguration | null>(null);
 
-watch(selectedComponent, async (newSelectedComponent) => {
-  if (newSelectedComponent) {
-    editorConfig.value = await getEditorConfig(newSelectedComponent.componentDefinition.id);
+watch(selectedComponent, async (newComponent, oldComponent) => {
+  const newComponentId = newComponent?.componentDefinition.id;
+  const oldComponentId = oldComponent?.componentDefinition.id;
+
+  if (newComponentId === oldComponentId) {
+    return;
+  }
+
+  if (newComponent) {
+    editorConfig.value = await getEditorConfig(newComponent.componentDefinition.id);
     if (editorConfig.value?.tabs?.length) {
       activeTabName.value = editorConfig.value.tabs[0].name;
     }
@@ -109,7 +116,7 @@ function handleDelete() {
 
     <div v-else class="editor-panel__placeholder">
       <div class="editor-panel__placeholder-icon">
-        <InfoIcon />
+        <SelectIcon />
       </div>
       <p class="editor-panel__placeholder-text">Select a component to edit</p>
     </div>
@@ -121,7 +128,8 @@ function handleDelete() {
   display: flex;
   flex-direction: column;
   height: 100%;
-  color: $color-text-primary;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-secondary);
 }
 .editor-panel__content {
   display: flex;
@@ -130,7 +138,7 @@ function handleDelete() {
 }
 .editor-panel__header {
   padding: 16px 16px 0;
-  border-bottom: 1px solid $color-border;
+  border-bottom: 1px solid var(--color-border);
   flex-shrink: 0;
 }
 .editor-panel__title {
@@ -152,15 +160,18 @@ function handleDelete() {
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  color: #606266;
+  color: var(--color-text-primary);
   transition: all 0.2s;
   margin-bottom: -1px;
+  opacity: 0.7;
   &:hover {
-    color: #34495e;
+    opacity: 1;
+    color: var(--color-accent);
   }
   &--active {
-    color: #3498db;
-    border-bottom-color: #3498db;
+    opacity: 1;
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
   }
 }
 .editor-panel__body {
@@ -170,16 +181,16 @@ function handleDelete() {
 }
 .editor-panel__footer {
   padding: 16px;
-  border-top: 1px solid $color-border;
-  background-color: $color-bg-primary;
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-bg-primary);
   flex-shrink: 0;
 }
 .editor-panel__delete-btn {
   width: 100%;
   padding: 10px;
-  background-color: #fef0f0;
-  color: #f56c6c;
-  border: 1px solid #fde2e2;
+  background-color: transparent;
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
   border-radius: 4px;
   font-size: 14px;
   font-weight: 500;
@@ -187,9 +198,9 @@ function handleDelete() {
   transition: all 0.2s;
 
   &:hover {
-    background-color: #f56c6c;
-    color: white;
-    border-color: #f56c6c;
+    background-color: var(--color-danger);
+    color: var(--color-text-secondary);
+    border-color: var(--color-danger);
   }
 }
 .editor-panel__placeholder {
@@ -199,12 +210,12 @@ function handleDelete() {
   align-items: center;
   height: 100%;
   text-align: center;
-  color: #909399;
+  color: var(--color-text-primary);
+  opacity: 0.5;
   padding: 20px;
 }
 .editor-panel__placeholder-icon {
-  margin-bottom: 12px;
-  color: #c0c4cc;
+  margin-bottom: 16px;
 }
 .editor-panel__placeholder-text {
   font-size: 15px;

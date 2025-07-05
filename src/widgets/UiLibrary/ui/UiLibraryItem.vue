@@ -4,7 +4,7 @@ import { DND_COMPONENT_ID_KEY } from '@/shared/lib/dnd/keys';
 import { DefaultPreviewIcon } from '@/shared/ui/icons';
 
 const props = defineProps<{
-  componentInfo: UiComponentPreview; // Changed from UiComponentInfo
+  componentInfo: UiComponentPreview;
 }>();
 
 function onDragStart(event: DragEvent) {
@@ -16,9 +16,9 @@ function onDragStart(event: DragEvent) {
 </script>
 <template>
   <div
-      class="ui-library-item"
-      draggable="true"
-      @dragstart="onDragStart"
+    class="ui-library-item"
+    draggable="true"
+    @dragstart="onDragStart"
   >
     <div class="ui-library-item__preview">
       <component :is="componentInfo.previewIcon || DefaultPreviewIcon" />
@@ -33,8 +33,8 @@ function onDragStart(event: DragEvent) {
   flex-direction: column;
   align-items: center;
   padding: 12px;
-  background-color: $color-bg-primary;
-  border: 1px solid $color-border;
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   cursor: grab;
   transition: all $transition-duration ease;
@@ -47,7 +47,7 @@ function onDragStart(event: DragEvent) {
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    border-color: #a7b5c9;
+    border-color: var(--color-accent);
   }
 
   &__preview {
@@ -57,12 +57,13 @@ function onDragStart(event: DragEvent) {
     width: 100%;
     height: 60px;
     margin-bottom: 8px;
-    color: #8c9bb0;
+    color: var(--color-text-primary);
+    opacity: 0.6;
   }
 
   &__name {
     font-size: 13px;
-    color: $color-text-primary;
+    color: var(--color-text-primary);
     font-weight: 500;
   }
 }

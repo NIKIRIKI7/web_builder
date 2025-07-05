@@ -36,18 +36,18 @@ function deleteLink(index: number) {
     <div v-for="(link, index) in modelValue" :key="link.id" class="link-item">
       <div class="link-item__inputs">
         <input
-            type="text"
-            class="link-item__input"
-            placeholder="Link Text"
-            :value="link.text"
-            @input="updateLink(index, 'text', ($event.target as HTMLInputElement).value)"
+          type="text"
+          class="link-item__input"
+          placeholder="Link Text"
+          :value="link.text"
+          @input="updateLink(index, 'text', ($event.target as HTMLInputElement).value)"
         />
         <input
-            type="text"
-            class="link-item__input"
-            placeholder="URL"
-            :value="link.url"
-            @input="updateLink(index, 'url', ($event.target as HTMLInputElement).value)"
+          type="text"
+          class="link-item__input"
+          placeholder="URL"
+          :value="link.url"
+          @input="updateLink(index, 'url', ($event.target as HTMLInputElement).value)"
         />
       </div>
       <button class="link-item__delete-btn" @click="deleteLink(index)">
@@ -82,14 +82,14 @@ function deleteLink(index: number) {
   width: 100%;
   padding: 6px 10px;
   font-size: 13px;
-  border: 1px solid $color-border;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
-  background-color: $color-bg-secondary;
-  color: $color-text-primary;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
   transition: border-color 0.2s;
   &:focus {
     outline: none;
-    border-color: #3498db;
+    border-color: var(--color-accent);
   }
 }
 .link-item__delete-btn {
@@ -101,14 +101,16 @@ function deleteLink(index: number) {
   height: 32px;
   background: none;
   border: 1px solid transparent;
-  color: #909399;
+  color: var(--color-text-primary);
+  opacity: 0.6;
   cursor: pointer;
   border-radius: 4px;
   transition: all 0.2s;
   &:hover {
-    color: #f56c6c;
-    background-color: #fef0f0;
-    border-color: #fde2e2;
+    color: var(--color-danger);
+    background-color: var(--color-bg-primary);
+    border-color: transparent;
+    opacity: 1;
   }
 }
 .link-array-editor__add-btn {
@@ -119,16 +121,16 @@ function deleteLink(index: number) {
   width: 100%;
   padding: 8px;
   margin-top: 8px;
-  background-color: #f0f9eb;
-  border: 1px solid #e1f3d8;
-  color: #67c23a;
+  background-color: transparent;
+  border: 1px solid var(--color-success);
+  color: var(--color-success);
   border-radius: 4px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
   &:hover {
-    background-color: #67c23a;
-    color: white;
+    background-color: var(--color-success);
+    color: var(--color-text-secondary);
   }
   svg {
     width: 20px;

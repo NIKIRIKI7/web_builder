@@ -25,25 +25,25 @@ import EditorPanel from '@/widgets/EditorPanel/ui/EditorPanel.vue';
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: $color-bg-primary;
+  background-color: var(--color-bg-primary);
 }
 .builder-page__main {
   display: flex;
   flex-grow: 1;
-  height: calc(100vh - $header-height);
+  height: calc(100vh - var(--layout-header-height));
 }
 .builder-page__sidebar {
   flex-shrink: 0;
-  width: $sidebar-width;
-  background-color: $color-bg-secondary;
-  border-right: 1px solid $color-border;
+  width: var(--layout-sidebar-width);
+  background-color: var(--color-bg-secondary);
+  border-right: 1px solid var(--color-border);
   height: 100%;
   overflow-y: auto;
 }
 .builder-page__sidebar--right {
-  width: $editor-panel-width;
+  width: var(--layout-editor-panel-width);
   border-right: none;
-  border-left: 1px solid $color-border;
+  border-left: 1px solid var(--color-border);
 }
 .builder-page__workspace {
   flex-grow: 1;

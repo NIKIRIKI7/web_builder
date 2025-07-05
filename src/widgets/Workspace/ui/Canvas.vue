@@ -139,7 +139,7 @@ function onDraggableUpdate(newOrder: any[]) {
   width: 100%;
   max-width: 1200px;
   min-height: 100%;
-  background-color: $color-bg-secondary;
+  background-color: var(--color-bg-secondary);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   position: relative;
@@ -148,8 +148,8 @@ function onDraggableUpdate(newOrder: any[]) {
   padding: 20px;
 }
 .canvas--drag-over {
-  border-color: #3498db;
-  box-shadow: 0 8px 16px rgba(52, 152, 219, 0.2);
+  border-color: var(--color-accent);
+  box-shadow: 0 8px 16px rgba(var(--color-accent), 0.2);
 }
 .canvas__placeholder,
 .canvas__loading {
@@ -159,7 +159,8 @@ function onDraggableUpdate(newOrder: any[]) {
   align-items: center;
   height: 300px;
   width: 100%;
-  color: #bdc3c7;
+  color: var(--color-text-primary);
+  opacity: 0.4;
   text-align: center;
   pointer-events: none;
 }
@@ -175,8 +176,8 @@ function onDraggableUpdate(newOrder: any[]) {
 }
 .ghost-component {
   opacity: 0.5;
-  background: #c8ebfb;
-  border: 2px dashed #3498db;
+  background: var(--color-bg-primary);
+  border: 2px dashed var(--color-accent);
   border-radius: 4px;
 }
 .ghost-component > * {
@@ -195,11 +196,14 @@ function onDraggableUpdate(newOrder: any[]) {
   margin-bottom: 20px;
 }
 .component-wrapper:hover {
-  outline-color: #d5eafb;
+  outline-color: var(--color-accent);
+  outline-style: dashed;
+  outline-width: 1px;
 }
 .component-wrapper--selected {
   z-index: 20;
-  outline-color: #3498db;
+  outline: 2px solid var(--color-accent);
+  outline-style: solid;
   cursor: default;
 }
 .component-wrapper--selected .component-wrapper__controls {
@@ -219,8 +223,8 @@ function onDraggableUpdate(newOrder: any[]) {
   align-items: center;
   gap: 4px;
   padding: 4px;
-  background-color: $color-bg-secondary;
-  border: 1px solid $color-border;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   opacity: 0;
@@ -245,19 +249,21 @@ function onDraggableUpdate(newOrder: any[]) {
   cursor: pointer;
   background-color: transparent;
   transition: all 0.2s;
-  color: #606266;
+  color: var(--color-text-primary);
+  opacity: 0.7;
 }
 .component-wrapper__control-btn:hover {
-  background-color: $color-bg-primary;
+  background-color: var(--color-bg-primary);
+  opacity: 1;
 }
 .component-wrapper__drag-handle {
   cursor: grab;
 }
 .component-wrapper__control-btn--clone:hover {
-  color: #3498db;
+  color: var(--color-accent);
 }
 .component-wrapper__control-btn--delete:hover {
-  color: #f56c6c;
+  color: var(--color-danger);
 }
 .component-wrapper__overlay {
   position: absolute;

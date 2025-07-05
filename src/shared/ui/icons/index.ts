@@ -7,3 +7,5 @@ export { default as DragHandleIcon } from './DragHandleIcon.vue';
 export { default as CloneIcon } from './CloneIcon.vue';
 export { default as DeleteIcon } from './DeleteIcon.vue';
 export { default as BurgerIcon } from './BurgerIcon.vue';
+export { default as ChevronDownIcon } from './ChevronDownIcon.vue';
+export { default as SelectIcon } from './SelectIcon.vue';
