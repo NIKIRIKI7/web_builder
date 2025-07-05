@@ -1,0 +1,85 @@
+.ecommerce-hero {
+  width: 100%;
+  font-family: sans-serif;
+  display: flex;
+  align-items: center;
+  min-height: 500px;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    gap: 2rem;
+  }
+
+  &__content {
+    flex: 1;
+    max-width: 50%;
+  }
+
+  &__main-text {
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #303133;
+    margin-bottom: 0.5rem;
+  }
+
+  &__sub-text {
+    font-size: 5rem;
+    font-weight: 300;
+    letter-spacing: 0.5rem;
+    color: #303133;
+    margin-bottom: 2.5rem;
+  }
+
+  &__cta {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background-color: #e57373;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    @include on-event {
+      background-color: #d32f2f;
+    }
+  }
+
+  &__image-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__image {
+    max-width: 100%;
+    height: auto;
+    max-height: 600px;
+  }
+}
+
+@include responsive($tablet) {
+  .ecommerce-hero__container {
+    flex-direction: column;
+    text-align: center;
+  }
+  .ecommerce-hero__content {
+    max-width: 100%;
+    order: 2;
+  }
+  .ecommerce-hero__image-wrapper {
+    order: 1;
+    margin-bottom: 2rem;
+  }
+  .ecommerce-hero__main-text,
+  .ecommerce-hero__sub-text {
+    font-size: 3.5rem;
+  }
+}

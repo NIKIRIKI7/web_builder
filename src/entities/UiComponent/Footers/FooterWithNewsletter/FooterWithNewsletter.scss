@@ -1,0 +1,79 @@
+.footer-with-newsletter {
+  width: 100%;
+  font-family: sans-serif;
+  border-top: 1px solid #e0e0e0;
+
+  &__container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    text-align: center;
+  }
+
+  &__content {
+    margin-bottom: 3rem;
+  }
+
+  &__title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #303133;
+  }
+
+  &__subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    opacity: 0.8;
+  }
+
+  &__form {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  &__input {
+    min-width: 300px;
+    padding: 0.8rem 1rem;
+    border: 1px solid #dcdfe6;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+  }
+
+  &__button {
+    padding: 0.8rem 1.5rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    @include on-event {
+      background-color: #2980b9;
+    }
+  }
+
+  &__copyright {
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+}
+
+@include responsive($mobile) {
+  .footer-with-newsletter__form {
+    flex-direction: column;
+  }
+  .footer-with-newsletter__input {
+    min-width: auto;
+  }
+}

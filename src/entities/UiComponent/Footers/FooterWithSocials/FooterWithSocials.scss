@@ -1,0 +1,45 @@
+.footer-with-socials {
+  width: 100%;
+  font-family: sans-serif;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  &__socials {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  &__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    color: inherit;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+
+    @include on-event {
+      background-color: #ffffff;
+      color: #34495e;
+      transform: translateY(-2px);
+    }
+  }
+
+  &__copyright {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+}

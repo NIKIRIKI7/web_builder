@@ -1,0 +1,76 @@
+.hero-with-form {
+  width: 100%;
+  font-family: sans-serif;
+  
+  &__container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    text-align: center;
+  }
+
+  &__title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #303133;
+  }
+
+  &__subtitle {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #566573;
+    margin-bottom: 2rem;
+  }
+  
+  &__form {
+    display: flex;
+    gap: 0.5rem;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  &__input {
+    flex-grow: 1;
+    min-width: 0;
+    padding: 0.8rem 1rem;
+    border: 1px solid #dcdfe6;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+  }
+
+  &__button {
+    padding: 0.8rem 1.5rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background-color 0.3s;
+    @include on-event {
+      background-color: #2980b9;
+    }
+  }
+
+  &__disclaimer {
+    font-size: 0.8rem;
+    color: #bdc3c7;
+    margin-top: 1rem;
+  }
+}
+
+@include responsive($mobile) {
+  .hero-with-form__form {
+    flex-direction: column;
+  }
+}
