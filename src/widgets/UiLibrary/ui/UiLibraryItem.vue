@@ -43,7 +43,7 @@ function onDragStart(event: DragEvent) {
   cursor: grab;
   transition: all $transition-duration ease;
   text-align: center;
-  min-height: 100px;
+  height: 110px;
 
   &:active {
     cursor: grabbing;
@@ -68,12 +68,14 @@ function onDragStart(event: DragEvent) {
   }
 
   &__name {
+    width: 100%;
     font-size: 13px;
     color: var(--color-text-primary);
     font-weight: 500;
     line-height: 1.3;
-    white-space: normal;
-    word-break: break-word;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
 </style>

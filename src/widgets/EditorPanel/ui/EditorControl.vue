@@ -7,6 +7,8 @@ import NumberInput from './controls/NumberInput.vue';
 import ColorInput from './controls/ColorInput.vue';
 import LinkArrayEditor from './controls/LinkArrayEditor.vue';
 import CodeEditorInput from './controls/CodeEditorInput.vue';
+import ImageInput from './controls/ImageInput.vue';
+import ObjectArrayEditor from './controls/ObjectArrayEditor.vue';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 interface Props {
@@ -25,6 +27,8 @@ const controlMap: Record<string, Component> = {
   color: ColorInput,
   'link-array': LinkArrayEditor,
   'code-editor': CodeEditorInput,
+  image: ImageInput,
+  'object-array': ObjectArrayEditor,
 };
 
 const activeControl = shallowRef(controlMap[props.field.type]);
@@ -55,6 +59,7 @@ const localValue = computed({
       :is="activeControl"
       v-model="localValue"
       :unit="field.unit"
+      :item-schema="field.itemSchema"
     />
   </div>
 </template>

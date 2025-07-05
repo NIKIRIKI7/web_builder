@@ -16,7 +16,7 @@ const items = computed<LibraryListItem[]>(() => libraryStore.flatListItems);
 const rowVirtualizer = useVirtualizer({
   count: items.value.length,
   getScrollElement: () => parentRef.value,
-  estimateSize: (index) => (items.value[index]?.type === 'category' ? 36 : 108),
+  estimateSize: (index) => (items.value[index]?.type === 'category' ? 40 : 110),
   overscan: 5,
 });
 
@@ -109,7 +109,7 @@ const renderableItems = computed(() => {
   padding: 0 16px;
 }
 .ui-library__category-title {
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   padding-top: 12px;
   font-size: 14px;
   font-weight: 600;
@@ -121,7 +121,7 @@ const renderableItems = computed(() => {
 .ui-library__list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 16px;
 }
 .ui-library__no-results {
   position: absolute;

@@ -31,8 +31,6 @@ const canvasStyle = computed(() => ({
     height: 100%;
     overflow: auto;
     padding: 24px;
-    display: flex;
-    justify-content: center;
   }
 }
 

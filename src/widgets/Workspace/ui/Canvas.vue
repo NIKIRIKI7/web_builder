@@ -192,6 +192,7 @@ function handleDragLeaveItem() {
   transition: all $transition-duration ease;
   border: 2px dashed transparent;
   padding: 20px;
+  margin: 0 auto;
 }
 .canvas--drag-over {
   border-color: var(--color-accent);
