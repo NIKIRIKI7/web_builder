@@ -1,0 +1,76 @@
+{
+  "header": {
+    "title": "Веб-Конструктор",
+    "themeSelector": "Выберите тему",
+    "languageSelector": "Выберите язык",
+    "export": "Экспорт в HTML",
+    "editLayout": "Редактировать интерфейс",
+    "resetLayout": "Сбросить"
+  },
+  "sidebar": {
+    "library": {
+      "title": "Компоненты",
+      "searchPlaceholder": "Поиск компонентов...",
+      "noResults": "Компоненты не найдены."
+    }
+  },
+  "canvas": {
+    "placeholder": {
+      "text": "Перетащите компоненты сюда"
+    },
+    "actions": {
+      "drag": "Перетащить для сортировки",
+      "clone": "Клонировать компонент",
+      "delete": "Удалить компонент"
+    }
+  },
+  "editor": {
+    "placeholder": {
+      "text": "Выберите компонент для редактирования"
+    },
+    "tabs": {
+      "content": "Контент",
+      "styles": "Стили",
+      "scripts": "Скрипты"
+    },
+    "fields": {
+      "logoText": "Текст логотипа",
+      "ctaText": "Текст кнопки",
+      "navLinks": "Ссылки навигации",
+      "copyrightText": "Текст копирайта",
+      "footerLinks": "Ссылки в подвале",
+      "bgColor": "Цвет фона",
+      "textColor": "Цвет текста",
+      "paddingTop": "Верхний отступ",
+      "paddingBottom": "Нижний отступ",
+      "paddingLeft": "Левый отступ",
+      "paddingRight": "Правый отступ",
+      "borderBottom": "Нижняя граница",
+      "eventName": "Название события",
+      "targetSelector": "Селектор цели (необязательно)",
+      "jsCode": "Код JavaScript",
+      "linkTextPlaceholder": "Текст ссылки",
+      "linkUrlPlaceholder": "URL"
+    },
+    "buttons": {
+      "delete": "Удалить компонент",
+      "addLink": "Добавить ссылку",
+      "addScript": "Добавить обработчик",
+      "deleteScript": "Удалить"
+    },
+    "scripts": {
+      "title": "Обработчик Событий",
+      "placeholder": "Для этого компонента нет скриптов."
+    }
+  },
+  "components": {
+    "categories": {
+      "headers": "Шапки",
+      "footers": "Подвалы"
+    },
+    "names": {
+      "simpleHeader": "Простая шапка",
+      "simpleFooter": "Простой подвал"
+    }
+  }
+}

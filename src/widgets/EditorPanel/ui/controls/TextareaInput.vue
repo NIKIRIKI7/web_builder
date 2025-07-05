@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { debounce } from '@/shared/lib/utils';
 
-defineProps<{ modelValue: string }>();
+const props = withDefaults(defineProps<{
+  modelValue?: string;
+}>(), {
+  modelValue: ''
+});
+
 const emit = defineEmits(['update:modelValue']);
 
 const onInput = debounce((event: Event) => {
@@ -11,7 +16,7 @@ const onInput = debounce((event: Event) => {
 
 <template>
   <textarea
-    :value="modelValue"
+    :value="props.modelValue"
     class="editor-control__input editor-control__textarea"
     @input="onInput"
   ></textarea>

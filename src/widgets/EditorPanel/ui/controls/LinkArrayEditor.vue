@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { klona } from 'klona/lite';
 import { DeleteIcon, AddIcon } from '@/shared/ui/icons';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 type Link = { id: number; text: string; url: string };
 
 const props = withDefaults(defineProps<{
-  modelValue: Link[];
+  modelValue?: Link[];
 }>(), {
   modelValue: () => [],
 });
 
 const emit = defineEmits(['update:modelValue']);
+const { t } = useI18nManager();
 
 function updateLink(index: number, field: 'text' | 'url', value: string) {
   const newLinks = klona(props.modelValue);
@@ -33,19 +35,19 @@ function deleteLink(index: number) {
 
 <template>
   <div class="link-array-editor">
-    <div v-for="(link, index) in modelValue" :key="link.id" class="link-item">
+    <div v-for="(link, index) in props.modelValue" :key="link.id" class="link-item">
       <div class="link-item__inputs">
         <input
           type="text"
           class="link-item__input"
-          placeholder="Link Text"
+          :placeholder="t('editor.fields.linkTextPlaceholder')"
           :value="link.text"
           @input="updateLink(index, 'text', ($event.target as HTMLInputElement).value)"
         />
         <input
           type="text"
           class="link-item__input"
-          placeholder="URL"
+          :placeholder="t('editor.fields.linkUrlPlaceholder')"
           :value="link.url"
           @input="updateLink(index, 'url', ($event.target as HTMLInputElement).value)"
         />
@@ -56,7 +58,7 @@ function deleteLink(index: number) {
     </div>
     <button class="link-array-editor__add-btn" @click="addLink">
       <AddIcon />
-      Add Link
+      {{ t('editor.buttons.addLink') }}
     </button>
   </div>
 </template>

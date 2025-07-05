@@ -2,10 +2,12 @@
 import { ref, computed } from 'vue';
 import { useVirtualizer } from '@tanstack/vue-virtual';
 import { useFilterableLibraryStore, type LibraryListItem } from '@/features/FilterableUiLibrary/model/store';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
 import FilterInput from '@/features/FilterableUiLibrary/ui/FilterInput.vue';
 import UiLibraryItem from './UiLibraryItem.vue';
 
 const libraryStore = useFilterableLibraryStore();
+const { t } = useI18nManager();
 
 const parentRef = ref<HTMLElement | null>(null);
 
@@ -30,7 +32,7 @@ const renderableItems = computed(() => {
 <template>
   <div class="ui-library">
     <div class="ui-library__header">
-      <h2 class="ui-library__title">Components</h2>
+      <h2 class="ui-library__title">{{ t('sidebar.library.title') }}</h2>
     </div>
     <FilterInput />
 
@@ -69,7 +71,7 @@ const renderableItems = computed(() => {
     </div>
 
     <div v-if="!items.length" class="ui-library__no-results">
-      <p>No components found.</p>
+      <p>{{ t('sidebar.library.noResults') }}</p>
     </div>
   </div>
 </template>

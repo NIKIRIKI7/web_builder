@@ -38,6 +38,15 @@ export const useCanvasStore = defineStore('canvas', {
     _addInstance(instance: CanvasInstanceState) {
       this.componentInstances.push(instance);
     },
+    _addInstanceAt(payload: { instance: CanvasInstanceState; targetId: number; position: 'before' | 'after' }) {
+      const targetIndex = this.componentInstances.findIndex(c => c.instanceId === payload.targetId);
+      if (targetIndex === -1) {
+        this.componentInstances.push(payload.instance);
+        return;
+      }
+      const insertIndex = payload.position === 'before' ? targetIndex : targetIndex + 1;
+      this.componentInstances.splice(insertIndex, 0, payload.instance);
+    },
     selectComponent(instanceId: number | null) {
       this.selectedComponentInstanceId = instanceId;
     },

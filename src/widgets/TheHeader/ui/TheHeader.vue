@@ -5,18 +5,18 @@ import { exportPageAsHtml } from '@/features/ExportManager/model';
 import { useThemeManager } from '@/shared/theme/useThemeManager';
 import { themeOptions } from '@/shared/theme/defaults';
 import type { Theme } from '@/shared/theme/types';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
+import { useLayoutStore } from '@/shared/layout/layoutStore';
 import DropdownMenu from '@/shared/ui/DropdownMenu/DropdownMenu.vue';
 
 const canvasManager = useCanvasManager();
 const { theme, setTheme } = useThemeManager();
+const { t, currentLocale, localeOptions } = useI18nManager();
+const layoutStore = useLayoutStore();
 
-const currentTheme = computed<Theme>({
-  get() {
-    return theme.value;
-  },
-  set(newTheme) {
-    setTheme(newTheme);
-  }
+const activeTheme = computed<Theme>({
+  get: () => theme.value,
+  set: (newTheme) => setTheme(newTheme),
 });
 
 function downloadFile(filename: string, content: string) {
@@ -38,15 +38,34 @@ async function handleExport() {
 
 <template>
   <header class="the-header">
-    <div class="the-header__logo">Web Builder</div>
+    <div class="the-header__logo">{{ t('header.title') }}</div>
     <div class="the-header__actions">
+      <button
+        v-if="layoutStore.isEditMode"
+        class="the-header__layout-reset"
+        @click="layoutStore.resetLayout()"
+      >
+        {{ t('header.resetLayout') }}
+      </button>
+      <button
+        class="the-header__layout-toggle"
+        :class="{'the-header__layout-toggle--active': layoutStore.isEditMode}"
+        @click="layoutStore.toggleEditMode()"
+      >
+        {{ t('header.editLayout') }}
+      </button>
       <DropdownMenu
-        v-model="currentTheme"
+        v-model="currentLocale"
+        :options="localeOptions"
+        :placeholder="t('header.languageSelector')"
+      />
+      <DropdownMenu
+        v-model="activeTheme"
         :options="themeOptions"
-        placeholder="Select Theme"
+        :placeholder="t('header.themeSelector')"
       />
       <button class="the-header__export-btn" @click="handleExport">
-        Export to HTML
+        {{ t('header.export') }}
       </button>
     </div>
   </header>
@@ -74,6 +93,45 @@ async function handleExport() {
     display: flex;
     align-items: center;
     gap: 16px;
+  }
+
+  &__layout-reset {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: var(--color-danger);
+    border: 1px solid var(--color-danger);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: var(--color-danger);
+      color: var(--color-text-secondary);
+    }
+  }
+
+  &__layout-toggle {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: var(--color-bg-primary);
+    }
+
+    &--active {
+      background-color: var(--color-accent);
+      color: var(--color-text-secondary);
+      border-color: var(--color-accent);
+    }
   }
 
   &__export-btn {

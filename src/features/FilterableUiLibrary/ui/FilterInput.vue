@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useFilterableLibraryStore } from '@/features/FilterableUiLibrary/model/store';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 const libraryStore = useFilterableLibraryStore();
+const { t } = useI18nManager();
 
 const localSearchTerm = computed({
   get: () => libraryStore.searchTerm,
@@ -16,7 +18,7 @@ const localSearchTerm = computed({
       v-model.trim="localSearchTerm"
       type="text"
       class="filter-input__field"
-      placeholder="Search components..."
+      :placeholder="t('sidebar.library.searchPlaceholder')"
     />
   </div>
 </template>

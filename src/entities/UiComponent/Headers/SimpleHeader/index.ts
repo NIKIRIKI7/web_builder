@@ -7,7 +7,7 @@ const ID = 'simple-header-v1';
 
 export const simpleHeaderPreview: UiComponentPreview = {
   id: ID,
-  name: 'Simple Header',
+  name: 'simpleHeader',
   category: 'Headers',
   previewIcon: markRaw(HeaderIcon),
 };
@@ -43,22 +43,22 @@ export const simpleHeaderEditorConfig: EditorConfiguration = {
       name: 'Content',
       target: 'props',
       fields: [
-        { name: 'logoText', label: 'Logo Text', type: 'text' },
-        { name: 'ctaText', label: 'Button Text', type: 'text' },
-        { name: 'links', label: 'Navigation Links', type: 'link-array' },
+        { name: 'logoText', label: 'logoText', type: 'text' },
+        { name: 'ctaText', label: 'ctaText', type: 'text' },
+        { name: 'links', label: 'navLinks', type: 'link-array' },
       ],
     },
     {
       name: 'Styles',
       target: 'styles',
       fields: [
-        { name: 'backgroundColor', label: 'Background Color', type: 'color' },
-        { name: 'color', label: 'Text Color', type: 'color' },
-        { name: 'paddingTop', label: 'Padding Top', type: 'number', unit: 'px' },
-        { name: 'paddingBottom', label: 'Padding Bottom', type: 'number', unit: 'px' },
-        { name: 'paddingLeft', label: 'Padding Left', type: 'number', unit: 'px' },
-        { name: 'paddingRight', label: 'Padding Right', type: 'number', unit: 'px' },
-        { name: 'borderBottom', label: 'Bottom Border', type: 'text' },
+        { name: 'backgroundColor', label: 'bgColor', type: 'color' },
+        { name: 'color', label: 'textColor', type: 'color' },
+        { name: 'paddingTop', label: 'paddingTop', type: 'number', unit: 'px' },
+        { name: 'paddingBottom', label: 'paddingBottom', type: 'number', unit: 'px' },
+        { name: 'paddingLeft', label: 'paddingLeft', type: 'number', unit: 'px' },
+        { name: 'paddingRight', label: 'paddingRight', type: 'number', unit: 'px' },
+        { name: 'borderBottom', label: 'borderBottom', type: 'text' },
       ],
     },
     {

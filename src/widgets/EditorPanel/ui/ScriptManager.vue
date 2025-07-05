@@ -2,6 +2,7 @@
 import type { ComponentScript } from '@/features/Canvas/model/canvasStore';
 import type { EditorField } from '@/entities/UiComponent/model/types';
 import EditorControl from './EditorControl.vue';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 defineProps<{
   scripts: ComponentScript[] | undefined;
@@ -12,6 +13,8 @@ const emit = defineEmits<{
   (e: 'update-script', payload: ComponentScript): void;
   (e: 'delete-script', scriptId: string): void;
 }>();
+
+const { t } = useI18nManager();
 
 function handleUpdate(script: ComponentScript, newValues: Partial<ComponentScript>) {
   emit('update-script', { ...script, ...newValues });
@@ -27,30 +30,30 @@ const createEditorField = (name: string, label: string, type: EditorField['type'
 <template>
   <div class="script-manager">
     <div v-if="!scripts || !scripts.length" class="script-manager__placeholder">
-      <p>No scripts defined for this component.</p>
+      <p>{{ t('editor.scripts.placeholder') }}</p>
     </div>
 
     <div v-for="script in scripts" :key="script.id" class="script-item">
       <div class="script-item__header">
-        <span class="script-item__title">Event Handler</span>
+        <span class="script-item__title">{{ t('editor.scripts.title') }}</span>
         <button class="script-item__delete-btn" @click="emit('delete-script', script.id)">
-          Delete
+          {{ t('editor.buttons.deleteScript') }}
         </button>
       </div>
 
       <div class="script-item__fields">
         <EditorControl
-          :field="createEditorField('eventName', 'Event Name', 'text')"
+          :field="createEditorField('eventName', 'eventName', 'text')"
           :model-value="script.eventName"
           @update:model-value="handleUpdate(script, { eventName: $event })"
         />
         <EditorControl
-          :field="createEditorField('targetSelector', 'Target Selector (optional)', 'text')"
+          :field="createEditorField('targetSelector', 'targetSelector', 'text')"
           :model-value="script.targetSelector"
           @update:model-value="handleUpdate(script, { targetSelector: $event })"
         />
         <EditorControl
-          :field="createEditorField('code', 'JavaScript Code', 'code-editor')"
+          :field="createEditorField('code', 'jsCode', 'code-editor')"
           :model-value="script.code"
           @update:model-value="handleUpdate(script, { code: $event })"
         />
@@ -58,7 +61,7 @@ const createEditorField = (name: string, label: string, type: EditorField['type'
     </div>
 
     <button class="script-manager__add-btn" @click="emit('add-script')">
-      Add Script Handler
+      {{ t('editor.buttons.addScript') }}
     </button>
   </div>
 </template>

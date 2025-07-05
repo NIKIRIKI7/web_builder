@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { debounce } from '@/shared/lib/utils';
 
-defineProps<{
-  modelValue: number;
+const props = withDefaults(defineProps<{
+  modelValue?: number;
   unit?: string;
-}>();
+}>(), {
+  modelValue: 0
+});
+
 const emit = defineEmits(['update:modelValue']);
 
 const onInput = debounce((event: Event) => {
@@ -14,7 +17,7 @@ const onInput = debounce((event: Event) => {
 <template>
   <div class="number-input-wrapper">
     <input
-      :value="modelValue"
+      :value="props.modelValue"
       type="number"
       class="editor-control__input number-input-wrapper__field"
       @input="onInput"

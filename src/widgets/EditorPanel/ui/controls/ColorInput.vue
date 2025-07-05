@@ -1,5 +1,7 @@
 <script setup lang="ts">
-withDefaults(defineProps<{ modelValue: string }>(), {
+const props = withDefaults(defineProps<{
+  modelValue?: string;
+}>(), {
   modelValue: '#000000',
 });
 
@@ -12,12 +14,12 @@ const onInput = (event: Event) => {
 <template>
   <div class="editor-control__color-wrapper">
     <input
-      :value="modelValue"
+      :value="props.modelValue"
       type="color"
       class="editor-control__color-input"
       @input="onInput"
     />
-    <span class="editor-control__color-value">{{ modelValue }}</span>
+    <span class="editor-control__color-value">{{ props.modelValue }}</span>
   </div>
 </template>
 

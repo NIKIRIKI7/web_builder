@@ -7,6 +7,7 @@ import NumberInput from './controls/NumberInput.vue';
 import ColorInput from './controls/ColorInput.vue';
 import LinkArrayEditor from './controls/LinkArrayEditor.vue';
 import CodeEditorInput from './controls/CodeEditorInput.vue';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 interface Props {
   field: EditorField;
@@ -15,6 +16,7 @@ interface Props {
 
 const props = defineProps<Props>();
 const emit = defineEmits(['update:modelValue']);
+const { t } = useI18nManager();
 
 const controlMap: Record<string, Component> = {
   text: TextInput,
@@ -47,7 +49,7 @@ const localValue = computed({
 
 <template>
   <div class="editor-control">
-    <label class="editor-control__label">{{ field.label }}</label>
+    <label class="editor-control__label">{{ t(`editor.fields.${field.label}`) }}</label>
     <component
       v-if="activeControl"
       :is="activeControl"

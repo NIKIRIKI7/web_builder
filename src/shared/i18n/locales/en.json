@@ -1,0 +1,76 @@
+{
+  "header": {
+    "title": "Web Builder",
+    "themeSelector": "Select Theme",
+    "languageSelector": "Select Language",
+    "export": "Export to HTML",
+    "editLayout": "Edit Layout",
+    "resetLayout": "Reset Layout"
+  },
+  "sidebar": {
+    "library": {
+      "title": "Components",
+      "searchPlaceholder": "Search components...",
+      "noResults": "No components found."
+    }
+  },
+  "canvas": {
+    "placeholder": {
+      "text": "Drag and drop components here"
+    },
+    "actions": {
+      "drag": "Drag to reorder",
+      "clone": "Clone Component",
+      "delete": "Delete Component"
+    }
+  },
+  "editor": {
+    "placeholder": {
+      "text": "Select a component to edit"
+    },
+    "tabs": {
+      "content": "Content",
+      "styles": "Styles",
+      "scripts": "Scripts"
+    },
+    "fields": {
+      "logoText": "Logo Text",
+      "ctaText": "Button Text",
+      "navLinks": "Navigation Links",
+      "copyrightText": "Copyright Text",
+      "footerLinks": "Footer Links",
+      "bgColor": "Background Color",
+      "textColor": "Text Color",
+      "paddingTop": "Padding Top",
+      "paddingBottom": "Padding Bottom",
+      "paddingLeft": "Padding Left",
+      "paddingRight": "Padding Right",
+      "borderBottom": "Bottom Border",
+      "eventName": "Event Name",
+      "targetSelector": "Target Selector (optional)",
+      "jsCode": "JavaScript Code",
+      "linkTextPlaceholder": "Link Text",
+      "linkUrlPlaceholder": "URL"
+    },
+    "buttons": {
+      "delete": "Delete Component",
+      "addLink": "Add Link",
+      "addScript": "Add Script Handler",
+      "deleteScript": "Delete"
+    },
+    "scripts": {
+      "title": "Event Handler",
+      "placeholder": "No scripts defined for this component."
+    }
+  },
+  "components": {
+    "categories": {
+      "headers": "Headers",
+      "footers": "Footers"
+    },
+    "names": {
+      "simpleHeader": "Simple Header",
+      "simpleFooter": "Simple Footer"
+    }
+  }
+}

@@ -3,13 +3,15 @@ import { ref, watch, shallowRef } from 'vue';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
 import { getEditorConfig } from '@/entities/UiComponent/model/registry';
 import type { EditorConfiguration } from '@/entities/UiComponent/model/types';
-import type { ComponentScript, FullRenderedComponent } from '@/features/Canvas/model/canvasStore';
+import type { ComponentScript } from '@/features/Canvas/model/canvasStore';
 import EditorControl from './EditorControl.vue';
 import ScriptManager from './ScriptManager.vue';
 import { SelectIcon } from '@/shared/ui/icons';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 const canvasManager = useCanvasManager();
 const { selectedComponent } = canvasManager;
+const { t } = useI18nManager();
 
 const activeTabName = ref('');
 const editorConfig = shallowRef<EditorConfiguration | null>(null);
@@ -68,7 +70,7 @@ function handleDelete() {
   <div class="editor-panel">
     <div v-if="selectedComponent && editorConfig" class="editor-panel__content">
       <div class="editor-panel__header">
-        <h2 class="editor-panel__title">{{ selectedComponent.componentDefinition.name }}</h2>
+        <h2 class="editor-panel__title">{{ t(`components.names.${selectedComponent.componentDefinition.name}`) }}</h2>
         <div v-if="editorConfig.tabs.length > 1" class="editor-panel__tabs">
           <button
             v-for="tab in editorConfig.tabs"
@@ -77,7 +79,7 @@ function handleDelete() {
             :class="{ 'editor-panel__tab--active': activeTabName === tab.name }"
             @click="activeTabName = tab.name"
           >
-            {{ tab.name }}
+            {{ t(`editor.tabs.${tab.name.toLowerCase()}`) }}
           </button>
         </div>
       </div>
@@ -108,7 +110,7 @@ function handleDelete() {
 
       <div class="editor-panel__footer">
         <button class="editor-panel__delete-btn" @click="handleDelete">
-          Delete Component
+          {{ t('editor.buttons.delete') }}
         </button>
       </div>
 
@@ -118,7 +120,7 @@ function handleDelete() {
       <div class="editor-panel__placeholder-icon">
         <SelectIcon />
       </div>
-      <p class="editor-panel__placeholder-text">Select a component to edit</p>
+      <p class="editor-panel__placeholder-text">{{ t('editor.placeholder.text') }}</p>
     </div>
   </div>
 </template>

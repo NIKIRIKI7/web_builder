@@ -2,10 +2,13 @@
 import type { UiComponentPreview } from '@/entities/UiComponent/model/types';
 import { DND_COMPONENT_ID_KEY } from '@/shared/lib/dnd/keys';
 import { DefaultPreviewIcon } from '@/shared/ui/icons';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 const props = defineProps<{
   componentInfo: UiComponentPreview;
 }>();
+
+const { t } = useI18nManager();
 
 function onDragStart(event: DragEvent) {
   if (event.dataTransfer) {
@@ -23,7 +26,7 @@ function onDragStart(event: DragEvent) {
     <div class="ui-library-item__preview">
       <component :is="componentInfo.previewIcon || DefaultPreviewIcon" />
     </div>
-    <span class="ui-library-item__name">{{ componentInfo.name }}</span>
+    <span class="ui-library-item__name">{{ t(`components.names.${componentInfo.name}`) }}</span>
   </div>
 </template>
 

@@ -1,0 +1,1 @@
+export const DND_LAYOUT_PANEL_ID_KEY = 'application/web-builder-layout-panel-id';

@@ -7,7 +7,7 @@ const ID = 'simple-footer-v1';
 
 export const simpleFooterPreview: UiComponentPreview = {
   id: ID,
-  name: 'Simple Footer',
+  name: 'simpleFooter',
   category: 'Footers',
   previewIcon: markRaw(FooterIcon),
 };
@@ -39,18 +39,18 @@ export const simpleFooterEditorConfig: EditorConfiguration = {
       name: 'Content',
       target: 'props',
       fields: [
-        { name: 'copyrightText', label: 'Copyright Text', type: 'textarea' },
-        { name: 'links', label: 'Footer Links', type: 'link-array' },
+        { name: 'copyrightText', label: 'copyrightText', type: 'textarea' },
+        { name: 'links', label: 'footerLinks', type: 'link-array' },
       ],
     },
     {
       name: 'Styles',
       target: 'styles',
       fields: [
-        { name: 'backgroundColor', label: 'Background Color', type: 'color' },
-        { name: 'color', label: 'Text Color', type: 'color' },
-        { name: 'paddingTop', label: 'Padding Top', type: 'number', unit: 'px' },
-        { name: 'paddingBottom', label: 'Padding Bottom', type: 'number', unit: 'px' },
+        { name: 'backgroundColor', label: 'bgColor', type: 'color' },
+        { name: 'color', label: 'textColor', type: 'color' },
+        { name: 'paddingTop', label: 'paddingTop', type: 'number', unit: 'px' },
+        { name: 'paddingBottom', label: 'paddingBottom', type: 'number', unit: 'px' },
       ],
     },
   ],
