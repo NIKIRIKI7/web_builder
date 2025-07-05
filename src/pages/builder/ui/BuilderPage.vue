@@ -3,11 +3,6 @@ import TheHeader from '@/widgets/TheHeader/ui/TheHeader.vue';
 import AppWorkspace from '@/widgets/Workspace/ui/AppWorkspace.vue';
 import UiLibrary from '@/widgets/UiLibrary/ui/UiLibrary.vue';
 import EditorPanel from '@/widgets/EditorPanel/ui/EditorPanel.vue';
-import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
-
-const canvasManager = useCanvasManager();
-
-await canvasManager.preloadCanvasDefinitions();
 </script>
 
 <template>

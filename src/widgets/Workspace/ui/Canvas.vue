@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import draggable from 'vuedraggable';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
 import { DND_COMPONENT_ID_KEY } from '@/shared/lib/dnd/keys';
-import { AddIcon, CloneIcon, DeleteIcon } from '@/shared/ui/icons';
+import { AddIcon, CloneIcon, DeleteIcon, DragHandleIcon } from '@/shared/ui/icons';
 
 const canvasManager = useCanvasManager();
 const isDragOver = ref(false);
@@ -45,9 +45,14 @@ function onDrop(event: DragEvent) {
 }
 
 function onDraggableUpdate(newOrder: any[]) {
-  canvasManager.draggableComponents.value = newOrder;
+  canvasManager.setComponentInstances(newOrder.map(c => ({
+    instanceId: c.instanceId,
+    componentId: c.componentDefinition.id,
+    props: c.props,
+    styles: c.styles,
+    scripts: c.scripts,
+  })));
 }
-
 </script>
 
 <template>
@@ -79,9 +84,15 @@ function onDraggableUpdate(newOrder: any[]) {
               <div
                 class="component-wrapper"
                 :class="{ 'component-wrapper--selected': item.instanceId === canvasManager.selectedComponentInstanceId.value }"
-                @click.stop="handleComponentClick(item.instanceId)"
               >
                 <div class="component-wrapper__controls">
+                  <div
+                    class="component-wrapper__control-btn component-wrapper__drag-handle"
+                    title="Drag to reorder"
+                    @click.stop
+                  >
+                    <DragHandleIcon />
+                  </div>
                   <button
                     class="component-wrapper__control-btn component-wrapper__control-btn--clone"
                     title="Clone Component"
@@ -105,7 +116,10 @@ function onDraggableUpdate(newOrder: any[]) {
                   :style="item.styles"
                 />
 
-                <div class="component-wrapper__overlay"></div>
+                <div
+                  class="component-wrapper__overlay"
+                  @click.stop="handleComponentClick(item.instanceId)"
+                ></div>
               </div>
             </template>
           </draggable>
@@ -170,11 +184,12 @@ function onDraggableUpdate(newOrder: any[]) {
 }
 .component-wrapper {
   position: relative;
+  z-index: 1;
   outline: 2px solid transparent;
   outline-offset: 2px;
   transition: outline-color 0.2s ease-in-out;
   border-radius: 4px;
-  cursor: move;
+  cursor: grab;
 }
 .component-wrapper:not(:last-child) {
   margin-bottom: 20px;
@@ -183,12 +198,17 @@ function onDraggableUpdate(newOrder: any[]) {
   outline-color: #d5eafb;
 }
 .component-wrapper--selected {
+  z-index: 20;
   outline-color: #3498db;
+  cursor: default;
 }
 .component-wrapper--selected .component-wrapper__controls {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+}
+.component-wrapper--selected .component-wrapper__overlay {
+  pointer-events: none;
 }
 .component-wrapper__controls {
   position: absolute;
@@ -230,6 +250,9 @@ function onDraggableUpdate(newOrder: any[]) {
 .component-wrapper__control-btn:hover {
   background-color: $color-bg-primary;
 }
+.component-wrapper__drag-handle {
+  cursor: grab;
+}
 .component-wrapper__control-btn--clone:hover {
   color: #3498db;
 }
@@ -243,9 +266,10 @@ function onDraggableUpdate(newOrder: any[]) {
   width: 100%;
   height: 100%;
   z-index: 10;
+  cursor: pointer;
 }
 .canvas__component {
-  pointer-events: none;
   width: 100%;
+  pointer-events: none;
 }
 </style>

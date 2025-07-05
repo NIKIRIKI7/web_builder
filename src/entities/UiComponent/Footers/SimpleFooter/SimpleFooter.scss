@@ -1,8 +1,5 @@
 .simple-footer {
   width: 100%;
-  padding: 2rem;
-  background-color: #2c3e50;
-  color: #ecf0f1;
   font-family: sans-serif;
 
   &__container {
@@ -31,5 +28,14 @@
   &__copyright {
     font-size: 0.9rem;
     color: #bdc3c7;
+  }
+}
+
+@include responsive($mobile) {
+  .simple-footer {
+    &__links {
+      flex-direction: column;
+      gap: 1rem;
+    }
   }
 }

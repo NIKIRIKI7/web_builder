@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
-import { exportToHtml } from '@/features/ExportManager/model/htmlExporter';
+import { exportPageAsHtml } from '@/features/ExportManager/model';
 
 const canvasManager = useCanvasManager();
 
@@ -15,11 +15,8 @@ function downloadFile(filename: string, content: string) {
 }
 
 async function handleExport() {
-  // Получаем данные из computed-свойства фасада, используя .value.
-  // Это гарантирует, что мы работаем с актуальным и правильно сформированным массивом.
   const componentsToExport = canvasManager.renderedComponents.value;
-
-  const htmlContent = await exportToHtml(componentsToExport);
+  const htmlContent = await exportPageAsHtml(componentsToExport);
   downloadFile('my-page.html', htmlContent);
 }
 </script>
@@ -51,10 +48,6 @@ async function handleExport() {
     font-size: 20px;
     font-weight: 600;
     color: $color-text-primary;
-  }
-
-  &__actions {
-    // Контейнер для кнопок
   }
 
   &__export-btn {

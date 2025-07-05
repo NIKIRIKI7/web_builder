@@ -36,32 +36,31 @@ const renderableItems = computed(() => {
 
     <div ref="parentRef" class="ui-library__content">
       <div
-          class="ui-library__content-sizer"
-          :style="{ height: `${rowVirtualizer.getTotalSize()}px` }"
+        class="ui-library__content-sizer"
+        :style="{ height: `${rowVirtualizer.getTotalSize()}px` }"
       >
         <div
-            v-for="item in renderableItems"
-            :key="String(item.key)"
-            class="ui-library__list-item"
-            :style="{ transform: `translateY(${item.start}px)` }"
+          v-for="item in renderableItems"
+          :key="String(item.key)"
+          class="ui-library__list-item"
+          :style="{ transform: `translateY(${item.start}px)` }"
         >
           <template v-if="item.data">
             <h3
-                v-if="item.data.type === 'category'"
-                class="ui-library__category-title"
+              v-if="item.data.type === 'category'"
+              class="ui-library__category-title"
             >
               {{ item.data.name }}
             </h3>
 
             <div
-                v-else-if="item.data.type === 'component_row'"
-                class="ui-library__list"
+              v-else-if="item.data.type === 'component_row'"
+              class="ui-library__list"
             >
-<!--              Vue: Type 'UiComponentPreview' is missing the following properties from type 'UiComponentInfo': component, editorTabs-->
               <UiLibraryItem
-                  v-for="component in item.data.items"
-                  :key="component.id"
-                  :component-info="component"
+                v-for="component in item.data.items"
+                :key="component.id"
+                :component-info="component"
               />
             </div>
           </template>

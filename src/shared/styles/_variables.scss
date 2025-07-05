@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 // Colors
 $color-bg-primary: #f0f2f5;
 $color-bg-secondary: #ffffff;
@@ -15,6 +17,20 @@ $editor-panel-width: 320px;
 
 // Z-index
 $z-index-header: 1000;
+$z-index-dropdown: 1010;
 
 // Transitions
 $transition-duration: 0.3s;
+
+// BreakPoints
+$grid-breakpoints: (
+        sm: 576px,
+        md: 768px,
+        lg: 992px,
+        xl: 1200px,
+);
+
+$desktop: map.get($grid-breakpoints, xl);
+$laptop: map.get($grid-breakpoints, lg);
+$tablet: map.get($grid-breakpoints, md);
+$mobile: map.get($grid-breakpoints, sm);

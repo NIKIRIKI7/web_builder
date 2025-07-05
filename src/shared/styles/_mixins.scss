@@ -1,0 +1,58 @@
+@use 'sass:math';
+@use 'sass:meta';
+@use 'sass:list';
+@use 'variables' as *;
+
+@mixin flex-center($direction: row) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: $direction;
+}
+
+@mixin responsive($breakpoint) {
+  @media (max-width: $breakpoint) {
+    @content;
+  }
+}
+
+@mixin apply-font($family, $weight, $size) {
+  font-family: $family;
+  font-weight: $weight;
+  font-size: rem($size);
+}
+
+@mixin truncate-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@function rem($pixels...) {
+  $base-font-size: 16;
+  $result: ();
+
+  @each $value in $pixels {
+    @if meta.type-of($value) == 'number' and math.unit($value) == 'rem' {
+      $result: list.append($result, $value, space);
+    } @else if meta.type-of($value) == 'number' {
+      $unitless-value: math.div($value, ($value * 0 + 1));
+      $result: list.append($result, math.div($unitless-value, $base-font-size) * 1rem, space);
+    } @else {
+      $result: list.append($result, $value, space);
+    }
+  }
+
+  @if list.length($result) == 1 {
+    @return list.nth($result, 1);
+  }
+
+  @return $result;
+}
+
+@mixin on-event {
+  &:hover,
+  &:focus-visible {
+    @content;
+  }
+}

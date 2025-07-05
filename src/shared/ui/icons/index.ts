@@ -6,3 +6,4 @@ export { default as InfoIcon } from './InfoIcon.vue';
 export { default as DragHandleIcon } from './DragHandleIcon.vue';
 export { default as CloneIcon } from './CloneIcon.vue';
 export { default as DeleteIcon } from './DeleteIcon.vue';
+export { default as BurgerIcon } from './BurgerIcon.vue';
