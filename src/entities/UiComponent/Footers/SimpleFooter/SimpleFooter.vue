@@ -1,7 +1,4 @@
 <script setup lang="ts">
-// ИСПРАВЛЕНИЕ: Используем withDefaults для защиты от отсутствующего prop.
-// Теперь, если компонент рендерится без prop 'links', он будет использовать
-// пустой массив по умолчанию и не будет выдавать ошибку 'Missing required prop'.
 withDefaults(defineProps<{
   copyrightText: string;
   links: Array<{ id: number, text: string, url: string }>;

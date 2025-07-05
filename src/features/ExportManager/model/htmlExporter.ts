@@ -1,4 +1,3 @@
-// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\features\ExportManager\model\htmlExporter.ts
 import { createSSRApp } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import type { FullRenderedComponent } from '@/features/Canvas/model/canvasStore';
@@ -30,7 +29,6 @@ export async function exportToHtml(components: FullRenderedComponent[]): Promise
     <title>My Exported Page</title>
 </head>
 <body>
-    <!-- Canvas is empty -->
 </body>
 </html>`;
     }

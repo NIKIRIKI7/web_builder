@@ -1,4 +1,3 @@
-// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\features\FilterableUiLibrary\model\store.ts
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import Fuse, { type FuseResult } from 'fuse.js';

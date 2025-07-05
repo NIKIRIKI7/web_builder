@@ -1,4 +1,3 @@
-// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\features\Canvas\model\canvasStore.ts
 import { defineStore } from 'pinia';
 import type { UiComponentInfo } from '@/entities/UiComponent/model/types';
 

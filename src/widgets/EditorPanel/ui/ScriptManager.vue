@@ -3,10 +3,6 @@ import type { ComponentScript } from '@/features/Canvas/model/canvasStore';
 import type { EditorField } from '@/entities/UiComponent/model/types';
 import EditorControl from './EditorControl.vue';
 
-// ИСПРАВЛЕНИЕ: Убираем `const props =`.
-// В <script setup> результат defineProps автоматически доступен в шаблоне.
-// Присваивание нужно только если вы обращаетесь к props внутри <script>,
-// а в данном случае это не так, что и вызывало предупреждение.
 defineProps<{
   scripts: ComponentScript[] | undefined;
 }>();
@@ -34,10 +30,6 @@ const createEditorField = (name: string, label: string, type: EditorField['type'
       <p>No scripts defined for this component.</p>
     </div>
 
-    <!--
-      Теперь v-for напрямую использует 'scripts' из props,
-      что является стандартным поведением в <script setup>
-    -->
     <div v-for="script in scripts" :key="script.id" class="script-item">
       <div class="script-item__header">
         <span class="script-item__title">Event Handler</span>

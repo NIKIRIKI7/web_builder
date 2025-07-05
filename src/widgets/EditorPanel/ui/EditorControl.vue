@@ -20,7 +20,6 @@ interface Props {
 const props = defineProps<Props>();
 const emit = defineEmits(['update:modelValue']);
 
-// ИЗМЕНЕНО: Добавлен 'link-array' в карту контролов
 const controlMap: Record<string, Component> = {
   text: TextInput,
   textarea: TextareaInput,

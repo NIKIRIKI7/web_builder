@@ -1,4 +1,3 @@
-// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\widgets\EditorPanel\ui\controls\ScriptEditor.vue
 <script setup lang="ts">
 defineProps<{ modelValue: string }>();
 const emit = defineEmits(['update:modelValue']);
@@ -23,8 +22,8 @@ const onInput = (event: Event) => {
   font-size: 14px;
   border: 1px solid $color-border;
   border-radius: 4px;
-  background-color: #2d2d2d; // Темный фон для кода
-  color: #f8f8f2; // Светлый текст
+  background-color: #2d2d2d;
+  color: #f8f8f2;
   font-family: 'Courier New', Courier, monospace;
   transition: border-color 0.2s;
 

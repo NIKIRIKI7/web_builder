@@ -1,8 +1,4 @@
 <script setup lang="ts">
-// ИСПРАВЛЕНИЕ: Используем withDefaults для защиты от undefined.
-// Если modelValue не будет передан или будет undefined,
-// компонент использует '#000000' в качестве запасного варианта.
-// Это полностью устраняет предупреждение о несоответствии типа.
 withDefaults(defineProps<{ modelValue: string }>(), {
   modelValue: '#000000',
 });

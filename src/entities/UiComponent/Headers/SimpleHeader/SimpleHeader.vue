@@ -1,6 +1,4 @@
-// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\entities\UiComponent\Headers\SimpleHeader\SimpleHeader.vue
 <script setup lang="ts">
-// Принимаем пропсы, которые будут приходить с Canvas
 defineProps<{
   logoText: string;
   ctaText: string;
@@ -25,5 +23,4 @@ defineProps<{
   </header>
 </template>
 
-<!-- ИСПРАВЛЕНИЕ: Добавляем './' для явного указания относительного пути -->
 <style lang="scss" src="./SimpleHeader.scss"></style>

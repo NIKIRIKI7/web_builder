@@ -7,7 +7,6 @@ defineProps<{
 }>();
 const emit = defineEmits(['update:modelValue']);
 
-// ИЗМЕНЕНИЕ: Debounce для числового ввода.
 const onInput = debounce((event: Event) => {
   emit('update:modelValue', parseFloat((event.target as HTMLInputElement).value) || 0);
 }, 300);

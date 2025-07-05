@@ -1,4 +1,3 @@
-// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\entities\UiComponent\Footers\SimpleFooter\index.ts
 import { defineAsyncComponent, markRaw } from 'vue';
 import type { UiComponentInfo, UiComponentPreview } from '../../model/types';
 import { FooterIcon } from '@/shared/ui/icons';
@@ -17,22 +16,18 @@ export const simpleFooterConfig: UiComponentInfo = {
     ...simpleFooterPreview,
     component: markRaw(defineAsyncComponent(() => import('./SimpleFooter.vue'))),
     staticCss,
-    // Этот объект используется для создания НОВЫХ экземпляров.
     defaultProps: {
         copyrightText: `© ${new Date().getFullYear()} Web Builder Inc. All rights reserved.`,
-        // ГЛАВНОЕ: 'links' присутствует здесь.
         links: [
             { id: 1, text: 'Privacy Policy', url: '#' },
             { id: 2, text: 'Terms of Service', url: '#' },
             { id: 3, text: 'Contact Us', url: '#' },
         ]
     },
-    // Этот объект используется для создания НОВЫХ экземпляров.
     defaultStyles: {
         backgroundColor: '#2c3e50',
         paddingTop: '32px',
         paddingBottom: '32px',
-        // ГЛАВНОЕ: 'color' присутствует здесь.
         color: '#ecf0f1',
     },
     editorTabs: [

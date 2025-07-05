@@ -1,4 +1,3 @@
-// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\shared\lib\sandbox\scriptExecutor.ts
 import type { FullRenderedComponent } from '@/features/Canvas/model/canvasStore';
 
 /**
@@ -18,13 +17,10 @@ export function generateRuntimeScripts(components: FullRenderedComponent[]): str
 
     if (scriptsToRun.length === 0) return '';
 
-    // Преобразуем данные в JSON-строку для безопасной вставки в <script>
     const executionData = JSON.stringify(scriptsToRun, null, 2);
 
-    // Этот код будет внедрен в итоговый HTML. Он полностью автономен.
     return `
 <script type="module">
-// --- Sandbox Engine ---
 const createSandboxApi = (rootElement, props) => ({
     querySelector: (selector) => rootElement.querySelector(selector),
     querySelectorAll: (selector) => rootElement.querySelectorAll(selector),

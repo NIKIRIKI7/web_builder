@@ -18,14 +18,10 @@ const rowVirtualizer = useVirtualizer({
   overscan: 5,
 });
 
-// ИЗМЕНЕНИЕ 1: Создаем новый computed-геттер, который объединяет данные
-// виртуализации с нашими реальными данными. Это решает все проблемы с типизацией в шаблоне.
 const renderableItems = computed(() => {
   const virtualItems = rowVirtualizer.value.getVirtualItems();
   return virtualItems.map(virtualItem => ({
-    // Сохраняем все свойства виртуального элемента (key, index, start...)
     ...virtualItem,
-    // Добавляем поле 'data' с нашим типизированным объектом
     data: items.value[virtualItem.index],
   }));
 });
@@ -43,19 +39,13 @@ const renderableItems = computed(() => {
           class="ui-library__content-sizer"
           :style="{ height: `${rowVirtualizer.getTotalSize()}px` }"
       >
-        <!-- ИЗМЕНЕНИЕ 2: Итерируемся по новому, полностью типизированному массиву 'renderableItems' -->
         <div
             v-for="item in renderableItems"
             :key="String(item.key)"
             class="ui-library__list-item"
             :style="{ transform: `translateY(${item.start}px)` }"
         >
-          <!-- Проверяем, что данные существуют (на всякий случай) -->
           <template v-if="item.data">
-            <!--
-              ИЗМЕНЕНИЕ 3: Теперь TypeScript точно знает, что если type === 'category',
-              то у item.data есть свойство 'name'. Ошибки больше нет.
-            -->
             <h3
                 v-if="item.data.type === 'category'"
                 class="ui-library__category-title"
@@ -63,14 +53,11 @@ const renderableItems = computed(() => {
               {{ item.data.name }}
             </h3>
 
-            <!--
-              ИЗМЕНЕНИЕ 4: Аналогично, здесь TypeScript уверен в наличии свойства 'items'.
-              Ошибки больше нет.
-            -->
             <div
                 v-else-if="item.data.type === 'component_row'"
                 class="ui-library__list"
             >
+<!--              Vue: Type 'UiComponentPreview' is missing the following properties from type 'UiComponentInfo': component, editorTabs-->
               <UiLibraryItem
                   v-for="component in item.data.items"
                   :key="component.id"
@@ -89,7 +76,6 @@ const renderableItems = computed(() => {
 </template>
 
 <style scoped lang="scss">
-/* Стили остаются без изменений */
 .ui-library {
   display: flex;
   flex-direction: column;

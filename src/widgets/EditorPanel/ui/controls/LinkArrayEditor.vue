@@ -4,8 +4,6 @@ import { DeleteIcon, AddIcon } from '@/shared/ui/icons';
 
 type Link = { id: number; text: string; url: string };
 
-// ИСПРАВЛЕНИЕ: Используем withDefaults для установки значения по умолчанию.
-// Теперь, даже если придет undefined, компонент будет работать с пустым массивом.
 const props = withDefaults(defineProps<{
   modelValue: Link[];
 }>(), {

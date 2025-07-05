@@ -4,7 +4,6 @@ import { debounce } from '@/shared/lib/utils';
 defineProps<{ modelValue: string }>();
 const emit = defineEmits(['update:modelValue']);
 
-// ИЗМЕНЕНИЕ: Аналогично TextInput, добавляем debounce.
 const onInput = debounce((event: Event) => {
   emit('update:modelValue', (event.target as HTMLTextAreaElement).value);
 }, 300);

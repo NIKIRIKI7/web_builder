@@ -1,9 +1,7 @@
-// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\entities\UiComponent\model\types.ts
 import type { Component } from 'vue';
 
 export type UiComponentCategory = 'Headers' | 'Footers' | 'Content';
 
-// ИЗМЕНЕНО: Добавлен тип 'link-array'
 export type EditorFieldType = 'text' | 'textarea' | 'number' | 'color' | 'code-editor' | 'link-array';
 
 export interface EditorField {

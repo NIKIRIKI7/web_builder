@@ -1,4 +1,3 @@
-// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\features\Canvas\model\useCanvasManager.ts
 import { computed } from 'vue';
 import { useCanvasStore, type FullRenderedComponent, type CanvasInstanceState } from './canvasStore';
 import { getComponentConfig, getCachedComponentConfig } from '@/entities/UiComponent/model/registry';

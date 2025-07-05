@@ -1,5 +1,3 @@
-// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\pages\builder\ui\BuilderPage.vue
-
 <script setup lang="ts">
 import TheHeader from '@/widgets/TheHeader/ui/TheHeader.vue';
 import AppWorkspace from '@/widgets/Workspace/ui/AppWorkspace.vue';
@@ -9,15 +7,10 @@ import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
 
 const canvasManager = useCanvasManager();
 
-// Эта строка остается, она по-прежнему выполняет свою задачу
 await canvasManager.preloadCanvasConfigs();
 </script>
 
 <template>
-  <!--
-    ИЗМЕНЕНИЕ: Убираем обертку <Suspense>.
-    Компонент просто возвращает свою основную разметку.
-  -->
   <div class="builder-page">
     <TheHeader />
     <main class="builder-page__main">
@@ -64,9 +57,4 @@ await canvasManager.preloadCanvasConfigs();
     flex-grow: 1;
   }
 }
-
-/*
-  ИЗМЕНЕНИЕ: Стиль для .builder-page-loader удален,
-  так как он теперь будет находиться в App.vue
-*/
 </style>

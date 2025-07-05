@@ -100,14 +100,6 @@ function onDraggableUpdate(newOrder: any[]) {
                   </button>
                 </div>
 
-                <!--
-                  ИЗМЕНЕНИЕ:
-                  1. Мы удалили внешнюю div-обертку, которая принимала стили.
-                  2. Мы перенесли биндинг `:style="item.styles"` непосредственно на <component>.
-                  Теперь Vue применит инлайн-стили к корневому элементу самого компонента
-                  (например, к тегу <header> или <footer>), что позволит корректно
-                  переопределять его собственные CSS-правила.
-                -->
                 <component
                     :is="item.componentInfo.component"
                     class="canvas__component"
@@ -131,7 +123,6 @@ function onDraggableUpdate(newOrder: any[]) {
 </template>
 
 <style scoped lang="scss">
-/* Стили остаются без изменений */
 .canvas {
   width: 100%;
   max-width: 1200px;

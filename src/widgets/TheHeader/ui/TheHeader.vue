@@ -2,7 +2,6 @@
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
 import { exportToHtml } from '@/features/ExportManager/model/htmlExporter';
 
-// Создаем экземпляр фасада для управления холстом.
 const canvasManager = useCanvasManager();
 
 function downloadFile(filename: string, content: string) {
@@ -20,7 +19,6 @@ async function handleExport() {
   // Это гарантирует, что мы работаем с актуальным и правильно сформированным массивом.
   const componentsToExport = canvasManager.renderedComponents.value;
 
-  // Вызываем внешнюю функцию-экспортер, передавая ей данные.
   const htmlContent = await exportToHtml(componentsToExport);
   downloadFile('my-page.html', htmlContent);
 }

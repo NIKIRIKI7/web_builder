@@ -5,17 +5,11 @@
 </script>
 
 <template>
-  <!--
-    ИЗМЕНЕНИЕ: Оборачиваем <RouterView> в <Suspense>.
-    Теперь любой дочерний маршрут с async setup будет корректно обработан.
-  -->
   <Suspense>
-    <!-- Основной контент (когда промис разрешится) -->
     <template #default>
       <RouterView />
     </template>
 
-    <!-- Запасной контент (пока промис в setup дочернего маршрута не разрешился) -->
     <template #fallback>
       <div class="app-loader">
         Loading Builder...
@@ -25,7 +19,6 @@
 </template>
 
 <style scoped lang="scss">
-// ДОБАВЛЕНО: Стили для глобального загрузчика
 .app-loader {
   display: flex;
   justify-content: center;

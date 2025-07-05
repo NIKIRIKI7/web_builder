@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-// Обновляем импорт
 import { useFilterableLibraryStore } from '@/features/FilterableUiLibrary/model/store';
 
 const libraryStore = useFilterableLibraryStore();
@@ -23,7 +22,6 @@ const localSearchTerm = computed({
 </template>
 
 <style scoped lang="scss">
-/* Используем БЭМ с новым именем блока */
 .filter-input {
   padding: 0 16px 16px;
   border-bottom: 1px solid $color-border;

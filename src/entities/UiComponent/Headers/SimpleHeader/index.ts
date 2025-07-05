@@ -1,4 +1,3 @@
-// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\entities\UiComponent\Headers\SimpleHeader\index.ts
 import { defineAsyncComponent, markRaw } from 'vue';
 import type { UiComponentInfo, UiComponentPreview } from '../../model/types';
 import { HeaderIcon } from '@/shared/ui/icons';
@@ -33,7 +32,6 @@ export const simpleHeaderConfig: UiComponentInfo = {
         paddingRight: '32px',
         backgroundColor: '#ffffff',
         borderBottom: '1px solid #e0e0e0',
-        // ИЗМЕНЕНО: Добавлен цвет текста по умолчанию
         color: '#34495e',
     },
     editorTabs: [
@@ -43,7 +41,6 @@ export const simpleHeaderConfig: UiComponentInfo = {
             fields: [
                 { name: 'logoText', label: 'Logo Text', type: 'text' },
                 { name: 'ctaText', label: 'Button Text', type: 'text' },
-                // ИЗМЕНЕНО: Добавлено поле для редактирования ссылок
                 { name: 'links', label: 'Navigation Links', type: 'link-array' },
             ],
         },
@@ -52,7 +49,6 @@ export const simpleHeaderConfig: UiComponentInfo = {
             target: 'styles',
             fields: [
                 { name: 'backgroundColor', label: 'Background Color', type: 'color' },
-                // ИЗМЕНЕНО: Добавлен контрол для смены цвета текста
                 { name: 'color', label: 'Text Color', type: 'color' },
                 { name: 'paddingTop', label: 'Padding Top', type: 'number', unit: 'px' },
                 { name: 'paddingBottom', label: 'Padding Bottom', type: 'number', unit: 'px' },

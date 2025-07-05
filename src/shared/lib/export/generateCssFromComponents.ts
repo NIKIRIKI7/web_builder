@@ -1,4 +1,3 @@
-// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\shared\lib\export\generateCssFromComponents.ts
 import type { FullRenderedComponent } from '@/features/Canvas/model/canvasStore';
 import { stylesObjectToString } from '@/shared/lib/utils';
 
@@ -16,7 +15,6 @@ export function generateCssFromComponents(components: FullRenderedComponent[]): 
             continue;
         }
 
-        // Генерируем уникальный, но предсказуемый класс
         const className = `wb-c-${component.instanceId}`;
         const cssRule = `.${className} { ${stylesObjectToString(component.styles)} }`;
 
