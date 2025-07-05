@@ -1,0 +1,88 @@
+.action-card {
+  font-family: sans-serif;
+
+  &__image-wrapper {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    background-color: #f0f2f5;
+
+    &:hover .action-card__overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+
+    .action-card:hover & {
+      transform: scale(1.05);
+    }
+  }
+  
+  &__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  
+  &__cta {
+    width: 100%;
+    padding: 0.75rem;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid white;
+    background-color: white;
+    color: #303133;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: #f0f2f5;
+    }
+
+    &--secondary {
+      background-color: transparent;
+      color: white;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+
+  &__details {
+    text-align: center;
+  }
+
+  &__name {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+
+  &__price {
+    font-size: 1rem;
+    color: #566573;
+  }
+}

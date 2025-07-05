@@ -96,7 +96,17 @@
       "targetSelector": "Селектор цели (необязательно)",
       "jsCode": "Код JavaScript",
       "linkTextPlaceholder": "Текст ссылки",
-      "linkUrlPlaceholder": "URL"
+      "linkUrlPlaceholder": "URL",
+      "products": "Товары",
+      "productName": "Название товара",
+      "price": "Цена",
+      "badgeText": "Текст значка",
+      "description": "Описание",
+      "filters": "Фильтры",
+      "filterKey": "Ключ фильтра (напр. tech)",
+      "filterLabel": "Метка фильтра (напр. Технологии)",
+      "originalPrice": "Оригинальная цена",
+      "salePrice": "Цена со скидкой"
     },
     "buttons": {
       "delete": "Удалить компонент",
@@ -116,7 +126,8 @@
       "footers": "Подвалы",
       "content": "Контент",
       "carousels": "Карусели",
-      "heros": "Hero-блоки"
+      "heros": "Hero-блоки",
+      "products": "Товары"
     },
     "names": {
       "simpleHeader": "Простая шапка",
@@ -143,7 +154,12 @@
       "centeredHero": "Центрированный Hero",
       "videoBackgroundHero": "Hero с видеофоном",
       "heroWithForm": "Hero с формой",
-      "appShowcaseHero": "Hero для приложения"
+      "appShowcaseHero": "Витрина приложения",
+      "featuredProductsGrid": "Сетка популярных товаров",
+      "horizontalProductCard": "Горизонтальная карточка товара",
+      "productCardWithActions": "Карточка с быстрыми действиями",
+      "productGridWithFilters": "Сетка товаров с фильтрами",
+      "salesGrid": "Сетка товаров с распродажей"
     }
   },
   "buttons": {

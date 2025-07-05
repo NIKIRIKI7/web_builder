@@ -35,12 +35,29 @@ import { videoBackgroundHeroPreview } from './Heros/VideoBackgroundHero';
 import { heroWithFormPreview } from './Heros/HeroWithForm';
 import { appShowcaseHeroPreview } from './Heros/AppShowcaseHero';
 
+// Товары
+import { featuredProductsGridPreview } from './Products/FeaturedProductsGrid';
+import { horizontalProductCardPreview } from './Products/HorizontalProductCard';
+import { productCardWithActionsPreview } from './Products/ProductCardWithActions';
+import { productGridWithFiltersPreview } from './Products/ProductGridWithFilters';
+import { salesGridPreview } from './Products/SalesGrid';
+
 export const allPreviews = [
   simpleHeaderPreview,
   headerCenteredPreview,
   headerWithSearchPreview,
   headerTransparentPreview,
   headerMegaMenuPreview,
+  ecommerceHeroPreview,
+  centeredHeroPreview,
+  videoBackgroundHeroPreview,
+  heroWithFormPreview,
+  appShowcaseHeroPreview,
+  featuredProductsGridPreview,
+  horizontalProductCardPreview,
+  productCardWithActionsPreview,
+  productGridWithFiltersPreview,
+  salesGridPreview,
   imageTextSplitPreview,
   imageTextSplitReversedPreview,
   textThenImagePreview,
@@ -51,11 +68,6 @@ export const allPreviews = [
   fullwidthCarouselPreview,
   testimonialsCarouselPreview,
   cardCarouselPreview,
-  ecommerceHeroPreview,
-  centeredHeroPreview,
-  videoBackgroundHeroPreview,
-  heroWithFormPreview,
-  appShowcaseHeroPreview,
   simpleFooterPreview,
   footerWithSocialsPreview,
   footerDetailedPreview,
@@ -70,6 +82,18 @@ export const configLoaders = {
   [headerTransparentPreview.id]: () => import('./Headers/HeaderTransparent'),
   [headerMegaMenuPreview.id]: () => import('./Headers/HeaderMegaMenu'),
 
+  [ecommerceHeroPreview.id]: () => import('./Heros/EcommerceHero'),
+  [centeredHeroPreview.id]: () => import('./Heros/CenteredHero'),
+  [videoBackgroundHeroPreview.id]: () => import('./Heros/VideoBackgroundHero'),
+  [heroWithFormPreview.id]: () => import('./Heros/HeroWithForm'),
+  [appShowcaseHeroPreview.id]: () => import('./Heros/AppShowcaseHero'),
+
+  [featuredProductsGridPreview.id]: () => import('./Products/FeaturedProductsGrid'),
+  [horizontalProductCardPreview.id]: () => import('./Products/HorizontalProductCard'),
+  [productCardWithActionsPreview.id]: () => import('./Products/ProductCardWithActions'),
+  [productGridWithFiltersPreview.id]: () => import('./Products/ProductGridWithFilters'),
+  [salesGridPreview.id]: () => import('./Products/SalesGrid'),
+
   [imageTextSplitPreview.id]: () => import('./Content/ImageTextSplit'),
   [imageTextSplitReversedPreview.id]: () => import('./Content/ImageTextSplitReversed'),
   [textThenImagePreview.id]: () => import('./Content/TextThenImage'),
@@ -82,15 +106,9 @@ export const configLoaders = {
   [testimonialsCarouselPreview.id]: () => import('./Carousels/TestimonialsCarousel'),
   [cardCarouselPreview.id]: () => import('./Carousels/CardCarousel'),
 
-  [ecommerceHeroPreview.id]: () => import('./Heros/EcommerceHero'),
-  [centeredHeroPreview.id]: () => import('./Heros/CenteredHero'),
-  [videoBackgroundHeroPreview.id]: () => import('./Heros/VideoBackgroundHero'),
-  [heroWithFormPreview.id]: () => import('./Heros/HeroWithForm'),
-  [appShowcaseHeroPreview.id]: () => import('./Heros/AppShowcaseHero'),
-
   [simpleFooterPreview.id]: () => import('./Footers/SimpleFooter'),
   [footerWithSocialsPreview.id]: () => import('./Footers/FooterWithSocials'),
   [footerDetailedPreview.id]: () => import('./Footers/FooterDetailed'),
   [footerWithNewsletterPreview.id]: () => import('./Footers/FooterWithNewsletter'),
   [footerMinimalistPreview.id]: () => import('./Footers/FooterMinimalist'),
-}
+};

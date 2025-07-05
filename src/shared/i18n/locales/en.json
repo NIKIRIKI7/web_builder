@@ -96,7 +96,16 @@
       "targetSelector": "Target Selector (optional)",
       "jsCode": "JavaScript Code",
       "linkTextPlaceholder": "Link Text",
-      "linkUrlPlaceholder": "URL"
+      "linkUrlPlaceholder": "URL",
+      "productName": "Product Name",
+      "price": "Price",
+      "badgeText": "Badge Text",
+      "description": "Description",
+      "filters": "Filters",
+      "filterKey": "Filter Key (e.g. tech)",
+      "filterLabel": "Filter Label (e.g. Technology)",
+      "originalPrice": "Original Price",
+      "salePrice": "Sale Price"
     },
     "buttons": {
       "delete": "Delete Component",
@@ -116,7 +125,8 @@
       "footers": "Footers",
       "content": "Content",
       "carousels": "Carousels",
-      "heros": "Heros"
+      "heros": "Heros",
+      "products": "Products"
     },
     "names": {
       "simpleHeader": "Simple Header",
@@ -143,7 +153,12 @@
       "centeredHero": "Centered Hero",
       "videoBackgroundHero": "Video Background Hero",
       "heroWithForm": "Hero with Form",
-      "appShowcaseHero": "App Showcase Hero"
+      "appShowcaseHero": "App Showcase Hero",
+      "featuredProductsGrid": "Featured Products Grid",
+      "horizontalProductCard": "Horizontal Product Card",
+      "productCardWithActions": "Product Card With Actions",
+      "productGridWithFilters": "Product Grid With Filters",
+      "salesGrid": "Sales Grid"
     }
   },
   "buttons": {

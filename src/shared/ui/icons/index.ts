@@ -3,6 +3,7 @@ export { default as FooterIcon } from './FooterIcon.vue';
 export { default as DefaultPreviewIcon } from './DefaultPreviewIcon.vue';
 export { default as CarouselIcon } from './CarouselIcon.vue';
 export { default as HeroIcon } from './HeroIcon.vue';
+export { default as ProductIcon } from './ProductIcon.vue';
 export { default as AddIcon } from './AddIcon.vue';
 export { default as DragHandleIcon } from './DragHandleIcon.vue';
 export { default as CloneIcon } from './CloneIcon.vue';

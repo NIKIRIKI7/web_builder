@@ -1,0 +1,71 @@
+.sales-grid {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: sans-serif;
+
+  &__title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2.5rem;
+  }
+  
+  &__items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+
+  &__card {
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+    
+    @include on-event {
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+  }
+
+  &__image-wrapper {
+    background-color: #f8f9fa;
+  }
+  
+  &__image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+  }
+
+  &__details {
+    padding: 1rem;
+  }
+
+  &__name {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  &__price-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  &__sale-price {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #e53935;
+  }
+
+  &__original-price {
+    font-size: 1rem;
+    color: #90a4ae;
+    text-decoration: line-through;
+  }
+}
