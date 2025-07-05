@@ -1,4 +1,5 @@
 import type { Component } from 'vue';
+import type { EditorTarget } from './constants';
 
 export type UiComponentCategory = 'Headers' | 'Footers' | 'Content';
 
@@ -13,7 +14,7 @@ export interface EditorField {
 
 export interface EditorTab {
   name:string;
-  target: 'props' | 'styles' | 'script';
+  target: EditorTarget;
   fields: EditorField[];
 }
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useThemeManager } from '@/shared/theme/useThemeManager';
+import ModalManager from '@/widgets/ModalManager/ui/ModalManager.vue';
 
 useThemeManager();
 </script>
@@ -16,6 +17,7 @@ useThemeManager();
       </div>
     </template>
   </Suspense>
+  <ModalManager />
 </template>
 
 <style scoped lang="scss">

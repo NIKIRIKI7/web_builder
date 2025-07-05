@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, onBeforeUnmount } from 'vue';
+import { computed, ref, defineAsyncComponent } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import type { Project } from '../model/types';
 import { useProjectStore } from '@/features/ProjectManager/model/projectStore';
+import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
+import { useClickOutside } from '@/shared/lib/hooks/useClickOutside';
 import { EditIcon, MoreHorizontalIcon, DeleteIcon } from '@/shared/ui/icons';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
@@ -11,12 +13,19 @@ const props = defineProps<{
 }>();
 
 const projectStore = useProjectStore();
+const modalStore = useModalStore();
 const router = useRouter();
 const route = useRoute();
 const { t } = useI18nManager();
 
 const cardRef = ref<HTMLElement | null>(null);
 const isOptionsOpen = ref(false);
+
+useClickOutside(cardRef, () => {
+  isOptionsOpen.value = false;
+});
+
+const ConfirmModal = defineAsyncComponent(() => import('@/widgets/ConfirmModal/ui/ConfirmModal.vue'));
 
 const formattedDate = computed(() => {
   return new Date(props.project.createdAt).toLocaleDateString();
@@ -26,33 +35,26 @@ function toggleOptions() {
   isOptionsOpen.value = !isOptionsOpen.value;
 }
 
-function handleDelete() {
-  const confirmationMessage = t('dashboard.card.deleteConfirmation', { name: props.project.name });
-  const isConfirmed = window.confirm(confirmationMessage);
-  if (isConfirmed) {
+async function handleDelete() {
+  isOptionsOpen.value = false;
+  const message = t('dashboard.card.deleteConfirmation', { name: `<strong>${props.project.name}</strong>` });
+
+  try {
+    await modalStore.open(ConfirmModal, {
+      title: 'Delete Project',
+      message: message,
+    });
+
     const projectIdToDelete = props.project.id;
     projectStore.deleteProject(projectIdToDelete);
 
     if (route.name === 'Builder' && route.params.projectId === projectIdToDelete) {
       router.push({ name: 'Dashboard' });
     }
-  }
-  isOptionsOpen.value = false;
-}
-
-function handleClickOutside(event: MouseEvent) {
-  if (cardRef.value && !cardRef.value.contains(event.target as Node)) {
-    isOptionsOpen.value = false;
+  } catch (error) {
+    // User cancelled
   }
 }
-
-onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
-});
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside);
-});
 </script>
 
 <template>
@@ -99,14 +101,12 @@ onBeforeUnmount(() => {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
   }
 }
-
 .project-card__header {
   position: absolute;
   top: 8px;
   right: 8px;
   z-index: 10;
 }
-
 .project-card__options-btn {
   display: flex;
   align-items: center;
@@ -123,7 +123,6 @@ onBeforeUnmount(() => {
     opacity: 1;
   }
 }
-
 .project-card__options-menu {
   position: absolute;
   top: calc(100% + 4px);
@@ -136,7 +135,6 @@ onBeforeUnmount(() => {
   padding: 6px;
   z-index: 20;
 }
-
 .project-card__option-item {
   display: flex;
   align-items: center;
@@ -164,7 +162,6 @@ onBeforeUnmount(() => {
     }
   }
 }
-
 .project-card__preview {
   display: flex;
   align-items: center;
@@ -176,7 +173,6 @@ onBeforeUnmount(() => {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
-
 .project-card__name {
   font-size: 24px;
   font-weight: 300;
@@ -184,7 +180,6 @@ onBeforeUnmount(() => {
   color: var(--color-text-primary);
   text-align: center;
 }
-
 .project-card__footer {
   padding: 16px;
   display: flex;
@@ -192,7 +187,6 @@ onBeforeUnmount(() => {
   align-items: center;
   font-size: 13px;
 }
-
 .project-card__edit-link {
   display: inline-flex;
   align-items: center;
@@ -211,12 +205,10 @@ onBeforeUnmount(() => {
     color: var(--color-accent-hover);
   }
 }
-
 .project-card__date {
   color: var(--color-text-primary);
   opacity: 0.6;
 }
-
 .dropdown-fade-enter-active,
 .dropdown-fade-leave-active {
   transition: opacity 0.15s ease, transform 0.15s ease;

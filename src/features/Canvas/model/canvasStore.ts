@@ -1,6 +1,4 @@
 import { defineStore } from 'pinia';
-import { watch } from 'vue';
-import { useProjectStore } from '@/features/ProjectManager/model/projectStore';
 import type { UiComponentDefinition } from '@/entities/UiComponent/model/types';
 
 export interface ComponentScript {
@@ -26,41 +24,28 @@ export interface FullRenderedComponent {
   scripts: ComponentScript[];
 }
 
-
 interface CanvasState {
   componentInstances: CanvasInstanceState[];
   selectedComponentInstanceId: number | null;
-  currentProjectId: string | null;
 }
 
 export const useCanvasStore = defineStore('canvas', {
   state: (): CanvasState => ({
     componentInstances: [],
     selectedComponentInstanceId: null,
-    currentProjectId: null,
   }),
   actions: {
-    loadProject(projectId: string) {
-      const projectStore = useProjectStore();
-      const project = projectStore.findProject(projectId);
-
-      if (project) {
-        this.$patch({
-          componentInstances: project.canvasState.componentInstances,
-          selectedComponentInstanceId: null,
-          currentProjectId: projectId,
-        });
-      } else {
-        console.error(`Project with id ${projectId} not found.`);
-        this.resetState();
-      }
-    },
-
     resetState() {
       this.$patch({
         componentInstances: [],
         selectedComponentInstanceId: null,
-        currentProjectId: null,
+      });
+    },
+
+    setState(newState: { componentInstances: CanvasInstanceState[]; selectedComponentInstanceId: number | null }) {
+      this.$patch({
+        componentInstances: newState.componentInstances,
+        selectedComponentInstanceId: newState.selectedComponentInstanceId,
       });
     },
 
@@ -142,22 +127,3 @@ export const useCanvasStore = defineStore('canvas', {
     },
   },
 });
-
-export function setupCanvasAutoSave() {
-  const canvasStore = useCanvasStore();
-  const projectStore = useProjectStore();
-
-  watch(
-    () => canvasStore.$state,
-    (newState) => {
-      if (newState.currentProjectId) {
-        projectStore.updateProjectCanvas(newState.currentProjectId, {
-          componentInstances: newState.componentInstances,
-          selectedComponentInstanceId: newState.selectedComponentInstanceId
-        });
-      }
-    },
-    { deep: true }
-  );
-}
-

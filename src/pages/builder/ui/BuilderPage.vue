@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { watch } from 'vue';
+import { watch, toRef } from 'vue';
 import TheHeader from '@/widgets/TheHeader/ui/TheHeader.vue';
 import LayoutManager from '@/shared/layout/ui/LayoutManager.vue';
 import EditorPanel from '@/widgets/EditorPanel/ui/EditorPanel.vue';
 import { useLayoutStore } from '@/shared/layout/layoutStore';
 import { useEditorStore } from '@/widgets/EditorPanel/model/editorStore';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
-import { useCanvasStore } from '@/features/Canvas/model/canvasStore';
+import { useProjectLoader } from '@/features/ProjectManager/model/useProjectLoader';
 
 const props = defineProps<{
   projectId: string;
@@ -14,22 +14,11 @@ const props = defineProps<{
 
 const layoutStore = useLayoutStore();
 const editorStore = useEditorStore();
-const canvasManager = useCanvasManager();
-const canvasStore = useCanvasStore();
+const { selectedComponentInstanceId } = useCanvasManager();
 
-watch(
-  () => props.projectId,
-  (newId) => {
-    if (newId) {
-      canvasStore.loadProject(newId);
-    } else {
-      canvasStore.resetState();
-    }
-  },
-  { immediate: true }
-);
+useProjectLoader(toRef(props, 'projectId'));
 
-watch(canvasManager.selectedComponentInstanceId, (newId) => {
+watch(selectedComponentInstanceId, (newId) => {
   if (newId === null) {
     editorStore.closeEditor();
   }

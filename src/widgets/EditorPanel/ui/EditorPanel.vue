@@ -5,6 +5,7 @@ import { useEditorStore } from '../model/editorStore';
 import { getEditorConfig } from '@/entities/UiComponent/model/registry';
 import type { EditorConfiguration } from '@/entities/UiComponent/model/types';
 import type { ComponentScript } from '@/features/Canvas/model/canvasStore';
+import { EDITOR_TARGET } from '@/entities/UiComponent/model/constants';
 import EditorControl from './EditorControl.vue';
 import ScriptManager from './ScriptManager.vue';
 import { SelectIcon, CloseIcon } from '@/shared/ui/icons';
@@ -41,7 +42,7 @@ function updateValue(target: 'props' | 'styles', fieldName: string, value: any) 
   if (!selectedComponent.value) return;
   const { instanceId } = selectedComponent.value;
   const payload = { instanceId, newValues: { [fieldName]: value } };
-  if (target === 'props') {
+  if (target === EDITOR_TARGET.PROPS) {
     canvasManager.updateComponentProps(payload);
   } else {
     canvasManager.updateComponentStyles(payload);
@@ -93,7 +94,7 @@ function handleDelete() {
       <div class="editor-panel__body">
         <template v-for="tab in editorConfig.tabs" :key="tab.name">
           <div v-show="activeTabName === tab.name">
-            <template v-if="tab.target === 'props' || tab.target === 'styles'">
+            <template v-if="tab.target === EDITOR_TARGET.PROPS || tab.target === EDITOR_TARGET.STYLES">
               <EditorControl
                 v-for="field in tab.fields"
                 :key="field.name"
@@ -102,7 +103,7 @@ function handleDelete() {
                 @update:model-value="updateValue(tab.target, field.name, $event)"
               />
             </template>
-            <template v-else-if="tab.target === 'script'">
+            <template v-else-if="tab.target === EDITOR_TARGET.SCRIPT">
               <ScriptManager
                 :scripts="selectedComponent.scripts"
                 @add-script="handleAddScript"
