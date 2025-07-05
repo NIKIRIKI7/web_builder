@@ -1,19 +1,27 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, shallowRef } from 'vue';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
+import { getEditorConfig } from '@/entities/UiComponent/model/registry';
+import type { EditorConfiguration } from '@/entities/UiComponent/model/types';
 import type { ComponentScript } from '@/features/Canvas/model/canvasStore';
 import EditorControl from './EditorControl.vue';
 import ScriptManager from './ScriptManager.vue';
 import { InfoIcon } from '@/shared/ui/icons';
 
 const canvasManager = useCanvasManager();
-const activeTabName = ref('');
-const selectedComponent = canvasManager.selectedComponent;
+const { selectedComponent } = canvasManager;
 
-watch(() => canvasManager.selectedComponentInstanceId.value, (newInstanceId) => {
-  if (newInstanceId && selectedComponent.value?.componentInfo.editorTabs?.length) {
-    activeTabName.value = selectedComponent.value.componentInfo.editorTabs[0].name;
+const activeTabName = ref('');
+const editorConfig = shallowRef<EditorConfiguration | null>(null);
+
+watch(selectedComponent, async (newSelectedComponent) => {
+  if (newSelectedComponent) {
+    editorConfig.value = await getEditorConfig(newSelectedComponent.componentDefinition.id);
+    if (editorConfig.value?.tabs?.length) {
+      activeTabName.value = editorConfig.value.tabs[0].name;
+    }
   } else {
+    editorConfig.value = null;
     activeTabName.value = '';
   }
 }, { immediate: true });
@@ -51,16 +59,16 @@ function handleDelete() {
 
 <template>
   <div class="editor-panel">
-    <div v-if="selectedComponent" class="editor-panel__content">
+    <div v-if="selectedComponent && editorConfig" class="editor-panel__content">
       <div class="editor-panel__header">
-        <h2 class="editor-panel__title">{{ selectedComponent.componentInfo.name }}</h2>
-        <div v-if="selectedComponent.componentInfo.editorTabs?.length > 1" class="editor-panel__tabs">
+        <h2 class="editor-panel__title">{{ selectedComponent.componentDefinition.name }}</h2>
+        <div v-if="editorConfig.tabs.length > 1" class="editor-panel__tabs">
           <button
-              v-for="tab in selectedComponent.componentInfo.editorTabs"
-              :key="tab.name"
-              class="editor-panel__tab"
-              :class="{ 'editor-panel__tab--active': activeTabName === tab.name }"
-              @click="activeTabName = tab.name"
+            v-for="tab in editorConfig.tabs"
+            :key="tab.name"
+            class="editor-panel__tab"
+            :class="{ 'editor-panel__tab--active': activeTabName === tab.name }"
+            @click="activeTabName = tab.name"
           >
             {{ tab.name }}
           </button>
@@ -68,23 +76,23 @@ function handleDelete() {
       </div>
 
       <div class="editor-panel__body">
-        <template v-for="tab in selectedComponent.componentInfo.editorTabs" :key="tab.name">
+        <template v-for="tab in editorConfig.tabs" :key="tab.name">
           <div v-show="activeTabName === tab.name">
             <template v-if="tab.target === 'props' || tab.target === 'styles'">
               <EditorControl
-                  v-for="field in tab.fields"
-                  :key="field.name"
-                  :field="field"
-                  :model-value="selectedComponent[tab.target][field.name]"
-                  @update:model-value="updateValue(tab.target, field.name, $event)"
+                v-for="field in tab.fields"
+                :key="field.name"
+                :field="field"
+                :model-value="selectedComponent[tab.target][field.name]"
+                @update:model-value="updateValue(tab.target, field.name, $event)"
               />
             </template>
             <template v-else-if="tab.target === 'script'">
               <ScriptManager
-                  :scripts="selectedComponent.scripts"
-                  @add-script="handleAddScript"
-                  @update-script="handleUpdateScript"
-                  @delete-script="handleDeleteScript"
+                :scripts="selectedComponent.scripts"
+                @add-script="handleAddScript"
+                @update-script="handleUpdateScript"
+                @delete-script="handleDeleteScript"
               />
             </template>
           </div>

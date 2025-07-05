@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { UiComponentInfo } from '@/entities/UiComponent/model/types';
+import type { UiComponentPreview } from '@/entities/UiComponent/model/types';
 import { DND_COMPONENT_ID_KEY } from '@/shared/lib/dnd/keys';
 import { DefaultPreviewIcon } from '@/shared/ui/icons';
 
 const props = defineProps<{
-  componentInfo: UiComponentInfo;
+  componentInfo: UiComponentPreview; // Changed from UiComponentInfo
 }>();
 
 function onDragStart(event: DragEvent) {
@@ -26,6 +26,7 @@ function onDragStart(event: DragEvent) {
     <span class="ui-library-item__name">{{ componentInfo.name }}</span>
   </div>
 </template>
+
 <style scoped lang="scss">
 .ui-library-item {
   display: flex;

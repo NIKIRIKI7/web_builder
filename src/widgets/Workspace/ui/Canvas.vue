@@ -1,5 +1,3 @@
-// C:\Users\mcniki\Documents\stormprojects\Vue\web_builder\src\widgets\Workspace\ui\Canvas.vue
-
 <script setup lang="ts">
 import { ref } from 'vue';
 import draggable from 'vuedraggable';
@@ -54,12 +52,12 @@ function onDraggableUpdate(newOrder: any[]) {
 
 <template>
   <div
-      class="canvas"
-      :class="{ 'canvas--drag-over': isDragOver }"
-      @dragover="onDragOver"
-      @dragleave="onDragLeave"
-      @drop="onDrop"
-      @click="handleCanvasClick"
+    class="canvas"
+    :class="{ 'canvas--drag-over': isDragOver }"
+    @dragover="onDragOver"
+    @dragleave="onDragLeave"
+    @drop="onDrop"
+    @click="handleCanvasClick"
   >
     <div v-if="!canvasManager.renderedComponents.value.length" class="canvas__placeholder">
       <div class="canvas__placeholder-icon">
@@ -71,40 +69,40 @@ function onDraggableUpdate(newOrder: any[]) {
       <Suspense>
         <template #default>
           <draggable
-              :model-value="canvasManager.draggableComponents.value"
-              @update:model-value="onDraggableUpdate"
-              item-key="instanceId"
-              class="draggable-container"
-              ghost-class="ghost-component"
+            :model-value="canvasManager.draggableComponents.value"
+            @update:model-value="onDraggableUpdate"
+            item-key="instanceId"
+            class="draggable-container"
+            ghost-class="ghost-component"
           >
             <template #item="{ element: item }">
               <div
-                  class="component-wrapper"
-                  :class="{ 'component-wrapper--selected': item.instanceId === canvasManager.selectedComponentInstanceId.value }"
-                  @click.stop="handleComponentClick(item.instanceId)"
+                class="component-wrapper"
+                :class="{ 'component-wrapper--selected': item.instanceId === canvasManager.selectedComponentInstanceId.value }"
+                @click.stop="handleComponentClick(item.instanceId)"
               >
                 <div class="component-wrapper__controls">
                   <button
-                      class="component-wrapper__control-btn component-wrapper__control-btn--clone"
-                      title="Clone Component"
-                      @click.stop="handleClone(item.instanceId)"
+                    class="component-wrapper__control-btn component-wrapper__control-btn--clone"
+                    title="Clone Component"
+                    @click.stop="handleClone(item.instanceId)"
                   >
                     <CloneIcon />
                   </button>
                   <button
-                      class="component-wrapper__control-btn component-wrapper__control-btn--delete"
-                      title="Delete Component"
-                      @click.stop="handleDelete(item.instanceId)"
+                    class="component-wrapper__control-btn component-wrapper__control-btn--delete"
+                    title="Delete Component"
+                    @click.stop="handleDelete(item.instanceId)"
                   >
                     <DeleteIcon />
                   </button>
                 </div>
 
                 <component
-                    :is="item.componentInfo.component"
-                    class="canvas__component"
-                    v-bind="item.props"
-                    :style="item.styles"
+                  :is="item.componentDefinition.component"
+                  class="canvas__component"
+                  v-bind="item.props"
+                  :style="item.styles"
                 />
 
                 <div class="component-wrapper__overlay"></div>
@@ -166,10 +164,9 @@ function onDraggableUpdate(newOrder: any[]) {
   background: #c8ebfb;
   border: 2px dashed #3498db;
   border-radius: 4px;
-
-  & > * {
-    visibility: hidden;
-  }
+}
+.ghost-component > * {
+  visibility: hidden;
 }
 .component-wrapper {
   position: relative;
@@ -178,21 +175,20 @@ function onDraggableUpdate(newOrder: any[]) {
   transition: outline-color 0.2s ease-in-out;
   border-radius: 4px;
   cursor: move;
-
-  &:not(:last-child) {
-    margin-bottom: 20px;
-  }
-  &:hover {
-    outline-color: #d5eafb;
-  }
-  &--selected {
-    outline-color: #3498db;
-    .component-wrapper__controls {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-  }
+}
+.component-wrapper:not(:last-child) {
+  margin-bottom: 20px;
+}
+.component-wrapper:hover {
+  outline-color: #d5eafb;
+}
+.component-wrapper--selected {
+  outline-color: #3498db;
+}
+.component-wrapper--selected .component-wrapper__controls {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 .component-wrapper__controls {
   position: absolute;
@@ -230,16 +226,15 @@ function onDraggableUpdate(newOrder: any[]) {
   background-color: transparent;
   transition: all 0.2s;
   color: #606266;
-
-  &:hover {
-    background-color: $color-bg-primary;
-  }
-  &--clone:hover {
-    color: #3498db;
-  }
-  &--delete:hover {
-    color: #f56c6c;
-  }
+}
+.component-wrapper__control-btn:hover {
+  background-color: $color-bg-primary;
+}
+.component-wrapper__control-btn--clone:hover {
+  color: #3498db;
+}
+.component-wrapper__control-btn--delete:hover {
+  color: #f56c6c;
 }
 .component-wrapper__overlay {
   position: absolute;

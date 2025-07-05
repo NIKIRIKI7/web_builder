@@ -7,7 +7,7 @@ import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
 
 const canvasManager = useCanvasManager();
 
-await canvasManager.preloadCanvasConfigs();
+await canvasManager.preloadCanvasDefinitions();
 </script>
 
 <template>
@@ -31,30 +31,26 @@ await canvasManager.preloadCanvasConfigs();
   flex-direction: column;
   height: 100%;
   background-color: $color-bg-primary;
-
-  &__main {
-    display: flex;
-    flex-grow: 1;
-    height: calc(100vh - $header-height);
-  }
-
-  &__sidebar {
-    flex-shrink: 0;
-    width: $sidebar-width;
-    background-color: $color-bg-secondary;
-    border-right: 1px solid $color-border;
-    height: 100%;
-    overflow-y: auto;
-
-    &--right {
-      width: $editor-panel-width;
-      border-right: none;
-      border-left: 1px solid $color-border;
-    }
-  }
-
-  &__workspace {
-    flex-grow: 1;
-  }
+}
+.builder-page__main {
+  display: flex;
+  flex-grow: 1;
+  height: calc(100vh - $header-height);
+}
+.builder-page__sidebar {
+  flex-shrink: 0;
+  width: $sidebar-width;
+  background-color: $color-bg-secondary;
+  border-right: 1px solid $color-border;
+  height: 100%;
+  overflow-y: auto;
+}
+.builder-page__sidebar--right {
+  width: $editor-panel-width;
+  border-right: none;
+  border-left: 1px solid $color-border;
+}
+.builder-page__workspace {
+  flex-grow: 1;
 }
 </style>
