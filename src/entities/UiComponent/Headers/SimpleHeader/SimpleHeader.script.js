@@ -1,7 +1,7 @@
-export default function(rootElement: HTMLElement) {
-  const burgerButton = rootElement.querySelector<HTMLButtonElement>('.simple-header__burger-btn');
-  const nav = rootElement.querySelector<HTMLElement>('.simple-header__nav');
-  const navLinks = rootElement.querySelectorAll<HTMLAnchorElement>('.simple-header__link');
+export default function(rootElement) {
+  const burgerButton = rootElement.querySelector('.simple-header__burger-btn');
+  const nav = rootElement.querySelector('.simple-header__nav');
+  const navLinks = rootElement.querySelectorAll('.simple-header__link');
 
   if (!burgerButton || !nav) {
     return;

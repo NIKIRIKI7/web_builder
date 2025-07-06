@@ -55,54 +55,58 @@ export function generateJs(components: ExportableComponent[]): string {
         const allComponentData = ${executionData};
         const runtimeScriptsRaw = ${runtimeScriptsString};
         const runtimeInitializers = {};
+        const runtimeContext = { eventBus };
 
         for (const key in runtimeScriptsRaw) {
           try {
             const scriptBody = runtimeScriptsRaw[key].replace(/^export default\\s*/, '');
-            runtimeInitializers[key] = new Function('return ' + scriptBody)();
+            const originalInitializer = new Function('return ' + scriptBody)();
+            if (typeof originalInitializer === 'function') {
+                runtimeInitializers[key] = (rootElement, props) => {
+                    originalInitializer.call(runtimeContext, rootElement, props);
+                };
+            }
           } catch (e) {
             console.error('Failed to parse runtime script for ' + key, e);
           }
         }
         
-        const executeCustomActions = (actions, rootElement) => {
+        const executeCustomActions = (actions, rootElement, props) => {
             actions.forEach(action => {
                 const handler = customScriptHandlers[action.type];
                 if (handler) {
-                    const context = { action, rootElement, eventBus };
+                    const context = { action, rootElement, eventBus, props };
                     try {
                         handler(context);
                     } catch(e) {
-                        console.error(\`Error executing action "\${action.type}":\`, e);
+                        console.error('Error executing action "' + action.type + '":', e);
                     }
                 } else {
-                    console.warn(\`Unknown action type: \${action.type}\`);
+                    console.warn('Unknown action type: ' + action.type);
                 }
             });
         };
 
         allComponentData.forEach(data => {
-            const rootElement = document.getElementById(\`wb-inst-\${data.instanceId}\`);
+            const rootElement = document.getElementById('wb-inst-' + data.instanceId);
             if (!rootElement) {
-                console.warn(\`Root element for instance \${data.instanceId} not found\`);
+                console.warn('Root element for instance ' + data.instanceId + ' not found');
                 return;
             }
 
-            // Initialize built-in component logic
             const initializer = runtimeInitializers[data.componentId];
             if (typeof initializer === 'function') {
                 try {
                     initializer(rootElement, data.props);
                 } catch(e) {
-                    console.error(\`Error initializing component "\${data.componentId}":\`, e);
+                    console.error('Error initializing component "' + data.componentId + '":', e);
                 }
             }
 
-            // Initialize user-defined scripts
             if (data.scripts && data.scripts.length > 0) {
                 data.scripts.forEach(script => {
                     if (script.trigger.type === 'onMount') {
-                        executeCustomActions(script.actions, rootElement);
+                        executeCustomActions(script.actions, rootElement, data.props);
                     }
                     else if (script.trigger.type === 'onClick') {
                         const targetElement = script.trigger.selector 
@@ -112,10 +116,10 @@ export function generateJs(components: ExportableComponent[]): string {
                         if (targetElement) {
                             targetElement.addEventListener('click', (event) => {
                                 event.preventDefault();
-                                executeCustomActions(script.actions, rootElement);
+                                executeCustomActions(script.actions, rootElement, data.props);
                             });
                         } else {
-                            console.warn(\`Trigger selector "\${script.trigger.selector}" not found in instance \${data.instanceId}\`);
+                            console.warn('Trigger selector "' + script.trigger.selector + '" not found in instance ' + data.instanceId);
                         }
                     }
                 });

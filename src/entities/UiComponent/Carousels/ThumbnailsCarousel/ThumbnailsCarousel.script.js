@@ -1,6 +1,6 @@
-export default function(rootElement: HTMLElement) {
-  const mainImage = rootElement.querySelector<HTMLImageElement>('.thumbnails-carousel__main-image');
-  const thumbButtons = Array.from(rootElement.querySelectorAll<HTMLButtonElement>('.thumbnails-carousel__thumb-btn'));
+export default function(rootElement) {
+  const mainImage = rootElement.querySelector('.thumbnails-carousel__main-image');
+  const thumbButtons = Array.from(rootElement.querySelectorAll('.thumbnails-carousel__thumb-btn'));
 
   if (!mainImage || thumbButtons.length === 0) return;
 
@@ -9,7 +9,7 @@ export default function(rootElement: HTMLElement) {
 
   thumbButtons.forEach(button => {
     button.addEventListener('click', () => {
-      const thumbImage = button.querySelector<HTMLImageElement>('.thumbnails-carousel__thumb-image');
+      const thumbImage = button.querySelector('.thumbnails-carousel__thumb-image');
       if (!thumbImage) return;
 
       if (activeThumb) {

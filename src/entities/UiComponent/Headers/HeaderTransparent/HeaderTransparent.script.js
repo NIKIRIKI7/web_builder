@@ -1,4 +1,4 @@
-export default function(rootElement: HTMLElement) {
+export default function(rootElement) {
   const scrollHandler = () => {
     if (window.scrollY > 50) {
       rootElement.classList.add('header-transparent--scrolled');

@@ -2,7 +2,7 @@ import { defineAsyncComponent, markRaw } from 'vue';
 import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 import { CarouselIcon } from '@/shared/ui/icons';
 import staticCss from './TestimonialsCarousel.scss?inline';
-import runtimeScript from './TestimonialsCarousel.script.ts?raw';
+import runtimeScript from './TestimonialsCarousel.script.js?raw';
 
 const ID = 'testimonials-carousel-v1';
 

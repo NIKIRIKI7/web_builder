@@ -2,7 +2,7 @@ import { defineAsyncComponent, markRaw } from 'vue';
 import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 import { HeaderIcon } from '@/shared/ui/icons';
 import staticCss from './HeaderMegaMenu.scss?inline';
-import runtimeScript from './HeaderMegaMenu.script.ts?raw';
+import runtimeScript from './HeaderMegaMenu.script.js?raw';
 
 const ID = 'header-mega-menu-v1';
 

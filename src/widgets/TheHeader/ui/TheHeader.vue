@@ -57,6 +57,7 @@ function mapToExportableComponents(
           name: node.componentDefinition.name,
           component: node.componentDefinition.component,
           staticCss: node.componentDefinition.staticCss,
+          runtimeScript: node.componentDefinition.runtimeScript,
         },
       };
       flatList.push(exportableNode);

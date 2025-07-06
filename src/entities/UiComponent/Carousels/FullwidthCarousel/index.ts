@@ -2,7 +2,7 @@ import { defineAsyncComponent, markRaw } from 'vue';
 import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 import { CarouselIcon } from '@/shared/ui/icons';
 import staticCss from './FullwidthCarousel.scss?inline';
-import runtimeScript from './FullwidthCarousel.script.ts?raw';
+import runtimeScript from './FullwidthCarousel.script.js?raw';
 
 const ID = 'fullwidth-carousel-v1';
 

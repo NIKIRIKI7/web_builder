@@ -1,7 +1,7 @@
-export default function(rootElement: HTMLElement) {
-  const filterButtons = Array.from(rootElement.querySelectorAll<HTMLButtonElement>('.filtered-grid__filter-btn'));
-  const items = Array.from(rootElement.querySelectorAll<HTMLElement>('.filtered-grid__item'));
-  const itemsContainer = rootElement.querySelector<HTMLElement>('.filtered-grid__items');
+export default function(rootElement) {
+  const filterButtons = Array.from(rootElement.querySelectorAll('.filtered-grid__filter-btn'));
+  const items = Array.from(rootElement.querySelectorAll('.filtered-grid__item'));
+  const itemsContainer = rootElement.querySelector('.filtered-grid__items');
 
   if (filterButtons.length === 0 || items.length === 0 || !itemsContainer) return;
 
@@ -10,10 +10,10 @@ export default function(rootElement: HTMLElement) {
     activeButton.classList.add('is-active');
   }
 
-  const filterItems = (filter: string | undefined) => {
+  const filterItems = (filter) => {
     items.forEach(item => {
       const category = item.dataset.category;
-      const shouldShow = filter === 'all' || filter === category;
+      const shouldShow = filter === 'all' || !filter || filter === category;
       item.classList.toggle('is-hidden', !shouldShow);
     });
   };
@@ -32,5 +32,7 @@ export default function(rootElement: HTMLElement) {
     });
   });
 
-  filterItems(activeButton.dataset.filter);
+  if (activeButton) {
+    filterItems(activeButton.dataset.filter);
+  }
 }
