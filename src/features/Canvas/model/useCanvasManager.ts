@@ -1,4 +1,4 @@
-import { useCanvasStore, type CanvasInstanceState, type FullRenderedComponent, type ComponentScript } from './canvasStore';
+import { useCanvasStore, type CanvasInstanceState, type ComponentScript } from './canvasStore';
 import { getComponentDefinition } from '@/entities/UiComponent/model/registry';
 import { klona } from 'klona/lite';
 
@@ -57,15 +57,8 @@ export function useCanvasManager() {
     store.selectComponent(newInstance.instanceId);
   }
 
-  function setDraggableOrder(newOrder: FullRenderedComponent[]) {
-    const newInstances: CanvasInstanceState[] = newOrder.map(c => ({
-      instanceId: c.instanceId,
-      componentId: c.componentDefinition.id,
-      props: c.props,
-      styles: c.styles,
-      scripts: c.scripts,
-    }));
-    store.setComponentInstances(newInstances);
+  function setDraggableOrder(newOrder: CanvasInstanceState[]) {
+    store.setComponentInstances(newOrder);
   }
 
   return {

@@ -14,10 +14,8 @@ export interface ScriptTrigger {
 
 export interface ScriptAction {
   id: string;
-  type: 'toggleVisibility' | 'emitEvent';
-  targetInstanceId?: number;
-  eventName?: string;
-  payload?: Record<string, any>;
+  type: string;
+  params: Record<string, any>;
 }
 
 export interface ComponentScript {
@@ -32,4 +30,8 @@ export interface ExportableComponent {
   props: Record<string, any>;
   styles: Record<string, any>;
   scripts: ComponentScript[];
+}
+
+export interface ExportStrategy {
+  export(components: ExportableComponent[]): Promise<void>;
 }

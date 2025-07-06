@@ -3,7 +3,8 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { useCanvasState } from "@/features/Canvas/model/useCanvasState";
 import type { FullRenderedComponent } from "@/features/Canvas/model/canvasStore";
-import { exportPageAsHtml } from "@/features/ExportManager/model";
+import { exportPage } from "@/features/ExportManager/model";
+import { HtmlExportStrategy } from "@/features/ExportManager/model/strategies/HtmlExportStrategy";
 import type { ExportableComponent } from "@/features/ExportManager/model/types";
 import { useThemeManager } from "@/shared/theme/useThemeManager";
 import { themeOptions } from "@/shared/theme/defaults";
@@ -11,7 +12,6 @@ import type { Theme } from "@/shared/theme/types";
 import { useI18nManager } from "@/shared/i18n/useI18nManager";
 import { useLayoutStore } from "@/shared/layout/layoutStore";
 import { usePreviewStore } from "@/shared/preview/previewStore";
-import { downloadFile } from "@/shared/lib/utils";
 import DropdownMenu from "@/shared/ui/DropdownMenu/DropdownMenu.vue";
 import {
   DesktopIcon,
@@ -43,26 +43,40 @@ const deviceIconMap = {
 function mapToExportableComponents(
   components: FullRenderedComponent[],
 ): ExportableComponent[] {
-  return components.map((c) => ({
-    instanceId: c.instanceId,
-    props: c.props,
-    styles: c.styles,
-    scripts: c.scripts,
-    componentDefinition: {
-      id: c.componentDefinition.id,
-      name: c.componentDefinition.name,
-      component: c.componentDefinition.component,
-      staticCss: c.componentDefinition.staticCss,
-    },
-  }));
+  const flatList: ExportableComponent[] = [];
+
+  function traverse(nodes: FullRenderedComponent[]) {
+    for (const node of nodes) {
+      const exportableNode: ExportableComponent = {
+        instanceId: node.instanceId,
+        props: node.props,
+        styles: node.styles,
+        scripts: node.scripts,
+        componentDefinition: {
+          id: node.componentDefinition.id,
+          name: node.componentDefinition.name,
+          component: node.componentDefinition.component,
+          staticCss: node.componentDefinition.staticCss,
+        },
+      };
+      flatList.push(exportableNode);
+
+      if (node.children && node.children.length > 0) {
+        traverse(node.children);
+      }
+    }
+  }
+
+  traverse(components);
+  return flatList;
 }
 
 async function handleExport() {
   const componentsToExport = mapToExportableComponents(
     canvasState.renderedComponents.value,
   );
-  const htmlContent = await exportPageAsHtml(componentsToExport);
-  downloadFile("my-page.html", htmlContent);
+  const htmlStrategy = new HtmlExportStrategy();
+  await exportPage(componentsToExport, htmlStrategy);
 }
 </script>
 

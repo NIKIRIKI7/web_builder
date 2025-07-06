@@ -7,33 +7,44 @@ import ProjectCard from '@/entities/Project/ui/ProjectCard.vue';
 import CreateProjectCard from '@/entities/Project/ui/CreateProjectCard.vue';
 import DashboardEmptyState from '@/widgets/DashboardEmptyState/ui/DashboardEmptyState.vue';
 import type { Project } from '@/entities/Project/model/types';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 const projectStore = useProjectStore();
 const modalStore = useModalStore();
 const router = useRouter();
 const route = useRoute();
+const { t } = useI18nManager();
 
 const CreateProjectModal = defineAsyncComponent(() => import('@/widgets/CreateProjectModal/ui/CreateProjectModal.vue'));
+const ConfirmModal = defineAsyncComponent(() => import('@/widgets/ConfirmModal/ui/ConfirmModal.vue'));
 
 type CreatePayload = { name: string; canvasState?: Project['canvasState'] };
 
 async function handleCreateProject() {
   try {
     const { name, canvasState } = await modalStore.open<CreatePayload>(CreateProjectModal);
-
     const newProject = projectStore.createProject(name, canvasState);
     router.push({ name: 'Builder', params: { projectId: newProject.id } });
-
   } catch (error) {
     // User cancelled
   }
 }
 
-function handleDeleteProject(projectIdToDelete: string) {
-  projectStore.deleteProject(projectIdToDelete);
+async function handleDeleteRequest(project: Project) {
+  const message = t('dashboard.card.deleteConfirmation', { name: `<strong>${project.name}</strong>` });
+  try {
+    await modalStore.open(ConfirmModal, {
+      title: t('dashboard.card.delete'),
+      message: message,
+    });
 
-  if (route.name === 'Builder' && route.params.projectId === projectIdToDelete) {
-    router.push({ name: 'Dashboard' });
+    projectStore.deleteProject(project.id);
+
+    if (route.name === 'Builder' && route.params.projectId === project.id) {
+      router.push({ name: 'Dashboard' });
+    }
+  } catch (error) {
+    // User cancelled
   }
 }
 </script>
@@ -47,7 +58,7 @@ function handleDeleteProject(projectIdToDelete: string) {
           v-for="project in projectStore.projects"
           :key="project.id"
           :project="project"
-          @delete="handleDeleteProject"
+          @delete-request="handleDeleteRequest"
         />
       </div>
     </template>

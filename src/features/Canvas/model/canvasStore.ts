@@ -24,6 +24,7 @@ export interface CanvasInstanceState {
   props: Record<string, any>;
   styles: Record<string, any>;
   scripts: ComponentScript[];
+  children?: CanvasInstanceState[];
 }
 
 export interface FullRenderedComponent {
@@ -32,6 +33,7 @@ export interface FullRenderedComponent {
   props: Record<string, any>;
   styles: Record<string, any>;
   scripts: ComponentScript[];
+  children?: FullRenderedComponent[];
 }
 
 interface CanvasState {

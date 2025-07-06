@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, defineAsyncComponent } from 'vue';
+import { computed, ref } from 'vue';
 import type { Project } from '../model/types';
-import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
 import { useClickOutside } from '@/shared/lib/hooks/useClickOutside';
 import { EditIcon, MoreHorizontalIcon, DeleteIcon } from '@/shared/ui/icons';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
@@ -11,10 +10,9 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'delete', projectId: string): void;
+  (e: 'delete-request', project: Project): void;
 }>();
 
-const modalStore = useModalStore();
 const { t } = useI18nManager();
 
 const cardRef = ref<HTMLElement | null>(null);
@@ -23,8 +21,6 @@ const isOptionsOpen = ref(false);
 useClickOutside(cardRef, () => {
   isOptionsOpen.value = false;
 });
-
-const ConfirmModal = defineAsyncComponent(() => import('@/widgets/ConfirmModal/ui/ConfirmModal.vue'));
 
 const formattedDate = computed(() => {
   return new Date(props.project.createdAt).toLocaleDateString();
@@ -47,21 +43,9 @@ function toggleOptions() {
   isOptionsOpen.value = !isOptionsOpen.value;
 }
 
-async function handleDelete() {
+function handleDeleteRequest() {
   isOptionsOpen.value = false;
-  const message = t('dashboard.card.deleteConfirmation', { name: `<strong>${props.project.name}</strong>` });
-
-  try {
-    await modalStore.open(ConfirmModal, {
-      title: 'Delete Project',
-      message: message,
-    });
-
-    emit('delete', props.project.id);
-
-  } catch (error) {
-    // User cancelled
-  }
+  emit('delete-request', props.project);
 }
 </script>
 
@@ -73,7 +57,7 @@ async function handleDelete() {
       </button>
       <transition name="dropdown-fade">
         <div v-if="isOptionsOpen" class="project-card__options-menu">
-          <button class="project-card__option-item project-card__option-item--delete" @click="handleDelete">
+          <button class="project-card__option-item project-card__option-item--delete" @click="handleDeleteRequest">
             <DeleteIcon />
             <span>{{ t('dashboard.card.delete') }}</span>
           </button>
