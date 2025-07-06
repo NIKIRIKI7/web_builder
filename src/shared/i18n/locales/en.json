@@ -20,6 +20,10 @@
       "createdOn": "Created:",
       "delete": "Delete",
       "deleteConfirmation": "Are you sure you want to delete the project \"{name}\"? This action cannot be undone."
+    },
+    "emptyState": {
+      "title": "Welcome to Your Web Builder!",
+      "subtitle": "Start creating your next amazing website. You don't have any projects yet."
     }
   },
   "sidebar": {

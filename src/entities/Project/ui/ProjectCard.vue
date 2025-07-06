@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, defineAsyncComponent, defineEmits } from 'vue';
+import { computed, ref, defineAsyncComponent } from 'vue';
 import type { Project } from '../model/types';
 import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
 import { useClickOutside } from '@/shared/lib/hooks/useClickOutside';

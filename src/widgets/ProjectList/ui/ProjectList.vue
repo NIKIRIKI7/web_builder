@@ -5,6 +5,7 @@ import { useProjectStore } from '@/features/ProjectManager/model/projectStore';
 import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
 import ProjectCard from '@/entities/Project/ui/ProjectCard.vue';
 import CreateProjectCard from '@/entities/Project/ui/CreateProjectCard.vue';
+import DashboardEmptyState from '@/widgets/DashboardEmptyState/ui/DashboardEmptyState.vue';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 const projectStore = useProjectStore();
@@ -42,15 +43,18 @@ function handleDeleteProject(projectIdToDelete: string) {
 
 <template>
   <div class="project-list">
-    <div class="project-list__grid">
-      <CreateProjectCard @create="handleCreateProject" />
-      <ProjectCard
-        v-for="project in projectStore.projects"
-        :key="project.id"
-        :project="project"
-        @delete="handleDeleteProject"
-      />
-    </div>
+    <template v-if="projectStore.projects.length > 0">
+      <div class="project-list__grid">
+        <CreateProjectCard @create="handleCreateProject" />
+        <ProjectCard
+          v-for="project in projectStore.projects"
+          :key="project.id"
+          :project="project"
+          @delete="handleDeleteProject"
+        />
+      </div>
+    </template>
+    <DashboardEmptyState v-else @create="handleCreateProject" />
   </div>
 </template>
 
