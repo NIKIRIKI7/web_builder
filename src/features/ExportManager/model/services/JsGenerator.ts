@@ -8,14 +8,24 @@ export function generateJs(components: ExportableComponent[]): string {
 
   const componentData = components.map(c => ({
     instanceId: c.instanceId,
+    componentId: c.componentDefinition.id,
     scripts: c.scripts || [],
+    props: c.props,
   }));
+
+  const runtimeScriptMap: Record<string, string> = {};
+  components.forEach(c => {
+    if (c.componentDefinition.runtimeScript && !runtimeScriptMap[c.componentDefinition.id]) {
+      runtimeScriptMap[c.componentDefinition.id] = c.componentDefinition.runtimeScript;
+    }
+  });
 
   const handlerMapString = `{
     ${actionRegistry.map(action => `'${action.type}': ${action.handler}`).join(',\n    ')}
   }`;
 
   const executionData = JSON.stringify(componentData, null, 2);
+  const runtimeScriptsString = JSON.stringify(runtimeScriptMap);
 
   return `
 <script type="module">
@@ -41,12 +51,23 @@ export function generateJs(components: ExportableComponent[]): string {
         }
 
         const eventBus = new EventBus();
-        const handlerMap = ${handlerMapString};
+        const customScriptHandlers = ${handlerMapString};
         const allComponentData = ${executionData};
+        const runtimeScriptsRaw = ${runtimeScriptsString};
+        const runtimeInitializers = {};
 
-        const executeActions = (actions, rootElement) => {
+        for (const key in runtimeScriptsRaw) {
+          try {
+            const scriptBody = runtimeScriptsRaw[key].replace(/^export default\\s*/, '');
+            runtimeInitializers[key] = new Function('return ' + scriptBody)();
+          } catch (e) {
+            console.error('Failed to parse runtime script for ' + key, e);
+          }
+        }
+        
+        const executeCustomActions = (actions, rootElement) => {
             actions.forEach(action => {
-                const handler = handlerMap[action.type];
+                const handler = customScriptHandlers[action.type];
                 if (handler) {
                     const context = { action, rootElement, eventBus };
                     try {
@@ -67,29 +88,38 @@ export function generateJs(components: ExportableComponent[]): string {
                 return;
             }
 
-            if (!data.scripts || data.scripts.length === 0) {
-                return;
+            // Initialize built-in component logic
+            const initializer = runtimeInitializers[data.componentId];
+            if (typeof initializer === 'function') {
+                try {
+                    initializer(rootElement, data.props);
+                } catch(e) {
+                    console.error(\`Error initializing component "\${data.componentId}":\`, e);
+                }
             }
 
-            data.scripts.forEach(script => {
-                if (script.trigger.type === 'onMount') {
-                    executeActions(script.actions, rootElement);
-                }
-                else if (script.trigger.type === 'onClick') {
-                    const targetElement = script.trigger.selector 
-                        ? rootElement.querySelector(script.trigger.selector) 
-                        : rootElement;
-                    
-                    if (targetElement) {
-                        targetElement.addEventListener('click', (event) => {
-                            event.preventDefault();
-                            executeActions(script.actions, rootElement);
-                        });
-                    } else {
-                        console.warn(\`Trigger selector "\${script.trigger.selector}" not found in instance \${data.instanceId}\`);
+            // Initialize user-defined scripts
+            if (data.scripts && data.scripts.length > 0) {
+                data.scripts.forEach(script => {
+                    if (script.trigger.type === 'onMount') {
+                        executeCustomActions(script.actions, rootElement);
                     }
-                }
-            });
+                    else if (script.trigger.type === 'onClick') {
+                        const targetElement = script.trigger.selector 
+                            ? rootElement.querySelector(script.trigger.selector) 
+                            : rootElement;
+                        
+                        if (targetElement) {
+                            targetElement.addEventListener('click', (event) => {
+                                event.preventDefault();
+                                executeCustomActions(script.actions, rootElement);
+                            });
+                        } else {
+                            console.warn(\`Trigger selector "\${script.trigger.selector}" not found in instance \${data.instanceId}\`);
+                        }
+                    }
+                });
+            }
         });
     });
 </script>

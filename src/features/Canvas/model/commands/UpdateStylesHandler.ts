@@ -1,0 +1,17 @@
+import { useCanvasStore } from '../canvasStore';
+import type { CommandHandler } from './types';
+
+interface UpdateStylesPayload {
+  instanceId: number;
+  newValues: Record<string, any>;
+}
+
+export const UpdateStylesHandler: CommandHandler<UpdateStylesPayload> = {
+  execute(payload) {
+    const canvasStore = useCanvasStore();
+    const component = canvasStore.componentInstances.find(c => c.instanceId === payload.instanceId);
+    if (component) {
+      component.styles = { ...component.styles, ...payload.newValues };
+    }
+  },
+};

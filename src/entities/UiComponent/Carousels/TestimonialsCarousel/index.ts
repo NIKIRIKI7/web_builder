@@ -2,6 +2,7 @@ import { defineAsyncComponent, markRaw } from 'vue';
 import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 import { CarouselIcon } from '@/shared/ui/icons';
 import staticCss from './TestimonialsCarousel.scss?inline';
+import runtimeScript from './TestimonialsCarousel.script.ts?raw';
 
 const ID = 'testimonials-carousel-v1';
 
@@ -16,6 +17,7 @@ export const testimonialsCarouselDefinition: UiComponentDefinition = {
   ...testimonialsCarouselPreview,
   component: markRaw(defineAsyncComponent(() => import('./TestimonialsCarousel.vue'))),
   staticCss,
+  runtimeScript,
   defaultProps: {
     testimonials: [
       { id: 1, avatarUrl: 'https://source.unsplash.com/random/100x100?person,woman', quote: 'This product has completely changed the way we work. It\'s intuitive, powerful, and the support is outstanding.', authorName: 'Jane Doe', authorTitle: 'CEO, Innovate Inc.' },

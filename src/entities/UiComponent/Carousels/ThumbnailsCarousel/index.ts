@@ -2,6 +2,7 @@ import { defineAsyncComponent, markRaw } from 'vue';
 import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 import { CarouselIcon } from '@/shared/ui/icons';
 import staticCss from './ThumbnailsCarousel.scss?inline';
+import runtimeScript from './ThumbnailsCarousel.script.ts?raw';
 
 const ID = 'thumbnails-carousel-v1';
 
@@ -16,6 +17,7 @@ export const thumbnailsCarouselDefinition: UiComponentDefinition = {
   ...thumbnailsCarouselPreview,
   component: markRaw(defineAsyncComponent(() => import('./ThumbnailsCarousel.vue'))),
   staticCss,
+  runtimeScript,
   defaultProps: {
     slides: [
       { id: 1, imageUrl: 'https://source.unsplash.com/random/800x450?product,watch', altText: 'Watch' },

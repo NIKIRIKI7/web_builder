@@ -5,6 +5,7 @@ export interface ExportableComponentDefinition {
   name: string;
   component: Component;
   staticCss?: string;
+  runtimeScript?: string;
 }
 
 export interface ScriptTrigger {

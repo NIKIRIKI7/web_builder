@@ -2,6 +2,7 @@ import { defineAsyncComponent, markRaw } from 'vue';
 import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 import { CarouselIcon } from '@/shared/ui/icons';
 import staticCss from './CardCarousel.scss?inline';
+import runtimeScript from './CardCarousel.script.ts?raw';
 
 const ID = 'card-carousel-v1';
 
@@ -16,6 +17,7 @@ export const cardCarouselDefinition: UiComponentDefinition = {
   ...cardCarouselPreview,
   component: markRaw(defineAsyncComponent(() => import('./CardCarousel.vue'))),
   staticCss,
+  runtimeScript,
   defaultProps: {
     cards: [
       { id: 1, imageUrl: 'https://source.unsplash.com/random/400x300?article,tech', category: 'Technology', title: 'The Future of AI in Web Development', url: '#' },

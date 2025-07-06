@@ -2,6 +2,7 @@ import { defineAsyncComponent, markRaw } from 'vue';
 import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 import { CarouselIcon } from '@/shared/ui/icons';
 import staticCss from './SimpleCarousel.scss?inline';
+import runtimeScript from './SimpleCarousel.script.ts?raw';
 
 const ID = 'simple-carousel-v1';
 
@@ -16,6 +17,7 @@ export const simpleCarouselDefinition: UiComponentDefinition = {
   ...simpleCarouselPreview,
   component: markRaw(defineAsyncComponent(() => import('./SimpleCarousel.vue'))),
   staticCss,
+  runtimeScript,
   defaultProps: {
     height: '400px',
     slides: [

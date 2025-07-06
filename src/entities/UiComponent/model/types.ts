@@ -47,4 +47,5 @@ export interface UiComponentDefinition extends UiComponentPreview {
   staticCss?: string;
   defaultProps?: Record<string, any>;
   defaultStyles?: Record<string, any>;
+  runtimeScript?: string;
 }

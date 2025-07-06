@@ -4,6 +4,10 @@ import { pinia } from './providers/pinia';
 import { i18n } from '@/shared/i18n';
 import App from './App.vue';
 import './styles/style.scss';
+import { initializeCommandHandlers } from '@/features/Canvas/model/commands';
+import '@/widgets/EditorPanel/ui/controls';
+
+initializeCommandHandlers();
 
 const app = createApp(App);
 

@@ -2,6 +2,7 @@ import { defineAsyncComponent, markRaw } from 'vue';
 import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 import { HeaderIcon } from '@/shared/ui/icons';
 import staticCss from './HeaderTransparent.scss?inline';
+import runtimeScript from './HeaderTransparent.script.ts?raw';
 
 const ID = 'header-transparent-v1';
 
@@ -16,6 +17,7 @@ export const headerTransparentDefinition: UiComponentDefinition = {
   ...headerTransparentPreview,
   component: markRaw(defineAsyncComponent(() => import('./HeaderTransparent.vue'))),
   staticCss,
+  runtimeScript,
   defaultProps: {
     logoText: 'Aura',
     ctaText: 'Explore',

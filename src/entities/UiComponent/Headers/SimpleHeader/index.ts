@@ -2,6 +2,7 @@ import { defineAsyncComponent, markRaw } from 'vue';
 import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 import { HeaderIcon } from '@/shared/ui/icons';
 import staticCss from './SimpleHeader.scss?inline';
+import runtimeScript from './SimpleHeader.script.ts?raw';
 
 const ID = 'simple-header-v1';
 
@@ -16,6 +17,7 @@ export const simpleHeaderDefinition: UiComponentDefinition = {
   ...simpleHeaderPreview,
   component: markRaw(defineAsyncComponent(() => import('./SimpleHeader.vue'))),
   staticCss,
+  runtimeScript,
   defaultProps: {
     logoText: 'MyWebsite',
     ctaText: 'Get Started',

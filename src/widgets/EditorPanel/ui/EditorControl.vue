@@ -1,16 +1,8 @@
 <script setup lang="ts">
-import { computed, shallowRef, type Component } from 'vue';
+import { computed } from 'vue';
 import type { EditorField } from '@/entities/UiComponent/model/types';
-import TextInput from './controls/TextInput.vue';
-import TextareaInput from './controls/TextareaInput.vue';
-import NumberInput from './controls/NumberInput.vue';
-import ColorInput from './controls/ColorInput.vue';
-import LinkArrayEditor from './controls/LinkArrayEditor.vue';
-import CodeEditorInput from './controls/CodeEditorInput.vue';
-import ImageInput from './controls/ImageInput.vue';
-import ObjectArrayEditor from './controls/ObjectArrayEditor.vue';
-import SelectInput from './controls/SelectInput.vue';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
+import { controlRegistry } from '../model/controlRegistry';
 
 interface Props {
   field: EditorField;
@@ -21,19 +13,7 @@ const props = defineProps<Props>();
 const emit = defineEmits(['update:modelValue']);
 const { t } = useI18nManager();
 
-const controlMap: Record<string, Component> = {
-  text: TextInput,
-  textarea: TextareaInput,
-  number: NumberInput,
-  color: ColorInput,
-  'link-array': LinkArrayEditor,
-  'code-editor': CodeEditorInput,
-  image: ImageInput,
-  'object-array': ObjectArrayEditor,
-  select: SelectInput,
-};
-
-const activeControl = shallowRef(controlMap[props.field.type]);
+const activeControl = computed(() => controlRegistry.getControl(props.field.type));
 
 const localValue = computed({
   get() {
@@ -64,6 +44,9 @@ const localValue = computed({
       :item-schema="field.itemSchema"
       :options="field.options"
     />
+    <div v-else class="editor-control__not-found">
+      Control of type '{{ field.type }}' not found.
+    </div>
   </div>
 </template>
 
@@ -80,6 +63,15 @@ const localValue = computed({
     font-weight: 500;
     color: var(--color-text-primary);
     opacity: 0.9;
+  }
+
+  &__not-found {
+    font-size: 12px;
+    color: var(--color-danger);
+    background-color: rgba(var(--color-danger-rgb), 0.1);
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(var(--color-danger-rgb), 0.3);
   }
 }
 </style>

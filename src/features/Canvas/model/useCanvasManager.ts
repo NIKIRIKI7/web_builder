@@ -1,78 +1,43 @@
-import { useCanvasStore, type CanvasInstanceState, type ComponentScript } from './canvasStore';
-import { getComponentDefinition } from '@/entities/UiComponent/model/registry';
-import { klona } from 'klona/lite';
+import { dispatchCommand } from './commands/commandBus';
+import type { ComponentScript, CanvasInstanceState } from './canvasStore';
 
 export function useCanvasManager() {
-  const store = useCanvasStore();
-
-  async function addComponent(componentId: string) {
-    const componentDefinition = await getComponentDefinition(componentId);
-    if (!componentDefinition) return;
-
-    const newInstance: CanvasInstanceState = {
-      instanceId: Date.now(),
-      componentId: componentId,
-      props: klona(componentDefinition.defaultProps || {}),
-      styles: klona(componentDefinition.defaultStyles || {}),
-      scripts: [],
-    };
-
-    store._addInstance(newInstance);
-    store.selectComponent(newInstance.instanceId);
-  }
-
-  async function addComponentAt(payload: { componentId: string; targetId: number; position: 'before' | 'after' }) {
-    const componentDefinition = await getComponentDefinition(payload.componentId);
-    if (!componentDefinition) return;
-
-    const newInstance: CanvasInstanceState = {
-      instanceId: Date.now(),
-      componentId: payload.componentId,
-      props: klona(componentDefinition.defaultProps || {}),
-      styles: klona(componentDefinition.defaultStyles || {}),
-      scripts: [],
-    };
-
-    store._addInstanceAt({ instance: newInstance, targetId: payload.targetId, position: payload.position });
-    store.selectComponent(newInstance.instanceId);
-  }
-
-  function cloneComponent(instanceId: number) {
-    const originalInstance = store.componentInstances.find(
-      (instance) => instance.instanceId === instanceId
-    );
-    if (!originalInstance) return;
-
-    const newInstance = klona(originalInstance);
-    newInstance.instanceId = Date.now();
-
-    const originalIndex = store.componentInstances.findIndex(
-      (instance) => instance.instanceId === instanceId
-    );
-
-    const newInstances = [...store.componentInstances];
-    newInstances.splice(originalIndex + 1, 0, newInstance);
-
-    store.setComponentInstances(newInstances);
-    store.selectComponent(newInstance.instanceId);
-  }
-
-  function setDraggableOrder(newOrder: CanvasInstanceState[]) {
-    store.setComponentInstances(newOrder);
-  }
-
   return {
-    addComponent,
-    addComponentAt,
-    cloneComponent,
-    selectComponent: (id: number | null) => store.selectComponent(id),
-    closeEditor: () => store.closeEditor(),
-    updateComponentProps: (payload: { instanceId: number; newValues: Record<string, any> }) => store.updateComponentProps(payload),
-    updateComponentStyles: (payload: { instanceId: number; newValues: Record<string, any> }) => store.updateComponentStyles(payload),
-    deleteComponent: (id: number) => store.deleteComponent(id),
-    setDraggableOrder,
-    addScript: (id: number) => store.addScript(id),
-    updateScript: (payload: { instanceId: number; script: ComponentScript }) => store.updateScript(payload),
-    deleteScript: (payload: { instanceId: number; scriptId: string }) => store.deleteScript(payload),
+    addComponent: (componentId: string) => {
+      dispatchCommand({ type: 'ADD_COMPONENT', payload: { componentId } });
+    },
+    addComponentAt: (payload: { componentId: string; targetId: number; position: 'before' | 'after' }) => {
+      dispatchCommand({ type: 'ADD_COMPONENT_AT', payload });
+    },
+    updateComponentProps: (payload: { instanceId: number; newValues: Record<string, any> }) => {
+      dispatchCommand({ type: 'UPDATE_PROPS', payload });
+    },
+    updateComponentStyles: (payload: { instanceId: number; newValues: Record<string, any> }) => {
+      dispatchCommand({ type: 'UPDATE_STYLES', payload });
+    },
+    cloneComponent: (instanceId: number) => {
+      dispatchCommand({ type: 'CLONE_COMPONENT', payload: { instanceId } });
+    },
+    deleteComponent: (instanceId: number) => {
+      dispatchCommand({ type: 'DELETE_COMPONENT', payload: { instanceId } });
+    },
+    selectComponent: (instanceId: number | null) => {
+      dispatchCommand({ type: 'SELECT_COMPONENT', payload: { instanceId } });
+    },
+    closeEditor: () => {
+      dispatchCommand({ type: 'CLOSE_EDITOR', payload: {} });
+    },
+    setDraggableOrder: (newOrder: CanvasInstanceState[]) => {
+      dispatchCommand({ type: 'SET_COMPONENT_ORDER', payload: newOrder });
+    },
+    addScript: (instanceId: number) => {
+      dispatchCommand({ type: 'ADD_SCRIPT', payload: { instanceId } });
+    },
+    updateScript: (payload: { instanceId: number; script: ComponentScript }) => {
+      dispatchCommand({ type: 'UPDATE_SCRIPT', payload });
+    },
+    deleteScript: (payload: { instanceId: number; scriptId: string }) => {
+      dispatchCommand({ type: 'DELETE_SCRIPT', payload });
+    },
   };
 }

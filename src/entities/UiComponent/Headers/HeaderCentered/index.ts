@@ -2,6 +2,7 @@ import { defineAsyncComponent, markRaw } from 'vue';
 import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 import { HeaderIcon } from '@/shared/ui/icons';
 import staticCss from './HeaderCentered.scss?inline';
+import runtimeScript from './HeaderCentered.script.ts?raw';
 
 const ID = 'header-centered-v1';
 
@@ -14,8 +15,9 @@ export const headerCenteredPreview: UiComponentPreview = {
 
 export const headerCenteredDefinition: UiComponentDefinition = {
   ...headerCenteredPreview,
-      component: markRaw(defineAsyncComponent(() => import('./HeaderCentered.vue'))),
+  component: markRaw(defineAsyncComponent(() => import('./HeaderCentered.vue'))),
   staticCss,
+  runtimeScript,
   defaultProps: {
     logoText: 'CenterLogo',
     linksLeft: [

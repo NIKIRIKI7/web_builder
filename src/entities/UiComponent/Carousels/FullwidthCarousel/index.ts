@@ -2,6 +2,7 @@ import { defineAsyncComponent, markRaw } from 'vue';
 import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 import { CarouselIcon } from '@/shared/ui/icons';
 import staticCss from './FullwidthCarousel.scss?inline';
+import runtimeScript from './FullwidthCarousel.script.ts?raw';
 
 const ID = 'fullwidth-carousel-v1';
 
@@ -16,6 +17,7 @@ export const fullwidthCarouselDefinition: UiComponentDefinition = {
   ...fullwidthCarouselPreview,
   component: markRaw(defineAsyncComponent(() => import('./FullwidthCarousel.vue'))),
   staticCss,
+  runtimeScript,
   defaultProps: {
     slides: [
       { id: 1, imageUrl: 'https://source.unsplash.com/random/1920x1080?business', title: 'Empowering Your Business', subtitle: 'Innovative solutions for the modern enterprise.', ctaText: 'Discover More', ctaUrl: '#' },
