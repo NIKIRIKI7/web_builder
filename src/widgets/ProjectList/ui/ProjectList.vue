@@ -6,25 +6,22 @@ import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
 import ProjectCard from '@/entities/Project/ui/ProjectCard.vue';
 import CreateProjectCard from '@/entities/Project/ui/CreateProjectCard.vue';
 import DashboardEmptyState from '@/widgets/DashboardEmptyState/ui/DashboardEmptyState.vue';
-import { useI18nManager } from '@/shared/i18n/useI18nManager';
+import type { Project } from '@/entities/Project/model/types';
 
 const projectStore = useProjectStore();
 const modalStore = useModalStore();
 const router = useRouter();
 const route = useRoute();
-const { t } = useI18nManager();
 
-const PromptModal = defineAsyncComponent(() => import('@/widgets/PromptModal/ui/PromptModal.vue'));
+const CreateProjectModal = defineAsyncComponent(() => import('@/widgets/CreateProjectModal/ui/CreateProjectModal.vue'));
+
+type CreatePayload = { name: string; canvasState?: Project['canvasState'] };
 
 async function handleCreateProject() {
   try {
-    const name = await modalStore.open<string>(PromptModal, {
-      title: t('dashboard.createProject'),
-      label: t('dashboard.prompts.newProjectTitle'),
-      initialValue: t('dashboard.prompts.newProjectDefaultName')
-    });
+    const { name, canvasState } = await modalStore.open<CreatePayload>(CreateProjectModal);
 
-    const newProject = projectStore.createProject(name);
+    const newProject = projectStore.createProject(name, canvasState);
     router.push({ name: 'Builder', params: { projectId: newProject.id } });
 
   } catch (error) {

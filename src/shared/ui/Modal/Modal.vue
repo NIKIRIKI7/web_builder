@@ -35,8 +35,7 @@ defineEmits(['close']);
   border-radius: 8px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   padding: 24px 32px;
-  min-width: 320px;
-  max-width: 500px;
+  overflow: visible;
 }
 
 .modal-fade-enter-active,

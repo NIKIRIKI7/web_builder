@@ -1,22 +1,17 @@
 import { watch, onBeforeUnmount, type Ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useProjectStore } from './projectStore';
-import { useCanvasStore, type CanvasInstanceState } from '@/features/Canvas/model/canvasStore';
+import { useCanvasStore } from '@/features/Canvas/model/canvasStore';
 import { klona } from 'klona/lite';
+import { debounce } from '@/shared/lib/utils';
+import type { Project } from '@/entities/Project/model/types';
 
-type CanvasStoreState = {
-  componentInstances: CanvasInstanceState[];
-  selectedComponentInstanceId: number | null;
-};
-
-function isValidCanvasState(data: any): data is CanvasStoreState {
+function isValidCanvasState(data: any): data is Project['canvasState'] {
   if (!data || typeof data !== 'object') {
     return false;
   }
-
   const hasInstances = 'componentInstances' in data && Array.isArray(data.componentInstances);
   const hasSelectedId = 'selectedComponentInstanceId' in data && (typeof data.selectedComponentInstanceId === 'number' || data.selectedComponentInstanceId === null);
-
   return hasInstances && hasSelectedId;
 }
 
@@ -28,7 +23,6 @@ export function useProjectLoader(projectId: Ref<string>) {
   const loadProjectData = (id: string) => {
     const project = projectStore.findProject(id);
     const stateToLoad = project?.canvasState;
-
     if (isValidCanvasState(stateToLoad)) {
       canvasStore.setState(klona(stateToLoad));
     } else {
@@ -38,11 +32,23 @@ export function useProjectLoader(projectId: Ref<string>) {
     }
   };
 
+  const updateThumbnail = debounce(() => {
+    if (!projectId.value) return;
+
+    const firstComponent = canvasStore.componentInstances[0];
+    if (firstComponent && firstComponent.styles?.backgroundColor) {
+      projectStore.updateProjectThumbnail(projectId.value, firstComponent.styles.backgroundColor);
+    } else {
+      projectStore.updateProjectThumbnail(projectId.value, null);
+    }
+  }, 1000);
+
   const stopWatchingProjectId = watch(
     projectId,
     (newId) => {
       if (newId) {
         loadProjectData(newId);
+        updateThumbnail();
       } else {
         canvasStore.resetState();
       }
@@ -51,9 +57,17 @@ export function useProjectLoader(projectId: Ref<string>) {
   );
 
   const stopAutoSave = watch(
-    () => canvasStore.$state,
+    () => canvasStore.componentInstances,
     (newState) => {
-      projectStore.updateProjectCanvas(projectId.value, newState);
+      if (projectId.value) {
+        const fullState = {
+          componentInstances: newState,
+          selectedComponentInstanceId: canvasStore.selectedComponentInstanceId,
+          isEditorOpen: canvasStore.isEditorOpen,
+        };
+        projectStore.updateProjectCanvas(projectId.value, fullState);
+        updateThumbnail();
+      }
     },
     { deep: true }
   );

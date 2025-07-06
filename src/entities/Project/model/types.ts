@@ -4,4 +4,5 @@ export interface Project {
   createdAt: number;
   updatedAt: number;
   canvasState: Record<string, any>;
+  thumbnail: string | null;
 }

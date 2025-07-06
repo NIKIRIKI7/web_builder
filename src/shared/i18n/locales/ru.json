@@ -24,6 +24,10 @@
     "emptyState": {
       "title": "Добро пожаловать в Web Builder!",
       "subtitle": "Начните создавать свой следующий удивительный сайт. У вас пока нет ни одного проекта."
+    },
+    "templates": {
+      "title": "Или начните с шаблона",
+      "blank": "Пустой проект"
     }
   },
   "sidebar": {
@@ -56,6 +60,8 @@
       "title": "Заголовок",
       "subtitle": "Подзаголовок",
       "text": "Текст",
+      "mainText": "Основной текст",
+      "subText": "Дополнительный текст",
       "paragraphText": "Текст параграфа",
       "paragraphs": "Параграфы",
       "imageUrl": "URL изображения",
@@ -101,6 +107,7 @@
       "jsCode": "Код JavaScript",
       "linkTextPlaceholder": "Текст ссылки",
       "linkUrlPlaceholder": "URL",
+      "viewAllText": "Текст 'Смотреть все'",
       "products": "Товары",
       "productName": "Название товара",
       "price": "Цена",
@@ -117,7 +124,8 @@
       "addLink": "Добавить ссылку",
       "addScript": "Добавить обработчик",
       "deleteScript": "Удалить",
-      "addItem": "Добавить элемент"
+      "addItem": "Добавить элемент",
+      "close": "Закрыть"
     },
     "scripts": {
       "title": "Обработчик Событий",

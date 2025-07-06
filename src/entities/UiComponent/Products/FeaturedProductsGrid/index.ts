@@ -21,10 +21,10 @@ export const featuredProductsGridDefinition: UiComponentDefinition = {
     viewAllText: 'View All',
     viewAllUrl: '#',
     products: [
-      { id: 1, imageUrl: 'https://i.ibb.co/6y40fb6/headphone.png', name: 'BLACK HEADPHONE ONE', price: 29, badgeText: 'NEW', url: '#' },
-      { id: 2, imageUrl: 'https://i.ibb.co/h9W9N6w/speaker.png', name: 'SPEAKER BEATS PILL', price: 199, badgeText: 'NEW', url: '#' },
-      { id: 3, imageUrl: 'https://i.ibb.co/yQzC7L1/airpods.png', name: 'APPLE AIR PODS', price: 122, badgeText: 'NEW', url: '#' },
-      { id: 4, imageUrl: 'https://i.ibb.co/yBw41z1/smartwatch.png', name: 'SMART WATCH F9 NEGRO', price: 99, badgeText: 'NEW', url: '#' },
+      { id: 1, imageUrl: 'https://source.unsplash.com/random/400x400?product,headphone', name: 'BLACK HEADPHONE ONE', price: 29, badgeText: 'NEW', url: '#' },
+      { id: 2, imageUrl: 'https://source.unsplash.com/random/400x400?product,speaker', name: 'SPEAKER BEATS PILL', price: 199, badgeText: 'NEW', url: '#' },
+      { id: 3, imageUrl: 'https://source.unsplash.com/random/400x400?product,airpods', name: 'APPLE AIR PODS', price: 122, badgeText: 'NEW', url: '#' },
+      { id: 4, imageUrl: 'https://source.unsplash.com/random/400x400?product,smartwatch', name: 'SMART WATCH F9 NEGRO', price: 99, badgeText: 'NEW', url: '#' },
     ]
   },
   defaultStyles: {

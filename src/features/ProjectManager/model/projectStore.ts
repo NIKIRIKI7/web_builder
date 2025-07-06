@@ -12,14 +12,15 @@ export const useProjectStore = defineStore('projects', () => {
     return projects.value.find(p => p.id === id);
   }
 
-  function createProject(name: string) {
+  function createProject(name: string, initialState?: Project['canvasState']) {
     const now = Date.now();
     const newProject: Project = {
       id: `project_${now}`,
       name: name,
       createdAt: now,
       updatedAt: now,
-      canvasState: {
+      thumbnail: null,
+      canvasState: initialState || {
         componentInstances: [],
         selectedComponentInstanceId: null,
         isEditorOpen: false,
@@ -37,6 +38,13 @@ export const useProjectStore = defineStore('projects', () => {
     }
   }
 
+  function updateProjectThumbnail(projectId: string, thumbnail: string | null) {
+    const project = findProject(projectId);
+    if (project) {
+      project.thumbnail = thumbnail;
+    }
+  }
+
   function deleteProject(id: string) {
     projects.value = projects.value.filter(p => p.id !== id);
   }
@@ -47,6 +55,7 @@ export const useProjectStore = defineStore('projects', () => {
     findProject,
     createProject,
     updateProjectCanvas,
+    updateProjectThumbnail,
     deleteProject
   };
 }, {

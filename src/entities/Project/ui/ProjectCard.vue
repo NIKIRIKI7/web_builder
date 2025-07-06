@@ -30,6 +30,19 @@ const formattedDate = computed(() => {
   return new Date(props.project.createdAt).toLocaleDateString();
 });
 
+const previewStyle = computed(() => {
+  const thumbnail = props.project.thumbnail;
+  if (!thumbnail) return {};
+
+  if (thumbnail.startsWith('#') || thumbnail.startsWith('rgb')) {
+    return { backgroundColor: thumbnail };
+  }
+  if (thumbnail.startsWith('data:image')) {
+    return { backgroundImage: `url(${thumbnail})` };
+  }
+  return {};
+});
+
 function toggleOptions() {
   isOptionsOpen.value = !isOptionsOpen.value;
 }
@@ -67,8 +80,8 @@ async function handleDelete() {
         </div>
       </transition>
     </div>
-    <div class="project-card__preview">
-      <h3 class="project-card__name">{{ project.name }}</h3>
+    <div class="project-card__preview" :style="previewStyle">
+      <h3 v-if="!project.thumbnail" class="project-card__name">{{ project.name }}</h3>
     </div>
     <div class="project-card__footer">
       <RouterLink :to="{ name: 'Builder', params: { projectId: project.id } }" class="project-card__edit-link">
@@ -165,6 +178,8 @@ async function handleDelete() {
   padding: 20px;
   border-bottom: 1px solid var(--color-border);
   background-color: var(--color-bg-primary);
+  background-size: cover;
+  background-position: center;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }

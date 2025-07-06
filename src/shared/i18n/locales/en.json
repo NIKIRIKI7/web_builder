@@ -24,6 +24,10 @@
     "emptyState": {
       "title": "Welcome to Your Web Builder!",
       "subtitle": "Start creating your next amazing website. You don't have any projects yet."
+    },
+    "templates": {
+      "title": "Or start from a template",
+      "blank": "Blank Project"
     }
   },
   "sidebar": {
@@ -56,6 +60,8 @@
       "title": "Title",
       "subtitle": "Subtitle",
       "text": "Text",
+      "mainText": "Main Text",
+      "subText": "Sub Text",
       "paragraphText": "Paragraph Text",
       "paragraphs": "Paragraphs",
       "imageUrl": "Image URL",
@@ -101,6 +107,8 @@
       "jsCode": "JavaScript Code",
       "linkTextPlaceholder": "Link Text",
       "linkUrlPlaceholder": "URL",
+      "viewAllText": "View All Text",
+      "products": "Products",
       "productName": "Product Name",
       "price": "Price",
       "badgeText": "Badge Text",
@@ -116,7 +124,8 @@
       "addLink": "Add Link",
       "addScript": "Add Script Handler",
       "deleteScript": "Delete",
-      "addItem": "Add Item"
+      "addItem": "Add Item",
+      "close": "Close"
     },
     "scripts": {
       "title": "Event Handler",

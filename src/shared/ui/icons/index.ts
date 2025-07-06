@@ -17,5 +17,6 @@ export { default as MobileIcon } from './MobileIcon.vue';
 export { default as EditIcon } from './EditIcon.vue';
 export { default as CloseIcon } from './CloseIcon.vue';
 export { default as ArrowLeftIcon } from './ArrowLeftIcon.vue';
+export { default as ArrowRightIcon } from './ArrowRightIcon.vue';
 export { default as MoreHorizontalIcon } from './MoreHorizontalIcon.vue';
 export { default as RocketIcon } from './RocketIcon.vue';
