@@ -143,26 +143,121 @@ graph TD
 
 ## Потоки Данных (Data Flow)
 
-1.  **Создание Проекта**:
-    -   Пользователь нажимает "Создать" в `CreateProjectCard` (UI).
-    -   Вызывается `useModalStore` (Feature), который открывает `CreateProjectModal` через `ModalManager` (UI).
-    -   После подтверждения `useModalStore` возвращает `Promise` с данными.
-    -   `ProjectList` (UI) вызывает экшен `createProject` у `projectStore` (Data).
-    -   `vue-router` (Shared) перенаправляет на страницу `BuilderPage`.
+Диаграммы последовательности иллюстрируют, как различные части приложения взаимодействуют друг с другом для выполнения ключевых пользовательских сценариев.
 
-2.  **Загрузка Проекта**:
-    -   `BuilderPage.vue` (UI) монтируется и активирует `useProjectLoader` (Feature), передавая ID проекта.
-    -   `useProjectLoader` запрашивает данные у `projectStore` (Data) и валидирует их.
-    -   `useProjectLoader` вызывает экшен `setState` у `canvasStore` (Data), заполняя холст.
-    -   `useProjectLoader` устанавливает `watch` для автосохранения изменений из `canvasStore` обратно в `projectStore`.
+### 1. Загрузка Проекта
 
-3.  **Добавление компонента на холст**:
-    -   Пользователь перетаскивает `UiLibraryItem` (UI).
-    -   `Canvas.vue` (UI) ловит событие `drop` и вызывает `addComponent` у `useCanvasManager` (Feature).
-    -   `useCanvasManager` создает экземпляр компонента и вызывает экшен `_addInstance` у `canvasStore` (Data).
-    -   `canvasStore` обновляет свой массив, что реактивно отображается на холсте.
+```mermaid
+sequenceDiagram
+    participant UI as BuilderPage.vue
+    participant Logic as useProjectLoader.ts
+    participant Data_P as projectStore.ts
+    participant Data_C as canvasStore.ts
+    participant Router as vue-router
 
-4.  **Экспорт в HTML**:
-    -   Пользователь нажимает кнопку в `TheHeader.vue` (UI).
-    -   Вызывается функция из модуля `ExportManager` (Feature).
-    -   `ExportManager` запрашивает актуальные данные у `useCanvasState` (Feature), генерирует HTML, CSS, JS и инициирует скачивание файла. Логика сторов и холста не затрагивается.
+    UI->>Logic: activate(projectId)
+    Logic->>Data_P: findProject(projectId)
+    Data_P-->>Logic: return project data
+
+    alt Project Found & Valid
+        Logic->>Data_C: setState(project.canvasState)
+        Logic->>Logic: Установить watch для автосохранения
+    else Project Not Found or Invalid
+        Logic->>Router: push({ name: 'Dashboard' })
+        Logic->>Data_C: resetState()
+    end
+    
+    loop Auto-save on change
+        Data_C-->>Logic: canvasStore state changed
+        Logic->>Data_P: updateProjectCanvas(state)
+    end
+```
+
+-   **`BuilderPage.vue`** (UI) при монтировании активирует **`useProjectLoader.ts`** (Logic), передавая ID проекта.
+-   **`useProjectLoader.ts`** запрашивает "сырые" данные проекта из **`projectStore.ts`** (Data).
+-   Если проект найден и его данные валидны, **`useProjectLoader.ts`** инициализирует **`canvasStore.ts`** (Data) состоянием проекта.
+-   В противном случае пользователь перенаправляется на главную страницу через **`vue-router`**.
+-   **`useProjectLoader.ts`** устанавливает `watch` для отслеживания изменений в **`canvasStore.ts`** и асинхронного сохранения этих изменений обратно в **`projectStore.ts`**.
+
+### 2. Добавление Компонента на Холст
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant UI as Canvas.vue
+    participant Logic as useCanvasManager.ts
+    participant Data as canvasStore.ts
+    
+    User->>UI: Drag & Drop компонента
+    UI->>Logic: addComponent(componentId)
+    
+    Logic->>Logic: Создать новый экземпляр (props, styles)
+    Logic->>Data: _addInstance(newInstance)
+    Data-->>UI: (Reactivity) Обновить DOM
+```
+
+-   Пользователь перетаскивает компонент из библиотеки на **`Canvas.vue`** (UI).
+-   **`Canvas.vue`** обрабатывает событие `drop` и вызывает метод `addComponent` из фасада **`useCanvasManager.ts`** (Logic).
+-   **`useCanvasManager.ts`** создает новый объект-экземпляр компонента с настройками по умолчанию.
+-   Фасад вызывает `action` у **`canvasStore.ts`** (Data), чтобы добавить новый экземпляр в массив.
+-   Система реактивности Vue обновляет DOM, и пользователь видит новый компонент на холсте.
+
+### 3. Редактирование Компонента
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant UI_Editor as EditorPanel.vue
+    participant Logic as useCanvasManager.ts
+    participant Data as canvasStore.ts
+    participant UI_Canvas as Canvas.vue
+
+    User->>UI_Canvas: Клик по компоненту
+    UI_Canvas->>Logic: selectComponent(instanceId)
+    Logic->>Data: selectComponent(instanceId)
+    note over UI_Editor: EditorPanel отображает свойства<br/>выбранного компонента
+
+    User->>UI_Editor: Изменяет значение в поле
+    UI_Editor->>Logic: updateComponentProps({ newValues })
+    Logic->>Data: updateComponentProps(payload)
+    Data-->>UI_Canvas: (Reactivity) Обновить DOM
+```
+
+-   Пользователь кликает на компонент в **`Canvas.vue`**, который вызывает `selectComponent` у **`useCanvasManager.ts`** (Logic).
+-   **`EditorPanel.vue`** (UI) реактивно отображает элементы управления для выбранного компонента.
+-   При изменении значения в поле (`EditorControl`), **`EditorPanel.vue`** вызывает соответствующий метод (`updateComponentProps` или `updateComponentStyles`) у **`useCanvasManager.ts`**.
+-   Фасад делегирует обновление в **`canvasStore.ts`** (Data).
+-   Реактивность обновляет вид компонента на холсте.
+
+### 4. Экспорт в HTML
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant UI as TheHeader.vue
+    participant Logic as ExportManager
+    participant State as useCanvasState.ts
+    participant Shared as downloadFile.ts
+    participant Browser
+    
+    User->>UI: Клик по кнопке "Экспорт"
+    UI->>Logic: exportPageAsHtml()
+    
+    Logic->>State: Получить renderedComponents
+    State-->>Logic: Вернуть актуальные данные холста
+    
+    Logic->>Logic: 1. Сгенерировать CSS
+    Logic->>Logic: 2. Срендерить компоненты в HTML
+    Logic->>Logic: 3. Сгенерировать JS для скриптов
+    Logic->>Logic: 4. Собрать финальный HTML-документ
+    
+    Logic->>Shared: downloadFile(htmlContent)
+    Shared->>Browser: Создать ссылку и инициировать скачивание
+    Browser-->>User: Диалог сохранения файла
+```
+
+-   Пользователь нажимает кнопку экспорта в **`TheHeader.vue`** (UI).
+-   Вызывается функция `exportPageAsHtml` из модуля **`ExportManager`** (Logic).
+-   **`ExportManager`** запрашивает актуальное состояние холста через `useCanvasState`.
+-   Модуль последовательно генерирует CSS, рендерит Vue-компоненты в статическую HTML-строку (`@vue/server-renderer`), генерирует JS для интерактивности.
+-   Собранный HTML-код передается в утилиту **`downloadFile`** (Shared), которая инициирует скачивание файла в браузере.
