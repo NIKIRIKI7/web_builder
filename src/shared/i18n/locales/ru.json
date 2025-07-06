@@ -117,7 +117,11 @@
       "filterKey": "Ключ фильтра (напр. tech)",
       "filterLabel": "Метка фильтра (напр. Технологии)",
       "originalPrice": "Оригинальная цена",
-      "salePrice": "Цена со скидкой"
+      "salePrice": "Цена со скидкой",
+      "triggerType": "Тип",
+      "actionType": "Тип действия",
+      "targetComponentId": "ID компонента-цели",
+      "alertMessage": "Текст оповещения"
     },
     "buttons": {
       "delete": "Удалить компонент",
@@ -125,11 +129,14 @@
       "addScript": "Добавить обработчик",
       "deleteScript": "Удалить",
       "addItem": "Добавить элемент",
-      "close": "Закрыть"
+      "close": "Закрыть",
+      "addAction": "Добавить действие"
     },
     "scripts": {
       "title": "Обработчик Событий",
-      "placeholder": "Для этого компонента нет скриптов."
+      "placeholder": "Для этого компонента нет скриптов.",
+      "triggerSectionTitle": "Триггер",
+      "actionsSectionTitle": "Действия"
     }
   },
   "components": {

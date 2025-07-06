@@ -1,17 +1,29 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import draggable from 'vuedraggable';
+import { useCanvasState } from '@/features/Canvas/model/useCanvasState';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
 import { DND_COMPONENT_ID_KEY } from '@/shared/lib/dnd/keys';
 import { AddIcon, CloneIcon, DeleteIcon, DragHandleIcon, EditIcon } from '@/shared/ui/icons';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
+import type { FullRenderedComponent } from '@/features/Canvas/model/canvasStore';
 
+const canvasState = useCanvasState();
 const canvasManager = useCanvasManager();
 const { t } = useI18nManager();
 
 const isDragOver = ref(false);
 const dropTargetInstanceId = ref<number | null>(null);
 const dropPosition = ref<'before' | 'after' | null>(null);
+
+const draggableComponents = computed<FullRenderedComponent[]>({
+  get() {
+    return canvasState.renderedComponents.value;
+  },
+  set(newOrder: FullRenderedComponent[]) {
+    canvasManager.setDraggableOrder(newOrder);
+  }
+});
 
 function handleComponentClick(instanceId: number) {
   canvasManager.selectComponent(instanceId);
@@ -64,17 +76,6 @@ function onDrop(event: DragEvent) {
   dropPosition.value = null;
 }
 
-function onDraggableUpdate(newOrder: any[]) {
-  const newInstances = newOrder.map(item => ({
-    instanceId: item.instanceId,
-    componentId: item.componentDefinition.id,
-    props: item.props,
-    styles: item.styles,
-    scripts: item.scripts,
-  }));
-  canvasManager.setComponentInstances(newInstances);
-}
-
 function handleDragOverItem(event: DragEvent, instanceId: number) {
   event.preventDefault();
   event.stopPropagation();
@@ -99,7 +100,7 @@ function handleDragLeaveItem() {
     @drop="onDrop"
     @click="handleCanvasClick"
   >
-    <div v-if="!canvasManager.renderedComponents.value.length" class="canvas__placeholder">
+    <div v-if="!canvasState.renderedComponents.value.length" class="canvas__placeholder">
       <div class="canvas__placeholder-icon">
         <AddIcon />
       </div>
@@ -109,8 +110,7 @@ function handleDragLeaveItem() {
       <Suspense>
         <template #default>
           <draggable
-            :model-value="canvasManager.draggableComponents.value"
-            @update:model-value="onDraggableUpdate"
+            v-model="draggableComponents"
             item-key="instanceId"
             handle=".component-wrapper__drag-handle"
             class="draggable-container"
@@ -120,7 +120,7 @@ function handleDragLeaveItem() {
               <div
                 class="component-wrapper"
                 :class="{
-                  'component-wrapper--selected': item.instanceId === canvasManager.selectedComponentInstanceId.value,
+                  'component-wrapper--selected': item.instanceId === canvasState.selectedComponentInstanceId.value,
                   'component-wrapper--drop-before': dropTargetInstanceId === item.instanceId && dropPosition === 'before',
                   'component-wrapper--drop-after': dropTargetInstanceId === item.instanceId && dropPosition === 'after',
                 }"
@@ -238,18 +238,15 @@ function handleDragLeaveItem() {
   z-index: 1;
   outline: 2px solid transparent;
   outline-offset: 2px;
-  transition: outline-color 0.2s ease-in-out;
+  transition: outline 0.2s ease-in-out;
   border-radius: 4px;
 }
 .component-wrapper:hover {
-  outline-color: var(--color-accent);
-  outline-style: dashed;
-  outline-width: 1px;
+  outline: 1px dashed var(--color-accent);
 }
 .component-wrapper--selected {
   z-index: 20;
   outline: 2px solid var(--color-accent);
-  outline-style: solid;
 }
 .component-wrapper--selected .component-wrapper__controls {
   opacity: 1;

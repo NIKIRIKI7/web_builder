@@ -1,151 +1,168 @@
 # Архитектура Приложения "Web Builder"
 
-Этот документ описывает высокоуровневую архитектуру созданного нами веб-конструктора. Диаграмма иллюстрирует ключевые компоненты, их взаимодействие и потоки данных в приложении после проведения рефакторинга.
+Этот документ описывает высокоуровневую архитектуру веб-конструктора, иллюстрируя ключевые компоненты, их взаимодействие и потоки данных в приложении.
 
 ## UML Диаграмма (Mermaid)
 
 ```mermaid
 graph TD
-    subgraph "UI Layer (Widgets & Pages)"
-        Page[BuilderPage.vue]
-        Header[TheHeader.vue]
-        Library[UiLibrary.vue]
+    subgraph "Pages & UI Layer"
+        DashboardPage[DashboardPage.vue]
+        BuilderPage[BuilderPage.vue]
+        TheHeader[TheHeader.vue]
+        ProjectList[ProjectList.vue]
+        UiLibrary[UiLibrary.vue]
         Workspace[Workspace.vue]
         EditorPanel[EditorPanel.vue]
-        Canvas[Canvas.vue]
-        EditorControls["EditorControl.vue <br/>(TextInput, etc.)"]
+        ModalManager[ModalManager.vue]
         ProjectCard[ProjectCard.vue]
+        CreateProjectCard[CreateProjectCard.vue]
+        EditorControls["EditorControl.vue <br/>(TextInput, etc.)"]
 
-        Page --> Header & Library & Workspace & EditorPanel
-        Workspace --> Canvas
+        DashboardPage --> TheHeader & ProjectList
+        BuilderPage --> TheHeader & Workspace & UiLibrary & EditorPanel
+        ProjectList --> ProjectCard & CreateProjectCard
+        Workspace --> Canvas[Canvas.vue]
         EditorPanel --> EditorControls
     end
 
-    subgraph "Business Logic (Facades & Features)"
-        CanvasManager[("useCanvasManager.ts")]
-        ProjectLoader[("useProjectLoader.ts")]
-        ExportManager[("features/ExportManager")]
-        FilterableLibrary[("features/FilterableUiLibrary")]
+    subgraph "Features Layer (Business Logic)"
+        ProjectFacade[("useProjectLoader.ts<br/>useModalStore.ts")]
+        CanvasFacade[("useCanvasManager.ts")]
+        LayoutFacade[("layoutStore.ts")]
+        PreviewFacade[("previewStore.ts")]
+        LibraryFeature[("FilterableUiLibraryStore.ts")]
+        ExportFeature[("features/ExportManager")]
     end
 
-    subgraph "Data Layer (Pinia & Entities)"
-        CanvasStore[("canvasStore.ts <br/> Raw Canvas State")]
-        ProjectStore[("projectStore.ts <br/> Raw Projects State")]
-        LibraryStore[(".../store.ts <br/> Raw Library State")]
+    subgraph "Entities & Data Layer (Pinia)"
+        ProjectStore[("projectStore.ts <br/> Projects State")]
+        CanvasStore[("canvasStore.ts <br/> Canvas State")]
         Persist[("localStorage")]
-        ProjectEntity[Project Entity]
-        UiComponentEntity[UiComponent Entity]
+        ProjectEntity[("Project Entity")]
+        UiComponentEntity[("UiComponent Entity")]
     end
 
     subgraph "Shared Resources"
+        SharedRouter[("Router")]
+        SharedI18n[("i18n")]
+        SharedTheme[("ThemeManager")]
+        SharedLayout[Layout Components]
         SharedIcons[UI: /icons/*.vue]
-        SharedHooks["Shared Hooks <br/> (useClickOutside)"]
-        SharedLibs["3rd Party Libs <br/> (fuse.js, vuedraggable)"]
-        SharedUtils["Shared Utils <br/> (debounce, downloadFile)"]
+        SharedHooks["Shared Hooks <br/>(useClickOutside)"]
+        SharedUtils["Shared Utils <br/>(debounce, klona)"]
     end
 
     %% Interactions
-    Page -- "Uses for lifecycle" --> ProjectLoader
-    ProjectLoader -- "Reads from" --> ProjectStore
-    ProjectLoader -- "Writes state to" --> CanvasStore
-    ProjectLoader -- "Saves changes to" --> ProjectStore
+    DashboardPage -- "Uses" --> ProjectFacade
+    BuilderPage -- "Uses" --> ProjectFacade
+    ProjectList -- "Uses" --> ProjectStore
+    ProjectCard -- "Uses" --> ProjectFacade
+    CreateProjectCard -- "Uses" --> ProjectFacade
 
-    Header -- "onExportClick" --> ExportManager
-    ExportManager -- "Gets data from" --> CanvasManager
+    TheHeader -- "Manages" --> LayoutFacade & PreviewFacade
+    TheHeader -- "Exports via" --> ExportFeature
+
+    UiLibrary -- "Uses" --> LibraryFeature
+    Workspace -- "Manages preview via" --> PreviewFacade
     
-    Library -- "Uses feature" --> FilterableLibrary
-    FilterableLibrary -- "Manages state in" --> LibraryStore
-    FilterableLibrary -- "Uses for search" --> SharedLibs
+    Canvas -- "Interacts with" --> CanvasFacade
+    EditorPanel -- "Interacts with" --> CanvasFacade
     
-    Canvas -- "Interacts with" --> CanvasManager
-    EditorPanel -- "Interacts with" --> CanvasManager
-    EditorControls -- "Update data via" --> EditorPanel
-    
-    CanvasManager -- "Orchestrates logic for" --> CanvasStore
-    CanvasManager -- "Renders" --> UiComponentEntity
-    
-    ProjectCard -- "Uses hook" --> SharedHooks
+    CanvasFacade -- "Orchestrates logic for" --> CanvasStore
+    ProjectFacade -- "Manages project lifecycle for" --> CanvasStore & ProjectStore
 
     ProjectStore -- "Saves state to" --> Persist
-    CanvasStore -- "Saves state via ProjectStore to" --> Persist
-    
-    UiComponentEntity -- "Uses" --> SharedIcons
-    
-    %% Styling
-    classDef widget fill:#e1effa,stroke:#a6c5e3,stroke-width:2px;
-    classDef logic fill:#fce8d5,stroke:#e3b593,stroke-width:2px;
-    classDef store fill:#f9f3d5,stroke:#e3d593,stroke-width:2px;
-    classDef entity fill:#d5fada,stroke:#93e3a4,stroke-width:2px;
-    classDef shared fill:#e8d5f9,stroke:#b593e3,stroke-width:2px;
-    
-    class Page,Header,Library,Workspace,EditorPanel,Canvas,EditorControls,ProjectCard widget;
-    class CanvasManager,ExportManager,FilterableLibrary,ProjectLoader logic;
-    class CanvasStore,LibraryStore,ProjectStore,Persist store;
-    class ProjectEntity,UiComponentEntity entity;
-    class SharedIcons,SharedLibs,SharedUtils,SharedHooks shared;
+    LayoutFacade -- "Saves state to" --> Persist
 
+    %% Styling
+    classDef page fill:#cde4ff,stroke:#5c98d9,stroke-width:2px;
+    classDef widget fill:#e1effa,stroke:#a6c5e3,stroke-width:2px;
+    classDef feature fill:#fce8d5,stroke:#e3b593,stroke-width:2px;
+    classDef store fill:#d5fada,stroke:#93e3a4,stroke-width:2px;
+    classDef shared fill:#e8d5f9,stroke:#b593e3,stroke-width:2px;
+
+    class DashboardPage,BuilderPage page;
+    class TheHeader,ProjectList,UiLibrary,Workspace,EditorPanel,ModalManager,ProjectCard,CreateProjectCard,EditorControls,Canvas widget;
+    class ProjectFacade,CanvasFacade,LayoutFacade,PreviewFacade,LibraryFeature,ExportFeature feature;
+    class ProjectStore,CanvasStore,Persist,ProjectEntity,UiComponentEntity store;
+    class SharedRouter,SharedI18n,SharedTheme,SharedLayout,SharedIcons,SharedHooks,SharedUtils shared;
 ```
 
 ## Описание Архитектурных Слоев
 
 ### 1. Слой Представления (UI Layer)
 
-Этот слой отвечает за всё, что видит и с чем взаимодействует пользователь. Компоненты этого слоя не содержат сложной бизнес-логики, а делегируют её обработку слою бизнес-логики.
+Этот слой отвечает за всё, что видит и с чем взаимодействует пользователь. Компоненты этого слоя не содержат сложной бизнес-логики, а делегируют её обработку слою фичей.
 
--   **`BuilderPage.vue`**: Основная страница-контейнер. Делегирует всю логику загрузки, сохранения и очистки данных проекта хуку `useProjectLoader`, оставаясь "чистым" компонентом, отвечающим только за компоновку виджетов.
--   **`TheHeader.vue`**: Верхняя панель приложения. Запускает экспорт, управляет режимом редактирования лэйаута и навигацией.
--   **`UiLibrary.vue`**: Виджет с библиотекой компонентов. Использует виртуальный скроллинг (`@tanstack/vue-virtual`) для высокой производительности.
--   **`Canvas.vue`**: Центральная рабочая область, куда пользователи перетаскивают компоненты. Взаимодействует с фасадом `useCanvasManager` для управления своим состоянием.
--   **`EditorPanel.vue`**: Панель свойств выбранного компонента. Декомпозирована на мелкие переиспользуемые контролы.
--   **`EditorControl.vue`**: Универсальный компонент, который рендерит нужный контрол (`TextInput.vue`, `ColorInput.vue` и др.) в зависимости от типа поля.
+-   **Страницы (`pages`)**:
+    -   `DashboardPage.vue`: Главная страница для управления проектами. Отображает `ProjectList`.
+    -   `BuilderPage.vue`: Основная страница-конструктор. Компонует основные виджеты (`TheHeader`, `UiLibrary`, `Workspace`, `EditorPanel`) и делегирует логику загрузки/сохранения хуку `useProjectLoader`.
 
-### 2. Слой Бизнес-Логики (Business Logic Layer)
+-   **Виджеты (`widgets`)**:
+    -   `TheHeader.vue`: Верхняя панель приложения. Управляет навигацией, темами, языком, режимом редактирования лэйаута и запуском экспорта.
+    -   `ProjectList.vue`: Отображает список проектов (`ProjectCard`) и карточку создания нового проекта.
+    -   `UiLibrary.vue`: Панель с библиотекой компонентов, использующая виртуализацию (`@tanstack/vue-virtual`) для высокой производительности.
+    -   `Workspace.vue`: Центральная рабочая область, управляющая режимами предпросмотра (`desktop`, `tablet`, `mobile`). Содержит `Canvas`.
+    -   `Canvas.vue`: Холст, куда пользователи перетаскивают компоненты. Взаимодействует с фасадом `useCanvasManager`.
+    -   `EditorPanel.vue`: Панель свойств выбранного компонента.
+    -   `ModalManager.vue`: Глобальный обработчик для отображения модальных окон, таких как `CreateProjectModal` и `ConfirmModal`.
 
-Это "мозговой центр" приложения, изолирующий UI от прямого манипулирования данными. Реализован через Vue Composables (фасады) и изолированные модули-фичи.
+### 2. Слой Фичей (Features Layer)
 
--   **`useCanvasManager.ts`**: **Фасад** для работы с холстом. Предоставляет для UI-слоя простой API (`addComponent`, `updateComponentProps`), инкапсулируя сложную логику взаимодействия с `canvasStore`.
--   **`useProjectLoader.ts`**: Изолированный хук, отвечающий за **жизненный цикл проекта**. Он инкапсулирует логику загрузки данных из `projectStore` в `canvasStore`, их валидацию и последующее автосохранение.
--   **`features/ExportManager`**: Изолированный модуль, отвечающий исключительно за экспорт.
--   **`features/FilterableUiLibrary`**: Фича, содержащая логику для поиска и фильтрации в библиотеке компонентов.
+Это "мозговой центр" приложения, инкапсулирующий бизнес-логику и изолирующий UI от прямого манипулирования данными. Реализован через Vue Composables (фасады) и Pinia-сторы с логикой.
 
-### 3. Слой Данных (Data Layer)
+-   **`ProjectFacade`**: Объединяет хуки `useProjectLoader` для управления жизненным циклом проекта (загрузка, автосохранение) и `useModalStore` для управления модальными окнами (создание, удаление).
+-   **`CanvasFacade (useCanvasManager.ts)`**: Фасад для работы с холстом. Предоставляет для UI-слоя простой API (`addComponent`, `updateComponentProps`), инкапсулируя сложную логику взаимодействия с `canvasStore`.
+-   **`LayoutFacade (layoutStore.ts)`**: Управляет состоянием и логикой кастомизируемого интерфейса (положение и размеры панелей).
+-   **`PreviewFacade (previewStore.ts)`**: Управляет режимом предпросмотра холста (десктоп, планшет, мобильный).
+-   **`LibraryFeature (FilterableUiLibraryStore.ts)`**: Содержит логику для поиска и фильтрации в библиотеке компонентов с использованием `fuse.js`.
+-   **`ExportFeature`**: Изолированный модуль, отвечающий исключительно за экспорт проекта в HTML, CSS и JS.
 
-Этот слой отвечает исключительно за хранение "сырого" состояния и определение структуры данных (сущностей).
+### 3. Слой Сущностей и Данных (Entities & Data Layer)
 
--   **`canvasStore.ts`**: "Глупый" Pinia-стор, хранит только состояние холста: массив компонентов, ID выбранного и скрипты. Не содержит сложной логики.
--   **`projectStore.ts`**: Аналогичный стор, хранит список всех проектов пользователя. Использует `pinia-plugin-persistedstate` для сохранения в `localStorage`.
--   **`Project (Entity)`**: Сущность, описывающая проект. Ключевое изменение: поле `canvasState` имеет тип `Record<string, any>`, что **устраняет прямую зависимость** от фичи `Canvas`. Валидация этих данных происходит в `useProjectLoader`.
--   **`UiComponent (Entity)`**: Ключевая бизнес-сущность, реализованная по принципу "конфигурация как код". Описывает метаданные, сам Vue-компонент, стили по умолчанию и конфигурацию для панели редактора.
+Этот слой отвечает за хранение "сырого" состояния (raw state) и определение структуры данных.
+
+-   **`ProjectStore.ts`**: Pinia-стор, хранит массив всех проектов. Использует `pinia-plugin-persistedstate` для сохранения в `localStorage` и систему миграций для обновления структуры.
+-   **`CanvasStore.ts`**: "Глупый" Pinia-стор, хранит только состояние холста: массив экземпляров компонентов, их `props`, `styles`, `scripts` и ID выбранного элемента.
+-   **`Project (Entity)`**: Типизация, описывающая структуру проекта.
+-   **`UiComponent (Entity)`**: Ключевая бизнес-сущность. Описывает метаданные компонента, его Vue-реализацию, стили по умолчанию и конфигурацию для редактора.
+-   **UI-сущности**: `ProjectCard.vue`, `CreateProjectCard.vue` - компоненты, представляющие одну сущность в UI.
 
 ### 4. Общие Ресурсы (Shared Layer)
 
--   **`shared/lib/hooks`**: Коллекция переиспользуемых Vue Composables, таких как `useClickOutside`, для инкапсуляции общей UI-логики и следования принципу DRY.
--   **`shared/lib/utils`**: Набор простых переиспользуемых утилит (`debounce`, `downloadFile`).
--   **`shared/ui/icons`**: Централизованная библиотека иконок в виде Vue-компонентов.
--   **Сторонние библиотеки**: `fuse.js`, `vuedraggable`, `codemirror` и другие.
+Переиспользуемые модули и утилиты, доступные во всём приложении.
+
+-   **`SharedRouter`**: Конфигурация `vue-router` для навигации между страницами.
+-   **`SharedI18n`**: Настройка `vue-i18n` для интернационализации.
+-   **`SharedTheme`**: `useThemeManager` для управления темами (светлая/тёмная).
+-   **`SharedLayout`**: Компоненты для построения кастомизируемого интерфейса (`LayoutManager`, `LayoutPanel`, `Splitter`).
+-   **`SharedHooks`**: Переиспользуемые Vue Composables (`useClickOutside`).
+-   **`SharedUtils`**: Набор простых утилит (`debounce`, `klona`, `downloadFile`).
+-   **`SharedIcons`**: Централизованная библиотека иконок в виде Vue-компонентов.
 
 ## Потоки Данных (Data Flow)
 
-1.  **Загрузка Проекта**:
-    -   `BuilderPage.vue` (UI) монтируется и активирует `useProjectLoader` (Logic), передавая ID проекта.
-    -   `useProjectLoader` (Logic) запрашивает данные проекта у `projectStore` (Data).
-    -   `useProjectLoader` (Logic) **валидирует** полученный `canvasState` на соответствие нужной структуре.
-    -   В случае успеха, `useProjectLoader` вызывает экшен `setState` у `canvasStore` (Data), заполняя холст.
-    -   `useProjectLoader` (Logic) устанавливает `watch` для автосохранения изменений из `canvasStore` обратно в `projectStore`.
+1.  **Создание Проекта**:
+    -   Пользователь нажимает "Создать" в `CreateProjectCard` (UI).
+    -   Вызывается `useModalStore` (Feature), который открывает `CreateProjectModal` через `ModalManager` (UI).
+    -   После подтверждения `useModalStore` возвращает `Promise` с данными.
+    -   `ProjectList` (UI) вызывает экшен `createProject` у `projectStore` (Data).
+    -   `vue-router` (Shared) перенаправляет на страницу `BuilderPage`.
 
-2.  **Добавление компонента на холст**:
+2.  **Загрузка Проекта**:
+    -   `BuilderPage.vue` (UI) монтируется и активирует `useProjectLoader` (Feature), передавая ID проекта.
+    -   `useProjectLoader` запрашивает данные у `projectStore` (Data) и валидирует их.
+    -   `useProjectLoader` вызывает экшен `setState` у `canvasStore` (Data), заполняя холст.
+    -   `useProjectLoader` устанавливает `watch` для автосохранения изменений из `canvasStore` обратно в `projectStore`.
+
+3.  **Добавление компонента на холст**:
     -   Пользователь перетаскивает `UiLibraryItem` (UI).
-    -   `Canvas.vue` (UI) ловит событие `drop` и вызывает `addComponent` у фасада `useCanvasManager` (Logic).
-    -   `useCanvasManager` (Logic) создает экземпляр компонента и вызывает экшен `_addInstance` у `canvasStore` (Data).
-    -   `canvasStore` (Data) обновляет свой массив, что реактивно отображается на холсте.
-
-3.  **Редактирование компонента**:
-    -   Пользователь выбирает компонент. `Canvas.vue` (UI) вызывает `selectComponent` у `useCanvasManager` (Logic).
-    -   `EditorPanel.vue` (UI) отображает контролы на основе данных из `selectedComponent` (computed-свойство из `useCanvasManager`).
-    -   При изменении значения, `EditorPanel.vue` вызывает `updateComponentStyles` или `updateComponentProps` у `useCanvasManager` (Logic).
-    -   `useCanvasManager` (Logic) делегирует обновление в `canvasStore` (Data).
+    -   `Canvas.vue` (UI) ловит событие `drop` и вызывает `addComponent` у `useCanvasManager` (Feature).
+    -   `useCanvasManager` создает экземпляр компонента и вызывает экшен `_addInstance` у `canvasStore` (Data).
+    -   `canvasStore` обновляет свой массив, что реактивно отображается на холсте.
 
 4.  **Экспорт в HTML**:
     -   Пользователь нажимает кнопку в `TheHeader.vue` (UI).
-    -   Вызывается функция из модуля `ExportManager` (Logic).
-    -   `ExportManager` запрашивает актуальные данные `renderedComponents` у `useCanvasManager` (Logic) и генерирует HTML-файл. Логика сторов и холста не затрагивается.
+    -   Вызывается функция из модуля `ExportManager` (Feature).
+    -   `ExportManager` запрашивает актуальные данные у `useCanvasState` (Feature), генерирует HTML, CSS, JS и инициирует скачивание файла. Логика сторов и холста не затрагивается.

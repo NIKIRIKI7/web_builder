@@ -16,34 +16,6 @@ export const simpleHeaderDefinition: UiComponentDefinition = {
   ...simpleHeaderPreview,
   component: markRaw(defineAsyncComponent(() => import('./SimpleHeader.vue'))),
   staticCss,
-  clientScript: `
-    const nav = rootElement.querySelector('.simple-header__nav');
-    const burgerBtn = rootElement.querySelector('.simple-header__burger-btn');
-    const navLinks = rootElement.querySelectorAll('.simple-header__link');
-
-    const toggle = () => {
-      if (nav && burgerBtn) {
-        nav.classList.toggle('simple-header__nav--is-open');
-        const isExpanded = nav.classList.contains('simple-header__nav--is-open');
-        burgerBtn.setAttribute('aria-expanded', String(isExpanded));
-      }
-    };
-
-    if (burgerBtn) {
-      burgerBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggle();
-      });
-    }
-
-    navLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        if (nav && nav.classList.contains('simple-header__nav--is-open')) {
-          toggle();
-        }
-      });
-    });
-  `,
   defaultProps: {
     logoText: 'MyWebsite',
     ctaText: 'Get Started',

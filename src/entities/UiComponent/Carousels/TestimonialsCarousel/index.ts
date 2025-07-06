@@ -16,35 +16,6 @@ export const testimonialsCarouselDefinition: UiComponentDefinition = {
   ...testimonialsCarouselPreview,
   component: markRaw(defineAsyncComponent(() => import('./TestimonialsCarousel.vue'))),
   staticCss,
-  clientScript: `
-    const track = rootElement.querySelector('.testimonials-carousel__track');
-    const slides = rootElement.querySelectorAll('.testimonials-carousel__slide');
-    const paginationContainer = rootElement.querySelector('.testimonials-carousel__pagination');
-    const slideCount = slides.length;
-    let currentIndex = 0;
-    let dots = [];
-
-    function goToSlide(index) {
-        if (index < 0 || index >= slideCount) return;
-        track.style.transform = 'translateX(-' + index * 100 + '%)';
-        if (dots[currentIndex]) dots[currentIndex].classList.remove('is-active');
-        if (dots[index]) dots[index].classList.add('is-active');
-        currentIndex = index;
-    }
-
-    if (paginationContainer) {
-        for (let i = 0; i < slideCount; i++) {
-            const dot = document.createElement('button');
-            dot.classList.add('testimonials-carousel__dot');
-            dot.addEventListener('click', () => goToSlide(i));
-            paginationContainer.appendChild(dot);
-            dots.push(dot);
-        }
-        if (dots.length > 0) {
-            dots[0].classList.add('is-active');
-        }
-    }
-  `,
   defaultProps: {
     testimonials: [
       { id: 1, avatarUrl: 'https://source.unsplash.com/random/100x100?person,woman', quote: 'This product has completely changed the way we work. It\'s intuitive, powerful, and the support is outstanding.', authorName: 'Jane Doe', authorTitle: 'CEO, Innovate Inc.' },
@@ -88,5 +59,10 @@ export const testimonialsCarouselEditorConfig: EditorConfiguration = {
         { name: 'paddingBottom', label: 'paddingBottom', type: 'number', unit: 'px' },
       ],
     },
+    {
+      name: 'Scripts',
+      target: 'script',
+      fields: []
+    }
   ],
 };

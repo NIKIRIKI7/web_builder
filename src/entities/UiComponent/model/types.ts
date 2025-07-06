@@ -18,13 +18,14 @@ export type UiComponentCategory =
   | 'Pricing'
   | 'Team'
   | 'FAQs';
-export type EditorFieldType = 'text' | 'textarea' | 'number' | 'color' | 'code-editor' | 'link-array' | 'image' | 'object-array';
+export type EditorFieldType = 'text' | 'textarea' | 'number' | 'color' | 'code-editor' | 'link-array' | 'image' | 'object-array' | 'select';
 export interface EditorField {
   name: string;
   label: string;
   type: EditorFieldType;
   unit?: 'px' | '%' | 'em' | 'rem';
   itemSchema?: EditorField[];
+  options?: { label: string; value: any }[];
 }
 export interface EditorTab {
   name:string;
@@ -44,7 +45,6 @@ export interface UiComponentPreview {
 export interface UiComponentDefinition extends UiComponentPreview {
   component: Component;
   staticCss?: string;
-  clientScript?: string;
   defaultProps?: Record<string, any>;
   defaultStyles?: Record<string, any>;
 }

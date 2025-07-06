@@ -1,4 +1,5 @@
 import type { ExportableComponent } from '../types';
+import { actionRegistry } from '@/features/ScriptActions/model/registry';
 
 export function generateJs(components: ExportableComponent[]): string {
   if (components.length === 0) {
@@ -7,70 +8,88 @@ export function generateJs(components: ExportableComponent[]): string {
 
   const componentData = components.map(c => ({
     instanceId: c.instanceId,
-    clientScript: c.componentDefinition.clientScript || null,
-    props: c.props,
     scripts: c.scripts || [],
   }));
+
+  const handlerMapString = `{
+    ${actionRegistry.map(action => `'${action.type}': ${action.handler}`).join(',\n    ')}
+  }`;
 
   const executionData = JSON.stringify(componentData, null, 2);
 
   return `
 <script type="module">
     document.addEventListener('DOMContentLoaded', () => {
+        
+        class EventBus {
+            constructor() { this.listeners = new Map(); }
+            on(event, handler) {
+                if (!this.listeners.has(event)) { this.listeners.set(event, new Set()); }
+                this.listeners.get(event).add(handler);
+                return () => this.off(event, handler);
+            }
+            off(event, handler) {
+                const eventListeners = this.listeners.get(event);
+                if (eventListeners) { eventListeners.delete(handler); }
+            }
+            emit(event, payload) {
+                const eventListeners = this.listeners.get(event);
+                if (eventListeners) {
+                    eventListeners.forEach(h => { try { h(payload); } catch (e) { console.error(e); }});
+                }
+            }
+        }
+
+        const eventBus = new EventBus();
+        const handlerMap = ${handlerMapString};
         const allComponentData = ${executionData};
 
-        const createSandboxApi = (data, rootElement) => ({
-            getProp(propName) {
-                return data.props[propName];
-            },
-            toggleClass(selector, className) {
-                const element = rootElement.querySelector(selector);
-                if (element) {
-                    element.classList.toggle(className);
+        const executeActions = (actions, rootElement) => {
+            actions.forEach(action => {
+                const handler = handlerMap[action.type];
+                if (handler) {
+                    const context = { action, rootElement, eventBus };
+                    try {
+                        handler(context);
+                    } catch(e) {
+                        console.error(\`Error executing action "\${action.type}":\`, e);
+                    }
+                } else {
+                    console.warn(\`Unknown action type: \${action.type}\`);
                 }
-            }
-        });
+            });
+        };
 
         allComponentData.forEach(data => {
-            try {
-                const rootElement = document.getElementById(\`wb-inst-\${data.instanceId}\`);
-                if (!rootElement) {
-                  console.error(\`Root element #wb-inst-\${data.instanceId} not found.\`);
-                  return;
-                }
+            const rootElement = document.getElementById(\`wb-inst-\${data.instanceId}\`);
+            if (!rootElement) {
+                console.warn(\`Root element for instance \${data.instanceId} not found\`);
+                return;
+            }
 
-                if (data.clientScript) {
-                    try {
-                        new Function('rootElement', data.clientScript)(rootElement);
-                    } catch (e) {
-                        console.error(\`Error executing client script for component #\${data.instanceId}: \${e.message}\`);
+            if (!data.scripts || data.scripts.length === 0) {
+                return;
+            }
+
+            data.scripts.forEach(script => {
+                if (script.trigger.type === 'onMount') {
+                    executeActions(script.actions, rootElement);
+                }
+                else if (script.trigger.type === 'onClick') {
+                    const targetElement = script.trigger.selector 
+                        ? rootElement.querySelector(script.trigger.selector) 
+                        : rootElement;
+                    
+                    if (targetElement) {
+                        targetElement.addEventListener('click', (event) => {
+                            event.preventDefault();
+                            executeActions(script.actions, rootElement);
+                        });
+                    } else {
+                        console.warn(\`Trigger selector "\${script.trigger.selector}" not found in instance \${data.instanceId}\`);
                     }
                 }
-
-                if (data.scripts && data.scripts.length > 0) {
-                    const api = createSandboxApi(data, rootElement);
-                    data.scripts.forEach(script => {
-                        const targetElement = script.targetSelector && script.targetSelector.trim() !== ''
-                            ? rootElement.querySelector(script.targetSelector)
-                            : rootElement;
-
-                        if (!targetElement) {
-                           console.warn(\`Target selector "\${script.targetSelector}" not found for component #\${data.instanceId}\`);
-                           return;
-                        }
-
-                        targetElement.addEventListener(script.eventName, (event) => {
-                            try {
-                                new Function('api', 'event', script.code)(api, event);
-                            } catch (e) {
-                                console.error(\`Error executing script for component #\${data.instanceId}: \${e.message}\`);
-                            }
-                        });
-                    });
-                }
-            } catch (e) {
-                console.error(\`Error setting up component #\${data.instanceId}: \`, e);
-            }
+            });
         });
     });
 </script>

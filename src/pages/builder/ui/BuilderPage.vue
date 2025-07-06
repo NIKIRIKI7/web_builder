@@ -4,7 +4,7 @@ import TheHeader from '@/widgets/TheHeader/ui/TheHeader.vue';
 import LayoutManager from '@/shared/layout/ui/LayoutManager.vue';
 import EditorPanel from '@/widgets/EditorPanel/ui/EditorPanel.vue';
 import { useLayoutStore } from '@/shared/layout/layoutStore';
-import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
+import { useCanvasState } from '@/features/Canvas/model/useCanvasState';
 import { useProjectLoader } from '@/features/ProjectManager/model/useProjectLoader';
 
 const props = defineProps<{
@@ -12,7 +12,7 @@ const props = defineProps<{
 }>();
 
 const layoutStore = useLayoutStore();
-const { isEditorOpen } = useCanvasManager();
+const { isEditorOpen } = useCanvasState();
 
 useProjectLoader(toRef(props, 'projectId'));
 

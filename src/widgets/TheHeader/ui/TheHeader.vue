@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { useCanvasManager } from "@/features/Canvas/model/useCanvasManager";
+import { useCanvasState } from "@/features/Canvas/model/useCanvasState";
 import type { FullRenderedComponent } from "@/features/Canvas/model/canvasStore";
 import { exportPageAsHtml } from "@/features/ExportManager/model";
 import type { ExportableComponent } from "@/features/ExportManager/model/types";
@@ -20,7 +20,7 @@ import {
   ArrowLeftIcon,
 } from "@/shared/ui/icons";
 
-const canvasManager = useCanvasManager();
+const canvasState = useCanvasState();
 const { theme, setTheme } = useThemeManager();
 const { t, currentLocale, localeOptions } = useI18nManager();
 const layoutStore = useLayoutStore();
@@ -53,14 +53,13 @@ function mapToExportableComponents(
       name: c.componentDefinition.name,
       component: c.componentDefinition.component,
       staticCss: c.componentDefinition.staticCss,
-      clientScript: c.componentDefinition.clientScript,
     },
   }));
 }
 
 async function handleExport() {
   const componentsToExport = mapToExportableComponents(
-    canvasManager.renderedComponents.value,
+    canvasState.renderedComponents.value,
   );
   const htmlContent = await exportPageAsHtml(componentsToExport);
   downloadFile("my-page.html", htmlContent);

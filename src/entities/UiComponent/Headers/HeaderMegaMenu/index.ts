@@ -16,23 +16,6 @@ export const headerMegaMenuDefinition: UiComponentDefinition = {
   ...headerMegaMenuPreview,
   component: markRaw(defineAsyncComponent(() => import('./HeaderMegaMenu.vue'))),
   staticCss,
-  clientScript: `
-    const menuToggle = rootElement.querySelector('.js-menu-toggle');
-    const megaMenu = rootElement.querySelector('.js-mega-menu');
-
-    if (menuToggle && megaMenu) {
-      menuToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        megaMenu.classList.toggle('header-mega-menu__menu--is-open');
-      });
-
-      document.addEventListener('click', (e) => {
-        if (!megaMenu.contains(e.target) && !menuToggle.contains(e.target)) {
-          megaMenu.classList.remove('header-mega-menu__menu--is-open');
-        }
-      });
-    }
-  `,
   defaultProps: {
     logoText: 'MegaCorp',
     menuItems: [
@@ -109,5 +92,10 @@ export const headerMegaMenuEditorConfig: EditorConfiguration = {
         { name: 'color', label: 'textColor', type: 'color' },
       ],
     },
+    {
+      name: 'Scripts',
+      target: 'script',
+      fields: []
+    }
   ],
 };

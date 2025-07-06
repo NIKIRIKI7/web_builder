@@ -16,34 +16,6 @@ export const productGridWithFiltersDefinition: UiComponentDefinition = {
   ...productGridWithFiltersPreview,
   component: markRaw(defineAsyncComponent(() => import('./ProductGridWithFilters.vue'))),
   staticCss,
-  clientScript: `
-    const filterBtns = rootElement.querySelectorAll('.filtered-grid__filter-btn');
-    const items = rootElement.querySelectorAll('.filtered-grid__item');
-    let currentActiveBtn = rootElement.querySelector('[data-filter="all"]');
-    if (currentActiveBtn) {
-      currentActiveBtn.classList.add('is-active');
-    }
-
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const filter = btn.dataset.filter;
-        
-        if (currentActiveBtn) {
-          currentActiveBtn.classList.remove('is-active');
-        }
-        btn.classList.add('is-active');
-        currentActiveBtn = btn;
-        
-        items.forEach(item => {
-          if (filter === 'all' || item.dataset.category === filter) {
-            item.classList.remove('is-hidden');
-          } else {
-            item.classList.add('is-hidden');
-          }
-        });
-      });
-    });
-  `,
   defaultProps: {
     title: 'Our Products',
     filters: [
@@ -103,5 +75,10 @@ export const productGridWithFiltersEditorConfig: EditorConfiguration = {
         { name: 'paddingBottom', label: 'paddingBottom', type: 'number', unit: 'px' },
       ],
     },
+    {
+      name: 'Scripts',
+      target: 'script',
+      fields: []
+    }
   ],
 };

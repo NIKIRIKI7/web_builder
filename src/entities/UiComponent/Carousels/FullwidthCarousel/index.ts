@@ -16,35 +16,6 @@ export const fullwidthCarouselDefinition: UiComponentDefinition = {
   ...fullwidthCarouselPreview,
   component: markRaw(defineAsyncComponent(() => import('./FullwidthCarousel.vue'))),
   staticCss,
-  clientScript: `
-    const track = rootElement.querySelector('.fullwidth-carousel__track');
-    const slides = rootElement.querySelectorAll('.fullwidth-carousel__slide');
-    const paginationContainer = rootElement.querySelector('.fullwidth-carousel__pagination');
-    const slideCount = slides.length;
-    let currentIndex = 0;
-    let dots = [];
-
-    function goToSlide(index) {
-      if (index < 0 || index >= slideCount) return;
-      track.style.transform = 'translateX(-' + index * 100 + '%)';
-      if (dots[currentIndex]) dots[currentIndex].classList.remove('is-active');
-      if (dots[index]) dots[index].classList.add('is-active');
-      currentIndex = index;
-    }
-    
-    if (paginationContainer) {
-        for (let i = 0; i < slideCount; i++) {
-            const dot = document.createElement('button');
-            dot.classList.add('fullwidth-carousel__dot');
-            dot.addEventListener('click', () => goToSlide(i));
-            paginationContainer.appendChild(dot);
-            dots.push(dot);
-        }
-        if (dots.length > 0) {
-            dots[0].classList.add('is-active');
-        }
-    }
-  `,
   defaultProps: {
     slides: [
       { id: 1, imageUrl: 'https://source.unsplash.com/random/1920x1080?business', title: 'Empowering Your Business', subtitle: 'Innovative solutions for the modern enterprise.', ctaText: 'Discover More', ctaUrl: '#' },
@@ -81,5 +52,10 @@ export const fullwidthCarouselEditorConfig: EditorConfiguration = {
       target: 'styles',
       fields: [],
     },
+    {
+      name: 'Scripts',
+      target: 'script',
+      fields: []
+    }
   ],
 };

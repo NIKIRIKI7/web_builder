@@ -1,11 +1,21 @@
 import { defineStore } from 'pinia';
 import type { UiComponentDefinition } from '@/entities/UiComponent/model/types';
 
+export interface ScriptTrigger {
+  type: 'onMount' | 'onClick';
+  selector?: string;
+}
+
+export interface ScriptAction {
+  id: string;
+  type: string; // 'alert', 'toggleVisibility', etc.
+  params: Record<string, any>;
+}
+
 export interface ComponentScript {
   id: string;
-  eventName: string;
-  targetSelector: string;
-  code: string;
+  trigger: ScriptTrigger;
+  actions: ScriptAction[];
 }
 
 export interface CanvasInstanceState {
@@ -45,7 +55,7 @@ export const useCanvasStore = defineStore('canvas', {
       });
     },
 
-    setState(newState: CanvasStoreState) {
+    setState(newState: CanvasState) {
       this.$patch({
         componentInstances: newState.componentInstances,
         selectedComponentInstanceId: newState.selectedComponentInstanceId,
@@ -98,9 +108,8 @@ export const useCanvasStore = defineStore('canvas', {
       if (component) {
         const newScript: ComponentScript = {
           id: `script_${Date.now()}`,
-          eventName: 'click',
-          targetSelector: '',
-          code: `alert('Element clicked!');`
+          trigger: { type: 'onClick', selector: '' },
+          actions: []
         };
         if (!component.scripts) {
           component.scripts = [];
@@ -120,6 +129,7 @@ export const useCanvasStore = defineStore('canvas', {
 
     deleteScript(payload: { instanceId: number; scriptId: string }) {
       const component = this.componentInstances.find(c => c.instanceId === payload.instanceId);
+
       if (component && component.scripts) {
         component.scripts = component.scripts.filter(s => s.id !== payload.scriptId);
       }

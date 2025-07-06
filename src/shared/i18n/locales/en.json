@@ -117,7 +117,11 @@
       "filterKey": "Filter Key (e.g. tech)",
       "filterLabel": "Filter Label (e.g. Technology)",
       "originalPrice": "Original Price",
-      "salePrice": "Sale Price"
+      "salePrice": "Sale Price",
+      "triggerType": "Type",
+      "actionType": "Action Type",
+      "targetComponentId": "Target Component ID",
+      "alertMessage": "Alert Message"
     },
     "buttons": {
       "delete": "Delete Component",
@@ -125,11 +129,14 @@
       "addScript": "Add Script Handler",
       "deleteScript": "Delete",
       "addItem": "Add Item",
-      "close": "Close"
+      "close": "Close",
+      "addAction": "Add Action"
     },
     "scripts": {
       "title": "Event Handler",
-      "placeholder": "No scripts defined for this component."
+      "placeholder": "No scripts defined for this component.",
+      "triggerSectionTitle": "Trigger",
+      "actionsSectionTitle": "Actions"
     }
   },
   "components": {
@@ -177,6 +184,7 @@
   "buttons": {
     "confirm": "Confirm",
     "cancel": "Cancel",
-    "ok": "OK"
+    "ok": "OK",
+    "close": "Close"
   }
 }

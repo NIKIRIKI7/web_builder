@@ -1,3 +1,6 @@
+@use "@/shared/styles/variables" as *;
+@use "@/shared/styles/mixins" as *;
+
 .card-carousel {
   position: relative;
   width: 100%;
@@ -29,7 +32,7 @@
     transition: transform 0.3s, box-shadow 0.3s;
     height: 100%;
 
-    &:hover {
+    @include on-event {
       transform: translateY(-5px);
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
     }
@@ -106,7 +109,7 @@
     padding: 0 2.5rem;
   }
   .card-carousel__slide {
-    flex-basis: calc(100% - 1.5rem);
+    flex-basis: 100%;
   }
   .card-carousel__btn {
     width: 40px;

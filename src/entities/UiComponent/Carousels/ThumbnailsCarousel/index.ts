@@ -16,35 +16,6 @@ export const thumbnailsCarouselDefinition: UiComponentDefinition = {
   ...thumbnailsCarouselPreview,
   component: markRaw(defineAsyncComponent(() => import('./ThumbnailsCarousel.vue'))),
   staticCss,
-  clientScript: `
-    const mainImage = rootElement.querySelector('.thumbnails-carousel__main-image');
-    const thumbButtons = rootElement.querySelectorAll('.thumbnails-carousel__thumb-btn');
-    const slidesData = api.getProp('slides');
-    let currentActiveButton = thumbButtons[0];
-
-    if (currentActiveButton) {
-      currentActiveButton.classList.add('is-active');
-    }
-
-    thumbButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const index = parseInt(button.dataset.index, 10);
-        if (mainImage && slidesData[index]) {
-          mainImage.style.opacity = '0';
-          setTimeout(() => {
-            mainImage.src = slidesData[index].imageUrl;
-            mainImage.alt = slidesData[index].altText;
-            mainImage.style.opacity = '1';
-          }, 200);
-        }
-        if (currentActiveButton) {
-          currentActiveButton.classList.remove('is-active');
-        }
-        button.classList.add('is-active');
-        currentActiveButton = button;
-      });
-    });
-  `,
   defaultProps: {
     slides: [
       { id: 1, imageUrl: 'https://source.unsplash.com/random/800x450?product,watch', altText: 'Watch' },
@@ -87,5 +58,10 @@ export const thumbnailsCarouselEditorConfig: EditorConfiguration = {
         { name: 'paddingBottom', label: 'paddingBottom', type: 'number', unit: 'px' },
       ],
     },
+    {
+      name: 'Scripts',
+      target: 'script',
+      fields: []
+    }
   ],
 };

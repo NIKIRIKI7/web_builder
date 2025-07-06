@@ -5,14 +5,25 @@ export interface ExportableComponentDefinition {
   name: string;
   component: Component;
   staticCss?: string;
-  clientScript?: string;
+}
+
+export interface ScriptTrigger {
+  type: 'onMount' | 'onClick';
+  selector?: string;
+}
+
+export interface ScriptAction {
+  id: string;
+  type: 'toggleVisibility' | 'emitEvent';
+  targetInstanceId?: number;
+  eventName?: string;
+  payload?: Record<string, any>;
 }
 
 export interface ComponentScript {
   id: string;
-  eventName: string;
-  targetSelector: string;
-  code: string;
+  trigger: ScriptTrigger;
+  actions: ScriptAction[];
 }
 
 export interface ExportableComponent {

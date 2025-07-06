@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, shallowRef } from 'vue';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
+import { useCanvasState } from '@/features/Canvas/model/useCanvasState';
 import { getEditorConfig } from '@/entities/UiComponent/model/registry';
 import type { EditorConfiguration, EditorTarget } from '@/entities/UiComponent/model/types';
 import type { ComponentScript } from '@/features/Canvas/model/canvasStore';
@@ -10,8 +11,8 @@ import ScriptManager from './ScriptManager.vue';
 import { SelectIcon, CloseIcon } from '@/shared/ui/icons';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
+const { selectedComponent } = useCanvasState();
 const canvasManager = useCanvasManager();
-const { selectedComponent, closeEditor } = canvasManager;
 const { t } = useI18nManager();
 
 const activeTabName = ref('');
@@ -72,7 +73,7 @@ function handleDelete() {
     <div v-if="selectedComponent && editorConfig" class="editor-panel__content">
       <div class="editor-panel__header">
         <h2 class="editor-panel__title">{{ t(`components.names.${selectedComponent.componentDefinition.name}`) }}</h2>
-        <button class="editor-panel__close-btn" @click="closeEditor" :title="t('buttons.close', 'Close')">
+        <button class="editor-panel__close-btn" @click="canvasManager.closeEditor()" :title="t('buttons.close', 'Close')">
           <CloseIcon class="editor-panel__close-icon"/>
         </button>
       </div>

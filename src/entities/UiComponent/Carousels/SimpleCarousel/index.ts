@@ -16,34 +16,6 @@ export const simpleCarouselDefinition: UiComponentDefinition = {
   ...simpleCarouselPreview,
   component: markRaw(defineAsyncComponent(() => import('./SimpleCarousel.vue'))),
   staticCss,
-  clientScript: `
-    const track = rootElement.querySelector('.simple-carousel__track');
-    const slides = rootElement.querySelectorAll('.simple-carousel__slide');
-    const prevBtn = rootElement.querySelector('.simple-carousel__btn--prev');
-    const nextBtn = rootElement.querySelector('.simple-carousel__btn--next');
-    let currentIndex = 0;
-    const slideCount = slides.length;
-
-    function goToSlide(index) {
-      if (index < 0 || index >= slideCount) return;
-      track.style.transform = 'translateX(-' + index * 100 + '%)';
-      currentIndex = index;
-    }
-
-    if (prevBtn) {
-      prevBtn.addEventListener('click', () => {
-        const newIndex = (currentIndex - 1 + slideCount) % slideCount;
-        goToSlide(newIndex);
-      });
-    }
-
-    if (nextBtn) {
-      nextBtn.addEventListener('click', () => {
-        const newIndex = (currentIndex + 1) % slideCount;
-        goToSlide(newIndex);
-      });
-    }
-  `,
   defaultProps: {
     height: '400px',
     slides: [
@@ -85,5 +57,10 @@ export const simpleCarouselEditorConfig: EditorConfiguration = {
         { name: 'paddingBottom', label: 'paddingBottom', type: 'number', unit: 'px' },
       ],
     },
+    {
+      name: 'Scripts',
+      target: 'script',
+      fields: []
+    }
   ],
 };

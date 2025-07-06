@@ -9,6 +9,7 @@ import LinkArrayEditor from './controls/LinkArrayEditor.vue';
 import CodeEditorInput from './controls/CodeEditorInput.vue';
 import ImageInput from './controls/ImageInput.vue';
 import ObjectArrayEditor from './controls/ObjectArrayEditor.vue';
+import SelectInput from './controls/SelectInput.vue';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 interface Props {
@@ -29,6 +30,7 @@ const controlMap: Record<string, Component> = {
   'code-editor': CodeEditorInput,
   image: ImageInput,
   'object-array': ObjectArrayEditor,
+  select: SelectInput,
 };
 
 const activeControl = shallowRef(controlMap[props.field.type]);
@@ -53,13 +55,14 @@ const localValue = computed({
 
 <template>
   <div class="editor-control">
-    <label class="editor-control__label">{{ t(`editor.fields.${field.label}`) }}</label>
+    <label class="editor-control__label">{{ t(`editor.fields.${field.label}`, field.label) }}</label>
     <component
       v-if="activeControl"
       :is="activeControl"
       v-model="localValue"
       :unit="field.unit"
       :item-schema="field.itemSchema"
+      :options="field.options"
     />
   </div>
 </template>

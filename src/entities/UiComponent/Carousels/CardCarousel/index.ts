@@ -16,51 +16,6 @@ export const cardCarouselDefinition: UiComponentDefinition = {
   ...cardCarouselPreview,
   component: markRaw(defineAsyncComponent(() => import('./CardCarousel.vue'))),
   staticCss,
-  clientScript: `
-    const viewport = rootElement.querySelector('.card-carousel__viewport');
-    const track = rootElement.querySelector('.card-carousel__track');
-    const slides = rootElement.querySelectorAll('.card-carousel__slide');
-    const prevBtn = rootElement.querySelector('.card-carousel__btn--prev');
-    const nextBtn = rootElement.querySelector('.card-carousel__btn--next');
-    
-    if (!track || slides.length === 0) return;
-
-    let currentIndex = 0;
-    const gap = parseFloat(getComputedStyle(track).gap) || 0;
-    
-    function getVisibleSlides() {
-      if (window.innerWidth < 576) return 1;
-      if (window.innerWidth < 768) return 2;
-      return 3;
-    }
-
-    function goToSlide(index) {
-      const visibleSlides = getVisibleSlides();
-      const maxIndex = Math.max(0, slides.length - visibleSlides);
-      const newIndex = Math.max(0, Math.min(index, maxIndex));
-      
-      const slideWidth = slides[0].offsetWidth;
-      const moveDistance = newIndex * (slideWidth + gap);
-      track.style.transform = 'translateX(-' + moveDistance + 'px)';
-      currentIndex = newIndex;
-    }
-
-    if (prevBtn) {
-      prevBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        goToSlide(currentIndex - 1);
-      });
-    }
-
-    if (nextBtn) {
-      nextBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        goToSlide(currentIndex + 1);
-      });
-    }
-    
-    window.addEventListener('resize', () => goToSlide(currentIndex), { passive: true });
-  `,
   defaultProps: {
     cards: [
       { id: 1, imageUrl: 'https://source.unsplash.com/random/400x300?article,tech', category: 'Technology', title: 'The Future of AI in Web Development', url: '#' },
@@ -106,5 +61,10 @@ export const cardCarouselEditorConfig: EditorConfiguration = {
         { name: 'paddingBottom', label: 'paddingBottom', type: 'number', unit: 'px' },
       ],
     },
+    {
+      name: 'Scripts',
+      target: 'script',
+      fields: []
+    }
   ],
 };
