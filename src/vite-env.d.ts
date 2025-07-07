@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 
+import type { PiniaPluginContext } from 'pinia';
 import 'pinia';
 
 declare module 'pinia' {
@@ -11,11 +12,11 @@ declare module 'pinia' {
       storage?: Storage;
       paths?: string[];
       serializer?: {
-        serialize: (value: any) => string;
-        deserialize: (value: string) => any;
+        serialize: (value: unknown) => string;
+        deserialize: (value: string) => unknown;
       };
-      beforeRestore?: (context: any) => void;
-      afterRestore?: (context: any) => void;
+      beforeRestore?: (context: PiniaPluginContext) => void;
+      afterRestore?: (context: PiniaPluginContext) => void;
     };
   }
 }

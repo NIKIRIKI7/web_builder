@@ -8,7 +8,6 @@ import LayoutSplitter from './LayoutSplitter.vue';
 
 import type { LayoutItem, LayoutNode } from '../types';
 
-
 const props = defineProps<{
   node: LayoutNode;
   path?: string[];
@@ -42,10 +41,7 @@ const shouldShowSplitter = (index: number): boolean => {
 </script>
 
 <template>
-  <div
-      class="layout-manager"
-      :class="`layout-manager--${node.type}`"
-  >
+  <div class="layout-manager" :class="`layout-manager--${node.type}`">
     <template v-for="(child, index) in node.children" :key="child.id">
       <div
           v-if="isDropTarget(child.id, 'before')"
@@ -53,10 +49,7 @@ const shouldShowSplitter = (index: number): boolean => {
           :class="`layout-manager__placeholder--${node.type}`"
       />
 
-      <div
-          class="layout-manager__child"
-          :style="{ flexBasis: `${child.size}%` }"
-      >
+      <div class="layout-manager__child" :style="{ flexBasis: `${child.size}%` }">
         <template v-if="child.type === 'panel'">
           <LayoutPanel :panel="child" :parent-type="node.type" />
         </template>
@@ -71,11 +64,7 @@ const shouldShowSplitter = (index: number): boolean => {
           :class="`layout-manager__placeholder--${node.type}`"
       />
 
-      <LayoutSplitter
-          v-if="shouldShowSplitter(index)"
-          :type="node.type"
-          @resize="handleResize(child, $event)"
-      />
+      <LayoutSplitter v-if="shouldShowSplitter(index)" :type="node.type" @resize="handleResize(child, $event)" />
     </template>
   </div>
 </template>

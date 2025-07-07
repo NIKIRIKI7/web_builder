@@ -11,9 +11,19 @@ export interface LayoutPanel {
 
 export interface LayoutNode {
   type: 'row' | 'col';
-  id:string;
+  id: string;
   size: number;
   children: (LayoutNode | LayoutPanel)[];
 }
 
 export type LayoutItem = LayoutNode | LayoutPanel;
+
+export interface DropTarget {
+  panelId: string;
+  side: 'before' | 'after';
+}
+
+export interface LayoutState {
+  isEditMode: boolean;
+  layout: LayoutNode;
+}

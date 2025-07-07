@@ -1,4 +1,6 @@
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { createApp } from 'vue';
+
 
 import { initializeCommandHandlers } from '@/features/Canvas/model/commands';
 import { i18n } from '@/shared/i18n';
@@ -13,8 +15,8 @@ initializeCommandHandlers();
 
 const app = createApp(App);
 
+pinia.use(piniaPluginPersistedstate);
 app.use(pinia);
 app.use(router);
 app.use(i18n);
-
 app.mount('#app');

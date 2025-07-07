@@ -63,29 +63,29 @@ function onDrop(event: DragEvent) {
 
 <template>
   <div
-    class="layout-panel"
-    :class="{ 'layout-panel--dragging': isBeingDragged }"
-    @dragover.prevent="onDragOver"
-    @dragleave="onDragLeave"
-    @drop.prevent="onDrop"
+      class="layout-panel"
+      :class="{ 'layout-panel--dragging': isBeingDragged }"
+      @dragover.prevent="onDragOver"
+      @dragleave="onDragLeave"
+      @drop.prevent="onDrop"
   >
     <div
-      v-if="layoutStore.isEditMode"
-      class="layout-panel__header"
+        v-if="layoutStore.isEditMode"
+        class="layout-panel__header"
     >
       <div
-        class="layout-panel__drag-handle"
-        draggable="true"
-        @dragstart.stop="onDragStart"
-        @dragend.stop="onDragEnd"
-        @mousedown.stop
+          class="layout-panel__drag-handle"
+          draggable="true"
+          @dragstart.stop="onDragStart"
+          @dragend.stop="onDragEnd"
+          @mousedown.stop
       >
         <DragHandleIcon />
       </div>
     </div>
     <div
-      class="layout-panel__content"
-      :class="{ 'layout-panel__content--edit-mode': layoutStore.isEditMode }"
+        class="layout-panel__content"
+        :class="{ 'layout-panel__content--edit-mode': layoutStore.isEditMode }"
     >
       <component :is="widgetComponent" />
     </div>
