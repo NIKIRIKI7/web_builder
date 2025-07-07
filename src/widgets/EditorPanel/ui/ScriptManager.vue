@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { klona } from 'klona/lite';
-import type { ComponentScript, ScriptAction } from '@/features/Canvas/model/canvasStore';
+import type { ComponentScript } from '@/entities/Canvas/model/types';
 import { actionRegistry, actionRegistryMap } from '@/features/ScriptActions/model/registry';
 import EditorControl from './EditorControl.vue';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';

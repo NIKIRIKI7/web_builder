@@ -1,5 +1,6 @@
 import { computed, watchEffect, ref, type Ref } from 'vue';
-import { useCanvasStore, type FullRenderedComponent, type CanvasInstanceState } from './canvasStore';
+import { useCanvasStore } from './canvasStore';
+import type { FullRenderedComponent, CanvasInstanceState } from '@/entities/Canvas/model/types';
 import { getComponentDefinition, getCachedComponentDefinition } from '@/entities/UiComponent/model/registry';
 
 async function processInstances(instances: CanvasInstanceState[]): Promise<FullRenderedComponent[]> {

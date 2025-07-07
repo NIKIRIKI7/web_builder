@@ -1,5 +1,5 @@
 import { dispatchCommand } from './commands/commandBus';
-import type { ComponentScript, CanvasInstanceState } from './canvasStore';
+import type { ComponentScript, CanvasInstanceState } from '@/entities/Canvas/model/types';
 
 export function useCanvasManager() {
   return {

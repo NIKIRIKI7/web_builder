@@ -1,46 +1,7 @@
 import { defineStore } from 'pinia';
-import type { UiComponentDefinition } from '@/entities/UiComponent/model/types';
+import type { CanvasState, CanvasInstanceState, ComponentScript, FullRenderedComponent } from '@/entities/Canvas/model/types';
 
-export interface ScriptTrigger {
-  type: 'onMount' | 'onClick';
-  selector?: string;
-}
-
-export interface ScriptAction {
-  id: string;
-  type: string; // 'alert', 'toggleVisibility', etc.
-  params: Record<string, any>;
-}
-
-export interface ComponentScript {
-  id: string;
-  trigger: ScriptTrigger;
-  actions: ScriptAction[];
-}
-
-export interface CanvasInstanceState {
-  instanceId: number;
-  componentId: string;
-  props: Record<string, any>;
-  styles: Record<string, any>;
-  scripts: ComponentScript[];
-  children?: CanvasInstanceState[];
-}
-
-export interface FullRenderedComponent {
-  instanceId: number;
-  componentDefinition: UiComponentDefinition;
-  props: Record<string, any>;
-  styles: Record<string, any>;
-  scripts: ComponentScript[];
-  children?: FullRenderedComponent[];
-}
-
-interface CanvasState {
-  componentInstances: CanvasInstanceState[];
-  selectedComponentInstanceId: number | null;
-  isEditorOpen: boolean;
-}
+export type { CanvasState, CanvasInstanceState, ComponentScript, FullRenderedComponent };
 
 export const useCanvasStore = defineStore('canvas', {
   state: (): CanvasState => ({

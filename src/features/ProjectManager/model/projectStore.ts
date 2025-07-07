@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, type Ref } from 'vue';
 import type { Project } from '@/entities/Project/model/types';
+import type { CanvasState } from '@/entities/Canvas/model/types';
 import { klona } from 'klona/lite';
 import { runMigrations, LATEST_PROJECT_STORE_VERSION } from '@/shared/lib/migrations';
 
@@ -12,7 +13,7 @@ export const useProjectStore = defineStore('projects', () => {
     return projects.value.find(p => p.id === id);
   }
 
-  function createProject(name: string, initialState?: Project['canvasState']) {
+  function createProject(name: string, initialState?: CanvasState) {
     const now = Date.now();
     const newProject: Project = {
       id: `project_${now}`,
@@ -30,7 +31,7 @@ export const useProjectStore = defineStore('projects', () => {
     return newProject;
   }
 
-  function updateProjectCanvas(projectId: string, canvasState: Project['canvasState']) {
+  function updateProjectCanvas(projectId: string, canvasState: CanvasState) {
     const project = findProject(projectId);
     if (project) {
       project.canvasState = klona(canvasState);

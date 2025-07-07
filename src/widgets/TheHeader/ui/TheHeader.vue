@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { useCanvasState } from "@/features/Canvas/model/useCanvasState";
-import type { FullRenderedComponent } from "@/features/Canvas/model/canvasStore";
+import type { FullRenderedComponent } from "@/entities/Canvas/model/types";
 import { exportPage } from "@/features/ExportManager/model";
 import { HtmlExportStrategy } from "@/features/ExportManager/model/strategies/HtmlExportStrategy";
 import type { ExportableComponent } from "@/features/ExportManager/model/types";
