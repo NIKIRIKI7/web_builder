@@ -6,13 +6,10 @@ import vueParser from 'vue-eslint-parser';
 import globals from 'globals';
 
 export default ts.config(
-    // 1. Базовые конфигурации. Они уже содержат необходимые плагины.
     js.configs.recommended,
     ...ts.configs.recommended,
     ...pluginVue.configs['flat/recommended'],
 
-    // 2. Наш основной кастомный объект для правил и настроек.
-    //    ЗДЕСЬ НЕ НУЖНО СНОВА ОБЪЯВЛЯТЬ `plugins`.
     {
         languageOptions: {
             globals: {
@@ -37,19 +34,16 @@ export default ts.config(
         },
 
         rules: {
-            // Общие правила
             'quotes': ['error', 'single'],
             'semi': ['error', 'always'],
             'indent': ['error', 2, { SwitchCase: 1 }],
             'no-console': ['warn', { allow: ['warn', 'error'] }],
             'no-debugger': 'warn',
-            'no-unused-vars': 'off',
+            'no-unused-vars': 'error',
 
-            // Правила TypeScript (плагин уже зарегистрирован выше)
             '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', ignoreRestSiblings: true }],
             '@typescript-eslint/no-explicit-any': 'warn',
 
-            // Правила Vue (плагин уже зарегистрирован выше)
             'vue/html-indent': ['error', 2],
             'vue/multi-word-component-names': 'off',
             'vue/max-attributes-per-line': ['warn', { singleline: { max: 3 }, multiline: { max: 1 } }],
@@ -61,11 +55,8 @@ export default ts.config(
         },
     },
 
-    // 3. Конфигурация Prettier должна идти ПОСЛЕДНЕЙ, чтобы отключать
-    //    правила форматирования из всех предыдущих конфигов.
     eslintConfigPrettier,
 
-    // 4. Игнорируемые файлы
     {
         ignores: [
             'dist/',

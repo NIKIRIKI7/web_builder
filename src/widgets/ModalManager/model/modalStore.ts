@@ -5,7 +5,9 @@ interface ModalState {
   isOpen: boolean;
   component: Component | null;
   props: Record<string, unknown>;
+  // eslint-disable-next-line no-unused-vars
   resolvePromise?: (value: unknown) => void;
+  // eslint-disable-next-line no-unused-vars
   rejectPromise?: (reason?: unknown) => void;
 }
 
@@ -24,6 +26,7 @@ export const useModalStore = defineStore('modal', {
       this.props = props;
 
       return new Promise<T>((resolve, reject) => {
+        // eslint-disable-next-line no-unused-vars
         this.resolvePromise = resolve as (value: unknown) => void;
         this.rejectPromise = reject;
       });

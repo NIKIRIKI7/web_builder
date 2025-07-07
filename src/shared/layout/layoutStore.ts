@@ -73,8 +73,8 @@ export const useLayoutStore = defineStore('layout', {
   },
   persist: {
     filter: (state: LayoutState) => {
-      const { draggedPanelId, dropTarget, ...rest } = state;
-      return rest;
+      const { isEditMode, layout } = state;
+      return { isEditMode, layout };
     },
   },
 });

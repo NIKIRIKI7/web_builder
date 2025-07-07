@@ -7,7 +7,8 @@ export interface ActionExecutionContext {
   },
   rootElement: HTMLElement;
   eventBus: {
-    emit: (event: string, payload: unknown) => void;
+    // eslint-disable-next-line no-unused-vars
+    emit: (_event: string, _payload: unknown) => void;
   }
 }
 

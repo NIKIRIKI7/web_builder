@@ -34,5 +34,6 @@ export interface ExportableComponent {
 }
 
 export interface ExportStrategy {
-  export(components: ExportableComponent[]): Promise<void>;
+  // eslint-disable-next-line no-unused-vars
+  export(_components: ExportableComponent[]): Promise<void>;
 }

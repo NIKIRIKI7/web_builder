@@ -4,5 +4,6 @@ export interface Command<T = unknown> {
 }
 
 export interface CommandHandler<T = unknown> {
-  execute(payload: T): void;
+  // eslint-disable-next-line no-unused-vars
+  execute(_payload: T): void;
 }

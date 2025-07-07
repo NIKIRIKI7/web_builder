@@ -1,4 +1,5 @@
-type EventHandler = (payload: unknown) => void;
+// eslint-disable-next-line no-unused-vars
+type EventHandler = (_payload: unknown) => void;
 
 class EventBus {
   private listeners: Map<string, Set<EventHandler>>;
