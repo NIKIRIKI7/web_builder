@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
 
-defineProps<{
+const props = defineProps<{
   title: string;
   message: string;
 }>();
@@ -10,11 +12,19 @@ defineProps<{
 const modalStore = useModalStore();
 const { t } = useI18nManager();
 
-const handleConfirm = () => {
+const messageParts = computed(() => {
+  const parts = props.message.split(/<strong>(.*?)<\/strong>/);
+  return parts.map((part, index) => ({
+    text: part,
+    isStrong: index % 2 === 1,
+  }));
+});
+
+const handleConfirm = (): void => {
   modalStore.resolve(true);
 };
 
-const handleCancel = () => {
+const handleCancel = (): void => {
   modalStore.reject('cancelled');
 };
 </script>
@@ -22,7 +32,12 @@ const handleCancel = () => {
 <template>
   <div class="confirm-modal">
     <h3 class="confirm-modal__title">{{ title }}</h3>
-    <p class="confirm-modal__message" v-html="message"></p>
+    <p class="confirm-modal__message">
+      <template v-for="(part, index) in messageParts" :key="index">
+        <strong v-if="part.isStrong">{{ part.text }}</strong>
+        <span v-else>{{ part.text }}</span>
+      </template>
+    </p>
     <div class="confirm-modal__actions">
       <button class="confirm-modal__button confirm-modal__button--cancel" @click="handleCancel">
         {{ t('buttons.cancel') }}

@@ -6,18 +6,16 @@ defineEmits<{
 
 <template>
   <Teleport to="body">
-    <Transition name="modal-fade">
-      <div class="modal" @mousedown.self="$emit('close')">
-        <div class="modal__container">
-          <slot></slot>
-        </div>
+    <div class="base-modal" @mousedown.self="$emit('close')">
+      <div class="base-modal__container">
+        <slot></slot>
       </div>
-    </Transition>
+    </div>
   </Teleport>
 </template>
 
 <style scoped lang="scss">
-.modal {
+.base-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -31,32 +29,12 @@ defineEmits<{
   align-items: center;
 }
 
-.modal__container {
+.base-modal__container {
   background-color: var(--color-bg-secondary);
   color: var(--color-text-primary);
   border-radius: 8px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   padding: 24px 32px;
   overflow: visible;
-}
-
-.modal-fade-enter-active,
-.modal-fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.modal-fade-enter-from,
-.modal-fade-leave-to {
-  opacity: 0;
-}
-
-.modal-fade-enter-active .modal__container,
-.modal-fade-leave-active .modal__container {
-  transition: transform 0.3s ease;
-}
-
-.modal-fade-enter-from .modal__container,
-.modal-fade-leave-to .modal__container {
-  transform: translateY(-20px) scale(0.98);
 }
 </style>

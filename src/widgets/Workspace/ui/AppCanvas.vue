@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed, ref } from 'vue';
 
-import type { FullRenderedComponent, CanvasInstanceState } from '@/features/Canvas/model/canvasStore';
+import type { CanvasInstanceState, FullRenderedComponent } from '@/features/Canvas/model/canvasStore';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
 import { useCanvasState } from '@/features/Canvas/model/useCanvasState';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
@@ -35,30 +35,29 @@ const draggableComponents = computed<FullRenderedComponent[]>({
   }
 });
 
-function handleCanvasClick(event: MouseEvent) {
+function handleCanvasClick(event: MouseEvent): void {
   if (event.target === event.currentTarget) {
     canvasManager.selectComponent(null);
   }
 }
 
-function onDragOver(event: DragEvent) {
+function onDragOver(event: DragEvent): void {
   event.preventDefault();
   const target = event.target as HTMLElement;
-  const isDirectCanvasDrop = target.classList.contains('canvas') || target.classList.contains('canvas__placeholder');
+  const isDirectCanvasDrop = target.classList.contains('app-canvas') || target.classList.contains('app-canvas__placeholder');
   if (isDirectCanvasDrop) {
     isDragOver.value = true;
   }
 }
 
-function onDragLeave(event: DragEvent) {
+function onDragLeave(event: DragEvent): void {
   const relatedTarget = event.relatedTarget as HTMLElement;
   if (!event.currentTarget || !(event.currentTarget as HTMLElement).contains(relatedTarget)) {
     isDragOver.value = false;
   }
 }
 
-
-function onDrop(event: DragEvent) {
+function onDrop(event: DragEvent): void {
   event.preventDefault();
   isDragOver.value = false;
 
@@ -68,7 +67,7 @@ function onDrop(event: DragEvent) {
   }
 
   const target = event.target as HTMLElement;
-  const isDirectCanvasDrop = target.classList.contains('canvas') || target.classList.contains('canvas__placeholder');
+  const isDirectCanvasDrop = target.classList.contains('app-canvas') || target.classList.contains('app-canvas__placeholder');
 
   if (isDirectCanvasDrop) {
     canvasManager.addComponent(componentId);
@@ -78,15 +77,15 @@ function onDrop(event: DragEvent) {
 
 <template>
   <div
-    class="canvas"
-    :class="{ 'canvas--drag-over': isDragOver }"
-    @dragover="onDragOver"
-    @dragleave="onDragLeave"
-    @drop="onDrop"
-    @click="handleCanvasClick"
+      class="app-canvas"
+      :class="{ 'app-canvas--drag-over': isDragOver }"
+      @dragover="onDragOver"
+      @dragleave="onDragLeave"
+      @drop="onDrop"
+      @click="handleCanvasClick"
   >
-    <div v-if="!draggableComponents.length" class="canvas__placeholder">
-      <p class="canvas__placeholder-text">{{ t('canvas.placeholder.text') }}</p>
+    <div v-if="!draggableComponents.length" class="app-canvas__placeholder">
+      <p class="app-canvas__placeholder-text">{{ t('canvas.placeholder.text') }}</p>
     </div>
     <template v-else>
       <Suspense>
@@ -94,7 +93,7 @@ function onDrop(event: DragEvent) {
           <CanvasNode v-model:nodes="draggableComponents" />
         </template>
         <template #fallback>
-          <div class="canvas__loading">
+          <div class="app-canvas__loading">
             Loading Components...
           </div>
         </template>
@@ -104,7 +103,7 @@ function onDrop(event: DragEvent) {
 </template>
 
 <style scoped lang="scss">
-.canvas {
+.app-canvas {
   min-height: 100%;
   background-color: var(--color-bg-secondary);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -115,12 +114,12 @@ function onDrop(event: DragEvent) {
   padding: 20px;
   margin: 0 auto;
 }
-.canvas--drag-over {
+.app-canvas--drag-over {
   border-color: var(--color-accent);
   box-shadow: 0 8px 16px rgba(var(--color-accent-rgb, 52, 152, 219), 0.2);
 }
-.canvas__placeholder,
-.canvas__loading {
+.app-canvas__placeholder,
+.app-canvas__loading {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -132,7 +131,7 @@ function onDrop(event: DragEvent) {
   text-align: center;
   pointer-events: none;
 }
-.canvas__placeholder-text {
+.app-canvas__placeholder-text {
   font-size: 16px;
   font-weight: 500;
 }

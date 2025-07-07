@@ -3,7 +3,7 @@ import { computed } from 'vue';
 
 import { usePreviewStore } from '@/shared/preview/previewStore';
 
-import Canvas from './Canvas.vue';
+import AppCanvas from './AppCanvas.vue';
 
 const previewStore = usePreviewStore();
 const canvasStyle = computed(() => ({
@@ -14,7 +14,7 @@ const canvasStyle = computed(() => ({
 <template>
   <div class="app-workspace">
     <div class="app-workspace__viewport">
-      <Canvas :style="canvasStyle" />
+      <AppCanvas :style="canvasStyle" />
     </div>
   </div>
 </template>
@@ -36,7 +36,7 @@ const canvasStyle = computed(() => ({
   }
 }
 
-:deep(.canvas) {
+:deep(.app-canvas) {
   transition: max-width 0.4s ease;
   width: 100%;
 }

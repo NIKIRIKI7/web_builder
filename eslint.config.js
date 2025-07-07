@@ -6,12 +6,15 @@ import globals from 'globals';
 import ts from 'typescript-eslint';
 import vueParser from 'vue-eslint-parser';
 
-export default ts.config(
+export default [
+    // Base configurations
     js.configs.recommended,
     ...ts.configs.recommendedTypeChecked,
     ...pluginVue.configs['flat/strongly-recommended'],
 
+    // Main configuration
     {
+        files: ['**/*.{js,mjs,cjs,ts,vue}'],
         languageOptions: {
             globals: {
                 ...globals.browser,
@@ -30,7 +33,9 @@ export default ts.config(
         },
 
         plugins: {
-            import: pluginImport
+            import: pluginImport,
+            vue: pluginVue,
+            '@typescript-eslint': ts.plugin
         },
 
         settings: {
@@ -43,21 +48,30 @@ export default ts.config(
         },
 
         rules: {
+            // JavaScript/TypeScript rules
             quotes: ['error', 'single', { avoidEscape: true }],
             semi: ['error', 'always'],
-            indent: 'off',
+            indent: 'off', // Handled by Prettier
             'no-console': ['error', { allow: ['warn', 'error'] }],
             'no-debugger': 'error',
             eqeqeq: ['error', 'always'],
+
+            // TypeScript rules
             '@typescript-eslint/no-unused-vars': [
                 'error',
-                { argsIgnorePattern: '^_', varsIgnorePattern: '^_', ignoreRestSiblings: true }
+                {
+                    argsIgnorePattern: '^_',
+                    varsIgnorePattern: '^_',
+                    ignoreRestSiblings: true
+                }
             ],
             '@typescript-eslint/no-explicit-any': 'error',
             '@typescript-eslint/explicit-module-boundary-types': 'error',
             '@typescript-eslint/no-floating-promises': 'error',
             '@typescript-eslint/no-misused-promises': 'error',
             '@typescript-eslint/consistent-type-imports': 'error',
+
+            // Vue rules
             'vue/html-indent': ['error', 2],
             'vue/multi-word-component-names': 'error',
             'vue/max-attributes-per-line': 'off',
@@ -69,10 +83,21 @@ export default ts.config(
             'vue/no-mutating-props': 'error',
             'vue/attribute-hyphenation': ['error', 'always'],
             'vue/v-on-event-hyphenation': ['error', 'always', { autofix: true }],
+
+            // Import rules
             'import/order': [
                 'error',
                 {
-                    groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'],
+                    groups: [
+                        'builtin',
+                        'external',
+                        'internal',
+                        'parent',
+                        'sibling',
+                        'index',
+                        'object',
+                        'type'
+                    ],
                     pathGroups: [
                         {
                             pattern: '@/**',
@@ -88,8 +113,10 @@ export default ts.config(
         }
     },
 
+    // Prettier configuration (should be last)
     eslintConfigPrettier,
 
+    // TypeScript declaration files
     {
         files: ['**/*.d.ts'],
         rules: {
@@ -97,7 +124,30 @@ export default ts.config(
         }
     },
 
+    // Configuration files
     {
-        ignores: ['dist/', 'node_modules/', '.tmp/', 'coverage/', '.vscode/', '.idea/', '**/*.script.js']
+        files: ['**/*.config.{js,ts}'],
+        languageOptions: {
+            globals: {
+                ...globals.node
+            }
+        }
+    },
+
+    // Ignore patterns
+    {
+        ignores: [
+            'dist/',
+            'node_modules/',
+            '.tmp/',
+            'coverage/',
+            '.vscode/',
+            '.idea/',
+            '**/*.script.js',
+            '.nuxt/',
+            '.output/',
+            'public/',
+            'static/'
+        ]
     }
-);
+];
