@@ -41,27 +41,35 @@ function handleCanvasClick(event: MouseEvent) {
 
 function onDragOver(event: DragEvent) {
   event.preventDefault();
-  if (draggableComponents.value.length === 0) {
+  const target = event.target as HTMLElement;
+  const isDirectCanvasDrop = target.classList.contains('canvas') || target.classList.contains('canvas__placeholder');
+  if (isDirectCanvasDrop) {
     isDragOver.value = true;
   }
 }
 
-function onDragLeave() {
-  isDragOver.value = false;
+function onDragLeave(event: DragEvent) {
+  const relatedTarget = event.relatedTarget as HTMLElement;
+  if (!event.currentTarget || !(event.currentTarget as HTMLElement).contains(relatedTarget)) {
+    isDragOver.value = false;
+  }
 }
+
 
 function onDrop(event: DragEvent) {
   event.preventDefault();
   isDragOver.value = false;
 
-  const target = event.target as HTMLElement;
-  const isRootDrop = target.classList.contains('canvas');
+  const componentId = event.dataTransfer?.getData(DND_COMPONENT_ID_KEY);
+  if (!componentId) {
+    return;
+  }
 
-  if (isRootDrop && draggableComponents.value.length === 0) {
-    const componentId = event.dataTransfer?.getData(DND_COMPONENT_ID_KEY);
-    if (componentId) {
-      canvasManager.addComponent(componentId);
-    }
+  const target = event.target as HTMLElement;
+  const isDirectCanvasDrop = target.classList.contains('canvas') || target.classList.contains('canvas__placeholder');
+
+  if (isDirectCanvasDrop) {
+    canvasManager.addComponent(componentId);
   }
 }
 </script>
