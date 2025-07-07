@@ -4,18 +4,20 @@ import { ChevronDownIcon } from '@/shared/ui/icons';
 
 type DropdownOption = {
   label: string;
-  value: any;
+  value: unknown;
 };
 
 const props = withDefaults(defineProps<{
   options: DropdownOption[];
-  modelValue: any;
+  modelValue: unknown;
   placeholder?: string;
 }>(), {
   placeholder: 'Select an option'
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits<{
+  'update:modelValue': [value: unknown];
+}>();
 
 const isOpen = ref(false);
 const dropdownRef = ref<HTMLElement | null>(null);
@@ -54,18 +56,18 @@ onBeforeUnmount(() => {
     <button class="dropdown-menu__trigger" @click="toggleDropdown">
       <span class="dropdown-menu__trigger-label">{{ selectedLabel }}</span>
       <ChevronDownIcon
-        class="dropdown-menu__trigger-icon"
-        :class="{'dropdown-menu__trigger-icon--is-open': isOpen }"
+          class="dropdown-menu__trigger-icon"
+          :class="{'dropdown-menu__trigger-icon--is-open': isOpen }"
       />
     </button>
     <transition name="dropdown-fade">
       <div v-if="isOpen" class="dropdown-menu__panel">
         <button
-          v-for="option in options"
-          :key="option.value.name"
-          class="dropdown-menu__item"
-          :class="{'dropdown-menu__item--is-active': modelValue === option.value}"
-          @click="selectOption(option)"
+            v-for="option in options"
+            :key="option.label"
+            class="dropdown-menu__item"
+            :class="{'dropdown-menu__item--is-active': modelValue === option.value}"
+            @click="selectOption(option)"
         >
           {{ option.label }}
         </button>
@@ -75,6 +77,8 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped lang="scss">
+@use '@/shared/styles/variables' as *;
+
 .dropdown-menu {
   position: relative;
   display: inline-block;

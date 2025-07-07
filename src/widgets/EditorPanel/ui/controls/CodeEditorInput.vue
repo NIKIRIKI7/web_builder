@@ -5,7 +5,9 @@ import { oneDark } from '@codemirror/theme-one-dark';
 import { debounce } from '@/shared/lib/utils';
 
 defineProps<{ modelValue: string }>();
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+}>();
 
 const codeExtensions = [javascript(), oneDark];
 
@@ -16,15 +18,15 @@ const debouncedCodeUpdate = debounce((code: string) => {
 
 <template>
   <Codemirror
-    :model-value="modelValue"
-    placeholder="Code goes here..."
-    :style="{ height: '200px' }"
-    :autofocus="true"
-    :indent-with-tab="true"
-    :tab-size="2"
-    :extensions="codeExtensions"
-    class="code-editor-instance"
-    @update:model-value="debouncedCodeUpdate"
+      :model-value="modelValue"
+      placeholder="Code goes here..."
+      :style="{ height: '200px' }"
+      :autofocus="true"
+      :indent-with-tab="true"
+      :tab-size="2"
+      :extensions="codeExtensions"
+      class="code-editor-instance"
+      @update:model-value="debouncedCodeUpdate"
   />
 </template>
 

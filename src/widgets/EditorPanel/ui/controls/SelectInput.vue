@@ -1,17 +1,19 @@
 <script setup lang="ts">
 type SelectOption = {
   label: string;
-  value: any;
+  value: unknown;
 };
 
 withDefaults(defineProps<{
-  modelValue: any;
+  modelValue: unknown;
   options?: SelectOption[];
 }>(), {
   options: () => [],
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits<{
+  'update:modelValue': [value: unknown]
+}>();
 
 const onChange = (event: Event) => {
   emit('update:modelValue', (event.target as HTMLSelectElement).value);
@@ -20,14 +22,14 @@ const onChange = (event: Event) => {
 
 <template>
   <select
-    :value="modelValue"
-    class="editor-control__input editor-control__select"
-    @change="onChange"
+      :value="modelValue"
+      class="editor-control__input editor-control__select"
+      @change="onChange"
   >
     <option
-      v-for="option in options"
-      :key="option.value"
-      :value="option.value"
+        v-for="option in options"
+        :key="String(option.value)"
+        :value="option.value"
     >
       {{ option.label }}
     </option>
@@ -37,7 +39,6 @@ const onChange = (event: Event) => {
 <style scoped lang="scss">
 .editor-control__input {
   width: 100%;
-  padding: 8px 12px;
   font-size: 14px;
   border: 1px solid var(--color-border);
   border-radius: 4px;
@@ -51,7 +52,7 @@ const onChange = (event: Event) => {
   background-repeat: no-repeat;
   background-position: right 8px center;
   background-size: 16px;
-  padding-right: 32px;
+  padding: 8px 32px 8px 12px;
 
   &:focus {
     outline: none;

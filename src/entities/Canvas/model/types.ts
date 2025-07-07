@@ -8,7 +8,7 @@ export interface ScriptTrigger {
 export interface ScriptAction {
   id: string;
   type: string;
-  params: Record<string, any>;
+  params: Record<string, unknown>;
 }
 
 export interface ComponentScript {
@@ -20,8 +20,8 @@ export interface ComponentScript {
 export interface CanvasInstanceState {
   instanceId: number;
   componentId: string;
-  props: Record<string, any>;
-  styles: Record<string, any>;
+  props: Record<string, unknown>;
+  styles: Record<string, unknown>;
   scripts: ComponentScript[];
   children?: CanvasInstanceState[];
 }
@@ -35,8 +35,8 @@ export interface CanvasState {
 export interface FullRenderedComponent {
   instanceId: number;
   componentDefinition: UiComponentDefinition;
-  props: Record<string, any>;
-  styles: Record<string, any>;
+  props: Record<string, unknown>;
+  styles: Record<string, unknown>;
   scripts: ComponentScript[];
   children?: FullRenderedComponent[];
 }

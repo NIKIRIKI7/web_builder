@@ -4,9 +4,9 @@ import { shallowRef, type Component } from 'vue';
 interface ModalState {
   isOpen: boolean;
   component: Component | null;
-  props: Record<string, any>;
-  resolvePromise?: (value: any) => void;
-  rejectPromise?: (reason?: any) => void;
+  props: Record<string, unknown>;
+  resolvePromise?: (value: unknown) => void;
+  rejectPromise?: (reason?: unknown) => void;
 }
 
 export const useModalStore = defineStore('modal', {
@@ -18,13 +18,13 @@ export const useModalStore = defineStore('modal', {
     rejectPromise: undefined,
   }),
   actions: {
-    open<T = any>(component: Component, props: Record<string, any> = {}): Promise<T> {
+    open<T = unknown>(component: Component, props: Record<string, unknown> = {}): Promise<T> {
       this.isOpen = true;
       this.component = shallowRef(component);
       this.props = props;
 
       return new Promise<T>((resolve, reject) => {
-        this.resolvePromise = resolve;
+        this.resolvePromise = resolve as (value: unknown) => void;
         this.rejectPromise = reject;
       });
     },
@@ -38,13 +38,13 @@ export const useModalStore = defineStore('modal', {
       this.resolvePromise = undefined;
       this.rejectPromise = undefined;
     },
-    resolve(value: any) {
+    resolve(value: unknown) {
       if (this.resolvePromise) {
         this.resolvePromise(value);
       }
       this.close();
     },
-    reject(reason: any) {
+    reject(reason: unknown) {
       if (this.rejectPromise) {
         this.rejectPromise(reason);
       }

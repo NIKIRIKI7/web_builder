@@ -6,7 +6,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'resize', delta: number): void;
+  resize: [delta: number];
 }>();
 
 const isDragging = ref(false);
@@ -34,9 +34,9 @@ function onMouseDown(startEvent: MouseEvent) {
 
 <template>
   <div
-    class="splitter"
-    :class="`splitter--${type}`"
-    @mousedown.stop="onMouseDown"
+      class="splitter"
+      :class="`splitter--${type}`"
+      @mousedown.stop="onMouseDown"
   ></div>
 </template>
 

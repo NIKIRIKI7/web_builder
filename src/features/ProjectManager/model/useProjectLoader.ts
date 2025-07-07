@@ -6,12 +6,12 @@ import { klona } from 'klona/lite';
 import { debounce } from '@/shared/lib/utils';
 import type { Project } from '@/entities/Project/model/types';
 
-function isValidCanvasState(data: any): data is Project['canvasState'] {
+function isValidCanvasState(data: unknown): data is Project['canvasState'] {
   if (!data || typeof data !== 'object') {
     return false;
   }
-  const hasInstances = 'componentInstances' in data && Array.isArray(data.componentInstances);
-  const hasSelectedId = 'selectedComponentInstanceId' in data && (typeof data.selectedComponentInstanceId === 'number' || data.selectedComponentInstanceId === null);
+  const hasInstances = 'componentInstances' in data && Array.isArray((data as Record<string, unknown>).componentInstances);
+  const hasSelectedId = 'selectedComponentInstanceId' in data && (typeof (data as Record<string, unknown>).selectedComponentInstanceId === 'number' || (data as Record<string, unknown>).selectedComponentInstanceId === null);
   return hasInstances && hasSelectedId;
 }
 
@@ -36,7 +36,7 @@ export function useProjectLoader(projectId: Ref<string>) {
     if (!projectId.value) return;
 
     const firstComponent = canvasStore.componentInstances[0];
-    if (firstComponent && firstComponent.styles?.backgroundColor) {
+    if (firstComponent && typeof firstComponent.styles?.backgroundColor === 'string') {
       projectStore.updateProjectThumbnail(projectId.value, firstComponent.styles.backgroundColor);
     } else {
       projectStore.updateProjectThumbnail(projectId.value, null);
@@ -44,32 +44,32 @@ export function useProjectLoader(projectId: Ref<string>) {
   }, 1000);
 
   const stopWatchingProjectId = watch(
-    projectId,
-    (newId) => {
-      if (newId) {
-        loadProjectData(newId);
-        updateThumbnail();
-      } else {
-        canvasStore.resetState();
-      }
-    },
-    { immediate: true }
+      projectId,
+      (newId) => {
+        if (newId) {
+          loadProjectData(newId);
+          updateThumbnail();
+        } else {
+          canvasStore.resetState();
+        }
+      },
+      { immediate: true }
   );
 
   const stopAutoSave = watch(
-    () => canvasStore.componentInstances,
-    (newState) => {
-      if (projectId.value) {
-        const fullState = {
-          componentInstances: newState,
-          selectedComponentInstanceId: canvasStore.selectedComponentInstanceId,
-          isEditorOpen: canvasStore.isEditorOpen,
-        };
-        projectStore.updateProjectCanvas(projectId.value, fullState);
-        updateThumbnail();
-      }
-    },
-    { deep: true }
+      () => canvasStore.componentInstances,
+      (newState) => {
+        if (projectId.value) {
+          const fullState = {
+            componentInstances: newState,
+            selectedComponentInstanceId: canvasStore.selectedComponentInstanceId,
+            isEditorOpen: canvasStore.isEditorOpen,
+          };
+          projectStore.updateProjectCanvas(projectId.value, fullState);
+          updateThumbnail();
+        }
+      },
+      { deep: true }
   );
 
   onBeforeUnmount(() => {

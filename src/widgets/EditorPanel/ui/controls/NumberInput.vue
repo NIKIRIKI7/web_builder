@@ -5,10 +5,13 @@ const props = withDefaults(defineProps<{
   modelValue?: number;
   unit?: string;
 }>(), {
-  modelValue: 0
+  modelValue: 0,
+  unit: '',
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits<{
+  'update:modelValue': [value: number]
+}>();
 
 const onInput = debounce((event: Event) => {
   emit('update:modelValue', parseFloat((event.target as HTMLInputElement).value) || 0);
@@ -17,10 +20,10 @@ const onInput = debounce((event: Event) => {
 <template>
   <div class="number-input-wrapper">
     <input
-      :value="props.modelValue"
-      type="number"
-      class="editor-control__input number-input-wrapper__field"
-      @input="onInput"
+        :value="props.modelValue"
+        type="number"
+        class="editor-control__input number-input-wrapper__field"
+        @input="onInput"
     />
     <span v-if="unit" class="number-input-wrapper__unit">{{ unit }}</span>
   </div>

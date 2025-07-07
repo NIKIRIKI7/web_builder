@@ -10,7 +10,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'delete-request', project: Project): void;
+  'delete-request': [project: Project];
 }>();
 
 const { t } = useI18nManager();

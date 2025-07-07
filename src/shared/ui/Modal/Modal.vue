@@ -1,5 +1,7 @@
 <script setup lang="ts">
-defineEmits(['close']);
+defineEmits<{
+  close: [];
+}>();
 </script>
 
 <template>

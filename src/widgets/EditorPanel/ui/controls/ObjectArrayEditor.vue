@@ -5,7 +5,7 @@ import type { EditorField } from '@/entities/UiComponent/model/types';
 import EditorControl from '../EditorControl.vue';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
-type Item = { id: number; [key: string]: any };
+type Item = { id: number; [key: string]: unknown };
 
 const props = withDefaults(defineProps<{
   modelValue?: Item[];
@@ -15,10 +15,13 @@ const props = withDefaults(defineProps<{
   itemSchema: () => [],
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits<{
+  'update:modelValue': [value: Item[]];
+}>();
+
 const { t } = useI18nManager();
 
-function updateItem(index: number, fieldName: string, value: any) {
+function updateItem(index: number, fieldName: string, value: unknown) {
   const newItems = klona(props.modelValue);
   newItems[index][fieldName] = value;
   emit('update:modelValue', newItems);
@@ -53,11 +56,11 @@ function deleteItem(index: number) {
     <div v-for="(item, index) in props.modelValue" :key="item.id" class="object-item">
       <div class="object-item__fields">
         <EditorControl
-          v-for="field in props.itemSchema"
-          :key="field.name"
-          :field="field"
-          :model-value="item[field.name]"
-          @update:model-value="updateItem(index, field.name, $event)"
+            v-for="field in props.itemSchema"
+            :key="field.name"
+            :field="field"
+            :model-value="item[field.name]"
+            @update:model-value="updateItem(index, field.name, $event)"
         />
       </div>
       <button class="object-item__delete-btn" @click="deleteItem(index)">

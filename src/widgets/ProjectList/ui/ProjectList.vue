@@ -24,9 +24,11 @@ async function handleCreateProject() {
   try {
     const { name, canvasState } = await modalStore.open<CreatePayload>(CreateProjectModal);
     const newProject = projectStore.createProject(name, canvasState);
-    router.push({ name: 'Builder', params: { projectId: newProject.id } });
+    await router.push({name: 'Builder', params: {projectId: newProject.id}});
   } catch (error) {
-    // User cancelled
+    if (error !== 'cancelled' && error !== 'Modal closed by user') {
+      console.error('An unexpected error occurred during project creation:', error);
+    }
   }
 }
 
@@ -41,10 +43,12 @@ async function handleDeleteRequest(project: Project) {
     projectStore.deleteProject(project.id);
 
     if (route.name === 'Builder' && route.params.projectId === project.id) {
-      router.push({ name: 'Dashboard' });
+      await router.push({name: 'Dashboard'});
     }
   } catch (error) {
-    // User cancelled
+    if (error !== 'cancelled' && error !== 'Modal closed by user') {
+      console.error('An unexpected error occurred during project deletion:', error);
+    }
   }
 }
 </script>
@@ -55,10 +59,10 @@ async function handleDeleteRequest(project: Project) {
       <div class="project-list__grid">
         <CreateProjectCard @create="handleCreateProject" />
         <ProjectCard
-          v-for="project in projectStore.projects"
-          :key="project.id"
-          :project="project"
-          @delete-request="handleDeleteRequest"
+            v-for="project in projectStore.projects"
+            :key="project.id"
+            :project="project"
+            @delete-request="handleDeleteRequest"
         />
       </div>
     </template>

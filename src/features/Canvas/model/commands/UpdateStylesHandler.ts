@@ -3,7 +3,7 @@ import type { CommandHandler } from './types';
 
 interface UpdateStylesPayload {
   instanceId: number;
-  newValues: Record<string, any>;
+  newValues: Record<string, unknown>;
 }
 
 export const UpdateStylesHandler: CommandHandler<UpdateStylesPayload> = {

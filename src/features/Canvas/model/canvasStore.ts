@@ -19,10 +19,10 @@ export const useCanvasStore = defineStore('canvas', {
     },
 
     setState(newState: CanvasState) {
-      this.$patch({
-        componentInstances: newState.componentInstances,
-        selectedComponentInstanceId: newState.selectedComponentInstanceId,
-        isEditorOpen: newState.isEditorOpen,
+      this.$patch((state) => {
+        state.componentInstances = newState.componentInstances;
+        state.selectedComponentInstanceId = newState.selectedComponentInstanceId;
+        state.isEditorOpen = newState.isEditorOpen;
       });
     },
 
@@ -52,14 +52,14 @@ export const useCanvasStore = defineStore('canvas', {
       this.isEditorOpen = false;
     },
 
-    updateComponentProps(payload: { instanceId: number; newValues: Record<string, any> }) {
+    updateComponentProps(payload: { instanceId: number; newValues: Record<string, unknown> }) {
       const component = this.componentInstances.find(c => c.instanceId === payload.instanceId);
       if (component) {
         component.props = { ...component.props, ...payload.newValues };
       }
     },
 
-    updateComponentStyles(payload: { instanceId: number; newValues: Record<string, any> }) {
+    updateComponentStyles(payload: { instanceId: number; newValues: Record<string, unknown> }) {
       const component = this.componentInstances.find(c => c.instanceId === payload.instanceId);
       if (component) {
         component.styles = { ...component.styles, ...payload.newValues };
@@ -103,7 +103,7 @@ export const useCanvasStore = defineStore('canvas', {
         this.closeEditor();
       }
       this.componentInstances = this.componentInstances.filter(
-        (instance) => instance.instanceId !== instanceId
+          (instance) => instance.instanceId !== instanceId
       );
     },
 

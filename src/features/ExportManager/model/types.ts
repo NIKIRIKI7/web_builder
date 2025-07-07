@@ -16,7 +16,7 @@ export interface ScriptTrigger {
 export interface ScriptAction {
   id: string;
   type: string;
-  params: Record<string, any>;
+  params: Record<string, unknown>;
 }
 
 export interface ComponentScript {
@@ -28,8 +28,8 @@ export interface ComponentScript {
 export interface ExportableComponent {
   instanceId: number;
   componentDefinition: ExportableComponentDefinition;
-  props: Record<string, any>;
-  styles: Record<string, any>;
+  props: Record<string, unknown>;
+  styles: Record<string, unknown>;
   scripts: ComponentScript[];
 }
 

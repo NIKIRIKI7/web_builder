@@ -12,9 +12,9 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'add-script'): void;
-  (e: 'update-script', payload: ComponentScript): void;
-  (e: 'delete-script', scriptId: string): void;
+  'add-script': [];
+  'update-script': [payload: ComponentScript];
+  'delete-script': [scriptId: string];
 }>();
 
 const { t } = useI18nManager();
@@ -25,10 +25,10 @@ const triggerTypeOptions = [
 ];
 
 const actionTypeOptions = computed(() =>
-  actionRegistry.map(action => ({
-    label: action.label,
-    value: action.type,
-  }))
+    actionRegistry.map(action => ({
+      label: action.label,
+      value: action.type,
+    }))
 );
 
 function handleTriggerUpdate(script: ComponentScript, newValues: Partial<ComponentScript['trigger']>) {
@@ -44,7 +44,7 @@ function handleActionTypeUpdate(script: ComponentScript, actionIndex: number, ne
   emit('update-script', newScript);
 }
 
-function handleActionParamUpdate(script: ComponentScript, actionIndex: number, paramName: string, value: any) {
+function handleActionParamUpdate(script: ComponentScript, actionIndex: number, paramName: string, value: unknown) {
   const newScript = klona(script);
   if (!newScript.actions[actionIndex].params) {
     newScript.actions[actionIndex].params = {};
@@ -90,15 +90,15 @@ function getActionFields(actionType: string) {
       <div class="script-item__trigger">
         <h4 class="script-item__section-title">{{ t('editor.scripts.triggerSectionTitle') }}</h4>
         <EditorControl
-          :field="{ name: 'triggerType', label: 'triggerType', type: 'select', options: triggerTypeOptions }"
-          :model-value="script.trigger.type"
-          @update:model-value="handleTriggerUpdate(script, { type: $event })"
+            :field="{ name: 'triggerType', label: 'triggerType', type: 'select', options: triggerTypeOptions }"
+            :model-value="script.trigger.type"
+            @update:model-value="handleTriggerUpdate(script, { type: $event as 'onMount' | 'onClick' })"
         />
         <EditorControl
-          v-if="script.trigger.type === 'onClick'"
-          :field="{ name: 'selector', label: 'targetSelector', type: 'text' }"
-          :model-value="script.trigger.selector"
-          @update:model-value="handleTriggerUpdate(script, { selector: $event })"
+            v-if="script.trigger.type === 'onClick'"
+            :field="{ name: 'selector', label: 'targetSelector', type: 'text' }"
+            :model-value="script.trigger.selector"
+            @update:model-value="handleTriggerUpdate(script, { selector: $event as string })"
         />
       </div>
 
@@ -109,9 +109,9 @@ function getActionFields(actionType: string) {
         <div v-for="(action, index) in script.actions" :key="action.id" class="action-item">
           <div class="action-item__header">
             <EditorControl
-              :field="{ name: 'actionType', label: 'actionType', type: 'select', options: actionTypeOptions }"
-              :model-value="action.type"
-              @update:model-value="handleActionTypeUpdate(script, index, $event)"
+                :field="{ name: 'actionType', label: 'actionType', type: 'select', options: actionTypeOptions }"
+                :model-value="action.type"
+                @update:model-value="handleActionTypeUpdate(script, index, $event as string)"
             />
             <button class="action-item__delete-btn" @click="deleteAction(script, index)">
               <DeleteIcon />
@@ -119,11 +119,11 @@ function getActionFields(actionType: string) {
           </div>
           <div class="action-item__fields">
             <EditorControl
-              v-for="field in getActionFields(action.type)"
-              :key="field.name"
-              :field="field"
-              :model-value="action.params?.[field.name]"
-              @update:model-value="handleActionParamUpdate(script, index, field.name, $event)"
+                v-for="field in getActionFields(action.type)"
+                :key="field.name"
+                :field="field"
+                :model-value="action.params?.[field.name]"
+                @update:model-value="handleActionParamUpdate(script, index, field.name, $event)"
             />
           </div>
         </div>

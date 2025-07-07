@@ -11,7 +11,10 @@ const props = withDefaults(defineProps<{
   modelValue: () => [],
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits<{
+  'update:modelValue': [value: Link[]]
+}>();
+
 const { t } = useI18nManager();
 
 function updateLink(index: number, field: 'text' | 'url', value: string) {
@@ -38,18 +41,18 @@ function deleteLink(index: number) {
     <div v-for="(link, index) in props.modelValue" :key="link.id" class="link-item">
       <div class="link-item__inputs">
         <input
-          type="text"
-          class="link-item__input"
-          :placeholder="t('editor.fields.linkTextPlaceholder')"
-          :value="link.text"
-          @input="updateLink(index, 'text', ($event.target as HTMLInputElement).value)"
+            type="text"
+            class="link-item__input"
+            :placeholder="t('editor.fields.linkTextPlaceholder')"
+            :value="link.text"
+            @input="updateLink(index, 'text', ($event.target as HTMLInputElement).value)"
         />
         <input
-          type="text"
-          class="link-item__input"
-          :placeholder="t('editor.fields.linkUrlPlaceholder')"
-          :value="link.url"
-          @input="updateLink(index, 'url', ($event.target as HTMLInputElement).value)"
+            type="text"
+            class="link-item__input"
+            :placeholder="t('editor.fields.linkUrlPlaceholder')"
+            :value="link.url"
+            @input="updateLink(index, 'url', ($event.target as HTMLInputElement).value)"
         />
       </div>
       <button class="link-item__delete-btn" @click="deleteLink(index)">

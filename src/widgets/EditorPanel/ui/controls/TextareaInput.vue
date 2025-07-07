@@ -7,7 +7,9 @@ const props = withDefaults(defineProps<{
   modelValue: ''
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+}>();
 
 const onInput = debounce((event: Event) => {
   emit('update:modelValue', (event.target as HTMLTextAreaElement).value);
@@ -16,9 +18,9 @@ const onInput = debounce((event: Event) => {
 
 <template>
   <textarea
-    :value="props.modelValue"
-    class="editor-control__input editor-control__textarea"
-    @input="onInput"
+      :value="props.modelValue"
+      class="editor-control__input editor-control__textarea"
+      @input="onInput"
   ></textarea>
 </template>
 

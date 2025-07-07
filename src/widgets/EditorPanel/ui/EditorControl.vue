@@ -6,11 +6,15 @@ import { controlRegistry } from '../model/controlRegistry';
 
 interface Props {
   field: EditorField;
-  modelValue: any;
+  modelValue: unknown;
 }
 
 const props = defineProps<Props>();
-const emit = defineEmits(['update:modelValue']);
+
+const emit = defineEmits<{
+  'update:modelValue': [value: unknown];
+}>();
+
 const { t } = useI18nManager();
 
 const activeControl = computed(() => controlRegistry.getControl(props.field.type));
@@ -18,7 +22,7 @@ const activeControl = computed(() => controlRegistry.getControl(props.field.type
 const localValue = computed({
   get() {
     if (props.field.type === 'number' && props.field.unit) {
-      return parseFloat(props.modelValue) || 0;
+      return parseFloat(props.modelValue as string) || 0;
     }
     return props.modelValue;
   },
@@ -37,12 +41,12 @@ const localValue = computed({
   <div class="editor-control">
     <label class="editor-control__label">{{ t(`editor.fields.${field.label}`, field.label) }}</label>
     <component
-      :is="activeControl"
-      v-if="activeControl"
-      v-model="localValue"
-      :unit="field.unit"
-      :item-schema="field.itemSchema"
-      :options="field.options"
+        :is="activeControl"
+        v-if="activeControl"
+        v-model="localValue"
+        :unit="field.unit"
+        :item-schema="field.itemSchema"
+        :options="field.options"
     />
     <div v-else class="editor-control__not-found">
       Control of type '{{ field.type }}' not found.

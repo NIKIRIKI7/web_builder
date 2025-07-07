@@ -7,7 +7,9 @@ const props = withDefaults(defineProps<{
   modelValue: ''
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+}>();
 
 const onInput = debounce((event: Event) => {
   emit('update:modelValue', (event.target as HTMLInputElement).value);
@@ -17,16 +19,16 @@ const onInput = debounce((event: Event) => {
 <template>
   <div class="image-input">
     <img
-      v-if="props.modelValue"
-      :src="props.modelValue"
-      alt="Preview"
-      class="image-input__preview"/>
+        v-if="props.modelValue"
+        :src="props.modelValue"
+        alt="Preview"
+        class="image-input__preview"/>
     <input
-      :value="props.modelValue"
-      type="text"
-      class="editor-control__input"
-      placeholder="https://example.com/image.png"
-      @input="onInput"
+        :value="props.modelValue"
+        type="text"
+        class="editor-control__input"
+        placeholder="https://example.com/image.png"
+        @input="onInput"
     />
   </div>
 </template>

@@ -11,7 +11,9 @@ const props = defineProps<{
   nodes: FullRenderedComponent[];
 }>();
 
-const emit = defineEmits(['update:nodes']);
+const emit = defineEmits<{
+  'update:nodes': [nodes: FullRenderedComponent[]];
+}>();
 
 const canvasState = useCanvasState();
 const canvasManager = useCanvasManager();
@@ -42,17 +44,17 @@ function handleDelete(instanceId: number) {
 
 <template>
   <draggable
-    v-model="draggableNodes"
-    item-key="instanceId"
-    handle=".component-wrapper__drag-handle"
-    group="components"
-    class="draggable-container"
-    ghost-class="ghost-component"
+      v-model="draggableNodes"
+      item-key="instanceId"
+      handle=".component-wrapper__drag-handle"
+      group="components"
+      class="draggable-container"
+      ghost-class="ghost-component"
   >
     <template #item="{ element: item }">
       <div
-        class="component-wrapper"
-        :class="{ 'component-wrapper--selected': item.instanceId === canvasState.selectedComponentInstanceId.value }"
+          class="component-wrapper"
+          :class="{ 'component-wrapper--selected': item.instanceId === canvasState.selectedComponentInstanceId.value }"
       >
         <div class="component-wrapper__controls">
           <div class="component-wrapper__control-btn component-wrapper__drag-handle" :title="t('canvas.actions.drag')">
@@ -70,10 +72,10 @@ function handleDelete(instanceId: number) {
         </div>
 
         <component
-          :is="item.componentDefinition.component"
-          class="canvas__component"
-          v-bind="item.props"
-          :style="item.styles">
+            :is="item.componentDefinition.component"
+            class="canvas__component"
+            v-bind="item.props"
+            :style="item.styles">
           <template v-if="item.children && item.children.length">
             <CanvasNode v-model:nodes="item.children" />
           </template>

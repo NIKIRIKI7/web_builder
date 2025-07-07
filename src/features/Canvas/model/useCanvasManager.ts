@@ -9,10 +9,10 @@ export function useCanvasManager() {
     addComponentAt: (payload: { componentId: string; targetId: number; position: 'before' | 'after' }) => {
       dispatchCommand({ type: 'ADD_COMPONENT_AT', payload });
     },
-    updateComponentProps: (payload: { instanceId: number; newValues: Record<string, any> }) => {
+    updateComponentProps: (payload: { instanceId: number; newValues: Record<string, unknown> }) => {
       dispatchCommand({ type: 'UPDATE_PROPS', payload });
     },
-    updateComponentStyles: (payload: { instanceId: number; newValues: Record<string, any> }) => {
+    updateComponentStyles: (payload: { instanceId: number; newValues: Record<string, unknown> }) => {
       dispatchCommand({ type: 'UPDATE_STYLES', payload });
     },
     cloneComponent: (instanceId: number) => {

@@ -5,7 +5,9 @@ const props = withDefaults(defineProps<{
   modelValue: '#000000',
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+}>();
 const onInput = (event: Event) => {
   emit('update:modelValue', (event.target as HTMLInputElement).value);
 };
@@ -14,10 +16,10 @@ const onInput = (event: Event) => {
 <template>
   <div class="editor-control__color-wrapper">
     <input
-      :value="props.modelValue"
-      type="color"
-      class="editor-control__color-input"
-      @input="onInput"
+        :value="props.modelValue"
+        type="color"
+        class="editor-control__color-input"
+        @input="onInput"
     />
     <span class="editor-control__color-value">{{ props.modelValue }}</span>
   </div>

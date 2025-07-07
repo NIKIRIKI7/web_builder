@@ -37,7 +37,7 @@ watch(selectedComponent, async (newComponent, oldComponent) => {
   }
 }, { immediate: true });
 
-function updateValue(target: EditorTarget, fieldName: string, value: any) {
+function updateValue(target: EditorTarget, fieldName: string, value: unknown) {
   if (!selectedComponent.value) return;
   const { instanceId } = selectedComponent.value;
   const payload = { instanceId, newValues: { [fieldName]: value } };
@@ -80,11 +80,11 @@ function handleDelete() {
 
       <div class="editor-panel__tabs">
         <button
-          v-for="tab in editorConfig.tabs"
-          :key="tab.name"
-          class="editor-panel__tab"
-          :class="{ 'editor-panel__tab--active': activeTabName === tab.name }"
-          @click="activeTabName = tab.name"
+            v-for="tab in editorConfig.tabs"
+            :key="tab.name"
+            class="editor-panel__tab"
+            :class="{ 'editor-panel__tab--active': activeTabName === tab.name }"
+            @click="activeTabName = tab.name"
         >
           {{ t(`editor.tabs.${tab.name.toLowerCase()}`) }}
         </button>
@@ -95,19 +95,19 @@ function handleDelete() {
           <div v-show="activeTabName === tab.name">
             <template v-if="tab.target === EDITOR_TARGET.PROPS || tab.target === EDITOR_TARGET.STYLES">
               <EditorControl
-                v-for="field in tab.fields"
-                :key="field.name"
-                :field="field"
-                :model-value="selectedComponent[tab.target][field.name]"
-                @update:model-value="updateValue(tab.target, field.name, $event)"
+                  v-for="field in tab.fields"
+                  :key="field.name"
+                  :field="field"
+                  :model-value="selectedComponent[tab.target][field.name]"
+                  @update:model-value="updateValue(tab.target, field.name, $event)"
               />
             </template>
             <template v-else-if="tab.target === EDITOR_TARGET.SCRIPT">
               <ScriptManager
-                :scripts="selectedComponent.scripts"
-                @add-script="handleAddScript"
-                @update-script="handleUpdateScript"
-                @delete-script="handleDeleteScript"
+                  :scripts="selectedComponent.scripts"
+                  @add-script="handleAddScript"
+                  @update-script="handleUpdateScript"
+                  @delete-script="handleDeleteScript"
               />
             </template>
           </div>

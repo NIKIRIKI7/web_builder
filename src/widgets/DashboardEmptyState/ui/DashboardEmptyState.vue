@@ -2,7 +2,10 @@
 import { RocketIcon } from '@/shared/ui/icons';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
-defineEmits(['create']);
+defineEmits<{
+  create: [];
+}>();
+
 const { t } = useI18nManager();
 </script>
 
