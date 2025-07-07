@@ -73,7 +73,7 @@ function handleDelete() {
     <div v-if="selectedComponent && editorConfig" class="editor-panel__content">
       <div class="editor-panel__header">
         <h2 class="editor-panel__title">{{ t(`components.names.${selectedComponent.componentDefinition.name}`) }}</h2>
-        <button class="editor-panel__close-btn" @click="canvasManager.closeEditor()" :title="t('buttons.close', 'Close')">
+        <button class="editor-panel__close-btn" :title="t('buttons.close', 'Close')" @click="canvasManager.closeEditor()">
           <CloseIcon class="editor-panel__close-icon"/>
         </button>
       </div>

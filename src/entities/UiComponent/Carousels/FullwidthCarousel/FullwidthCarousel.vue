@@ -16,7 +16,11 @@ defineProps<{
 <template>
   <section class="fullwidth-carousel">
     <div class="fullwidth-carousel__track">
-      <div v-for="slide in slides" :key="slide.id" class="fullwidth-carousel__slide" :style="{ backgroundImage: `url(${slide.imageUrl})` }">
+      <div
+        v-for="slide in slides"
+        :key="slide.id"
+        class="fullwidth-carousel__slide"
+        :style="{ backgroundImage: `url(${slide.imageUrl})` }">
         <div class="fullwidth-carousel__scrim"></div>
         <div class="fullwidth-carousel__content">
           <h2 class="fullwidth-carousel__title">{{ slide.title }}</h2>

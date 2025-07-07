@@ -18,7 +18,7 @@ const migrations = [
 ];
 
 export function runMigrations(persistedState: any) {
-  let stateVersion = persistedState.version || 1;
+  const stateVersion = persistedState.version || 1;
 
   if (stateVersion >= LATEST_PROJECT_STORE_VERSION) {
     return persistedState;

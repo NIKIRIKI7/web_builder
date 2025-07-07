@@ -17,7 +17,6 @@ const debouncedCodeUpdate = debounce((code: string) => {
 <template>
   <Codemirror
     :model-value="modelValue"
-    @update:model-value="debouncedCodeUpdate"
     placeholder="Code goes here..."
     :style="{ height: '200px' }"
     :autofocus="true"
@@ -25,6 +24,7 @@ const debouncedCodeUpdate = debounce((code: string) => {
     :tab-size="2"
     :extensions="codeExtensions"
     class="code-editor-instance"
+    @update:model-value="debouncedCodeUpdate"
   />
 </template>
 

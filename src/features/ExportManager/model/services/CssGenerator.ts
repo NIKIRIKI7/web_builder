@@ -33,7 +33,7 @@ async function aggregateStaticCss(components: ExportableComponent[]): Promise<st
 export async function generateAllCss(components: ExportableComponent[]): Promise<{ allCss: string, classMap: Map<number, string> }> {
   const { css: dynamicCss, classMap } = generateDynamicCss(components);
   const staticCss = await aggregateStaticCss(components);
-  const globalWrapperCss = `body { margin: 0; background-color: #f0f2f5; }`;
+  const globalWrapperCss = 'body { margin: 0; background-color: #f0f2f5; }';
   const allCss = [globalWrapperCss, staticCss, dynamicCss].join('\n');
   return { allCss, classMap };
 }

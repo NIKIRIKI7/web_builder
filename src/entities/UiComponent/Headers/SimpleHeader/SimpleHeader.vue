@@ -36,9 +36,9 @@ function toggleMenu() {
 
       <button
         class="simple-header__burger-btn"
-        @click="toggleMenu"
         aria-label="Toggle menu"
         :aria-expanded="isMenuOpen"
+        @click="toggleMenu"
       >
         <BurgerIcon />
       </button>

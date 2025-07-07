@@ -50,7 +50,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="dropdown-menu" ref="dropdownRef">
+  <div ref="dropdownRef" class="dropdown-menu">
     <button class="dropdown-menu__trigger" @click="toggleDropdown">
       <span class="dropdown-menu__trigger-label">{{ selectedLabel }}</span>
       <ChevronDownIcon

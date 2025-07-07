@@ -18,7 +18,11 @@ defineProps<{
   <section class="sales-grid">
     <h2 class="sales-grid__title">{{ title }}</h2>
     <div class="sales-grid__items">
-      <a v-for="product in products" :key="product.id" :href="product.url" class="sales-grid__card">
+      <a
+        v-for="product in products"
+        :key="product.id"
+        :href="product.url"
+        class="sales-grid__card">
         <div class="sales-grid__image-wrapper">
           <img :src="product.imageUrl" :alt="product.name" class="sales-grid__image" />
         </div>

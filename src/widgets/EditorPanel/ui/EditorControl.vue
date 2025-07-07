@@ -37,8 +37,8 @@ const localValue = computed({
   <div class="editor-control">
     <label class="editor-control__label">{{ t(`editor.fields.${field.label}`, field.label) }}</label>
     <component
-      v-if="activeControl"
       :is="activeControl"
+      v-if="activeControl"
       v-model="localValue"
       :unit="field.unit"
       :item-schema="field.itemSchema"

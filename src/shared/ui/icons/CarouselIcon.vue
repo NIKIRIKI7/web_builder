@@ -10,8 +10,22 @@
     stroke-linecap="round"
     stroke-linejoin="round"
   >
-    <rect x="1" y="6" width="22" height="12" rx="2" ry="2"></rect>
-    <line x1="6" y1="6" x2="6" y2="18"></line>
-    <line x1="18" y1="6" x2="18" y2="18"></line>
+    <rect
+      x="1"
+      y="6"
+      width="22"
+      height="12"
+      rx="2"
+      ry="2"></rect>
+    <line
+      x1="6"
+      y1="6"
+      x2="6"
+      y2="18"></line>
+    <line
+      x1="18"
+      y1="6"
+      x2="18"
+      y2="18"></line>
   </svg>
 </template>

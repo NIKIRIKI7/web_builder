@@ -26,7 +26,11 @@ defineProps<{
             <div class="header-mega-menu__menu-container">
               <div v-for="col in item.columns" :key="col.id" class="header-mega-menu__menu-column">
                 <h4 class="header-mega-menu__menu-title">{{ col.title }}</h4>
-                <a v-for="link in col.links" :key="link.id" :href="link.url" class="header-mega-menu__menu-link">
+                <a
+                  v-for="link in col.links"
+                  :key="link.id"
+                  :href="link.url"
+                  class="header-mega-menu__menu-link">
                   {{ link.text }}
                 </a>
               </div>

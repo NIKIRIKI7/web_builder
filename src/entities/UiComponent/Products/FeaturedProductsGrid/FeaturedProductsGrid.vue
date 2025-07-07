@@ -23,7 +23,11 @@ defineProps<{
       <a :href="viewAllUrl" class="featured-products__view-all">{{ viewAllText }}</a>
     </div>
     <div class="featured-products__grid">
-      <a v-for="product in products" :key="product.id" :href="product.url" class="featured-products__card-link">
+      <a
+        v-for="product in products"
+        :key="product.id"
+        :href="product.url"
+        class="featured-products__card-link">
         <div class="featured-products__card">
           <div class="featured-products__image-wrapper">
             <img :src="product.imageUrl" :alt="product.name" class="featured-products__image" />

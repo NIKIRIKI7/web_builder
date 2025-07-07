@@ -21,7 +21,11 @@ withDefaults(defineProps<{
         <div class="footer-detailed__nav">
           <div v-for="col in columns" :key="col.id" class="footer-detailed__column">
             <h4 class="footer-detailed__column-title">{{ col.title }}</h4>
-            <a v-for="link in col.links" :key="link.id" :href="link.url" class="footer-detailed__link">
+            <a
+              v-for="link in col.links"
+              :key="link.id"
+              :href="link.url"
+              class="footer-detailed__link">
               {{ link.text }}
             </a>
           </div>

@@ -16,7 +16,11 @@ const onInput = debounce((event: Event) => {
 
 <template>
   <div class="image-input">
-    <img v-if="props.modelValue" :src="props.modelValue" alt="Preview" class="image-input__preview"/>
+    <img
+      v-if="props.modelValue"
+      :src="props.modelValue"
+      alt="Preview"
+      class="image-input__preview"/>
     <input
       :value="props.modelValue"
       type="text"

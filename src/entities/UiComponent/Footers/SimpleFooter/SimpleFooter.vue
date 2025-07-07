@@ -12,9 +12,9 @@ withDefaults(defineProps<{
     <div class="simple-footer__container">
       <div class="simple-footer__links">
         <a
-            v-for="link in links"
-            :key="link.id"
-            :href="link.url"
+          v-for="link in links"
+          :key="link.id"
+          :href="link.url"
         >{{ link.text }}</a>
       </div>
       <div class="simple-footer__copyright">

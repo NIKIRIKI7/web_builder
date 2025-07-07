@@ -69,7 +69,11 @@ function handleDelete(instanceId: number) {
           </button>
         </div>
 
-        <component :is="item.componentDefinition.component" class="canvas__component" v-bind="item.props" :style="item.styles">
+        <component
+          :is="item.componentDefinition.component"
+          class="canvas__component"
+          v-bind="item.props"
+          :style="item.styles">
           <template v-if="item.children && item.children.length">
             <CanvasNode v-model:nodes="item.children" />
           </template>

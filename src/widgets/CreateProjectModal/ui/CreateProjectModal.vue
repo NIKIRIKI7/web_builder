@@ -63,7 +63,11 @@ const handleCancel = () => {
 
       <div class="create-project-modal__section">
         <div class="template-selector">
-          <button type="button" class="template-selector__arrow-btn" @click="prevTemplate" aria-label="Previous template">
+          <button
+            type="button"
+            class="template-selector__arrow-btn"
+            aria-label="Previous template"
+            @click="prevTemplate">
             <ArrowLeftIcon />
           </button>
           <div class="template-selector__card-container">
@@ -77,7 +81,11 @@ const handleCancel = () => {
               />
             </Transition>
           </div>
-          <button type="button" class="template-selector__arrow-btn" @click="nextTemplate" aria-label="Next template">
+          <button
+            type="button"
+            class="template-selector__arrow-btn"
+            aria-label="Next template"
+            @click="nextTemplate">
             <ArrowRightIcon />
           </button>
         </div>

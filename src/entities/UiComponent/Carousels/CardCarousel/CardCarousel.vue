@@ -16,7 +16,11 @@ defineProps<{
   <section class="card-carousel">
     <div class="card-carousel__viewport">
       <div class="card-carousel__track">
-        <a v-for="card in cards" :key="card.id" :href="card.url" class="card-carousel__slide">
+        <a
+          v-for="card in cards"
+          :key="card.id"
+          :href="card.url"
+          class="card-carousel__slide">
           <div class="card-carousel__card">
             <img :src="card.imageUrl" :alt="card.title" class="card-carousel__image" />
             <div class="card-carousel__content">

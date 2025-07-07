@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { useRoute } from "vue-router";
-import { useCanvasState } from "@/features/Canvas/model/useCanvasState";
-import type { FullRenderedComponent } from "@/entities/Canvas/model/types";
-import { exportPage } from "@/features/ExportManager/model";
-import { HtmlExportStrategy } from "@/features/ExportManager/model/strategies/HtmlExportStrategy";
-import type { ExportableComponent } from "@/features/ExportManager/model/types";
-import { useThemeManager } from "@/shared/theme/useThemeManager";
-import { themeOptions } from "@/shared/theme/defaults";
-import type { Theme } from "@/shared/theme/types";
-import { useI18nManager } from "@/shared/i18n/useI18nManager";
-import { useLayoutStore } from "@/shared/layout/layoutStore";
-import { usePreviewStore } from "@/shared/preview/previewStore";
-import DropdownMenu from "@/shared/ui/DropdownMenu/DropdownMenu.vue";
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { useCanvasState } from '@/features/Canvas/model/useCanvasState';
+import type { FullRenderedComponent } from '@/entities/Canvas/model/types';
+import { exportPage } from '@/features/ExportManager/model';
+import { HtmlExportStrategy } from '@/features/ExportManager/model/strategies/HtmlExportStrategy';
+import type { ExportableComponent } from '@/features/ExportManager/model/types';
+import { useThemeManager } from '@/shared/theme/useThemeManager';
+import { themeOptions } from '@/shared/theme/defaults';
+import type { Theme } from '@/shared/theme/types';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
+import { useLayoutStore } from '@/shared/layout/layoutStore';
+import { usePreviewStore } from '@/shared/preview/previewStore';
+import DropdownMenu from '@/shared/ui/DropdownMenu/DropdownMenu.vue';
 import {
   DesktopIcon,
   TabletIcon,
   MobileIcon,
   ArrowLeftIcon,
-} from "@/shared/ui/icons";
+} from '@/shared/ui/icons';
 
 const canvasState = useCanvasState();
 const { theme, setTheme } = useThemeManager();
@@ -27,7 +27,7 @@ const layoutStore = useLayoutStore();
 const previewStore = usePreviewStore();
 const route = useRoute();
 
-const isBuilderPage = computed(() => route.name === "Builder");
+const isBuilderPage = computed(() => route.name === 'Builder');
 
 const activeTheme = computed<Theme>({
   get: () => theme.value,

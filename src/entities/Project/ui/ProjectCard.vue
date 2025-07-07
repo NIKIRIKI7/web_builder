@@ -50,7 +50,7 @@ function handleDeleteRequest() {
 </script>
 
 <template>
-  <div class="project-card" ref="cardRef">
+  <div ref="cardRef" class="project-card">
     <div class="project-card__header">
       <button class="project-card__options-btn" @click.stop="toggleOptions">
         <MoreHorizontalIcon />
