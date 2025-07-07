@@ -7,12 +7,10 @@ import ts from 'typescript-eslint';
 import vueParser from 'vue-eslint-parser';
 
 export default [
-    // Base configurations
     js.configs.recommended,
     ...ts.configs.recommendedTypeChecked,
     ...pluginVue.configs['flat/strongly-recommended'],
 
-    // Main configuration
     {
         files: ['**/*.{js,mjs,cjs,ts,vue}'],
         languageOptions: {
@@ -48,15 +46,13 @@ export default [
         },
 
         rules: {
-            // JavaScript/TypeScript rules
             quotes: ['error', 'single', { avoidEscape: true }],
             semi: ['error', 'always'],
-            indent: 'off', // Handled by Prettier
+            indent: 'off',
             'no-console': ['error', { allow: ['warn', 'error'] }],
             'no-debugger': 'error',
             eqeqeq: ['error', 'always'],
 
-            // TypeScript rules
             '@typescript-eslint/no-unused-vars': [
                 'error',
                 {
@@ -71,7 +67,6 @@ export default [
             '@typescript-eslint/no-misused-promises': 'error',
             '@typescript-eslint/consistent-type-imports': 'error',
 
-            // Vue rules
             'vue/html-indent': ['error', 2],
             'vue/multi-word-component-names': 'error',
             'vue/max-attributes-per-line': 'off',
@@ -84,7 +79,6 @@ export default [
             'vue/attribute-hyphenation': ['error', 'always'],
             'vue/v-on-event-hyphenation': ['error', 'always', { autofix: true }],
 
-            // Import rules
             'import/order': [
                 'error',
                 {
@@ -113,10 +107,8 @@ export default [
         }
     },
 
-    // Prettier configuration (should be last)
     eslintConfigPrettier,
 
-    // TypeScript declaration files
     {
         files: ['**/*.d.ts'],
         rules: {
@@ -124,7 +116,6 @@ export default [
         }
     },
 
-    // Configuration files
     {
         files: ['**/*.config.{js,ts}'],
         languageOptions: {
@@ -134,7 +125,6 @@ export default [
         }
     },
 
-    // Ignore patterns
     {
         ignores: [
             'dist/',

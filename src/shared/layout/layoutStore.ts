@@ -1,83 +1,97 @@
 import { klona } from 'klona/lite';
 import { defineStore } from 'pinia';
+import { reactive, ref, type Ref } from 'vue';
 
 import { WIDGET_ID } from './constants';
 import { LayoutService } from './layout.service';
 
-import type { LayoutNode } from './types';
-
-
-interface DropTarget {
-  panelId: string;
-  side: 'before' | 'after';
-}
-
-interface LayoutState {
-  isEditMode: boolean;
-  layout: LayoutNode;
-  draggedPanelId: string | null;
-  dropTarget: DropTarget | null;
-}
+import type { LayoutNode, DropTarget } from './types';
 
 const defaultLayout: LayoutNode = {
-  id: 'root',
-  type: 'row',
-  size: 100,
-  children: [
-    { type: 'panel', id: 'panel-1', widgetId: WIDGET_ID.UI_LIBRARY, size: 25 },
-    { type: 'panel', id: 'panel-2', widgetId: WIDGET_ID.APP_WORKSPACE, size: 75 },
-  ]
+    id: 'root',
+    type: 'row',
+    size: 100,
+    children: [
+        { type: 'panel', id: 'panel-1', widgetId: WIDGET_ID.UI_LIBRARY, size: 25 },
+        { type: 'panel', id: 'panel-2', widgetId: WIDGET_ID.APP_WORKSPACE, size: 75 }
+    ]
 };
 
-export const useLayoutStore = defineStore('layout', {
-  state: (): LayoutState => ({
-    isEditMode: false,
-    layout: klona(defaultLayout),
-    draggedPanelId: null,
-    dropTarget: null,
-  }),
-  actions: {
-    toggleEditMode() {
-      this.isEditMode = !this.isEditMode;
-    },
-    resetLayout() {
-      this.layout = klona(defaultLayout);
-    },
-    resizePanel(path: string[], delta: number) {
-      const newLayout = klona(this.layout);
-      if (LayoutService.findParentAndResize(newLayout, path, delta)) {
-        this.layout = newLayout;
-      }
-    },
-    setDraggedPanel(panelId: string | null) {
-      this.draggedPanelId = panelId;
-    },
-    setDropTarget(target: DropTarget | null) {
-      this.dropTarget = target;
-    },
-    clearDragState() {
-      this.draggedPanelId = null;
-      this.dropTarget = null;
-    },
-    executeMovePanel() {
-      if (!this.draggedPanelId || !this.dropTarget) return;
+export const useLayoutStore = defineStore(
+    'layout',
+    () => {
+        const isEditMode = ref(false);
+        const layout: LayoutNode = reactive(klona(defaultLayout));
+        const draggedPanelId: Ref<string | null> = ref(null);
+        const dropTarget: Ref<DropTarget | null> = ref(null);
 
-      if (this.draggedPanelId === this.dropTarget.panelId) return;
-
-      const newLayout = klona(this.layout);
-      const draggedPanel = LayoutService.findAndRemovePanel(newLayout, this.draggedPanelId);
-
-      if (draggedPanel) {
-        if (LayoutService.findAndInsertPanel(newLayout, this.dropTarget.panelId, draggedPanel, this.dropTarget.side)) {
-          this.layout = newLayout;
+        function toggleEditMode(): void {
+            isEditMode.value = !isEditMode.value;
         }
-      }
+
+        function resetLayout(): void {
+            const newLayout = klona(defaultLayout);
+            Object.assign(layout, newLayout);
+        }
+
+        function resizePanel(path: string[], delta: number): void {
+            const newLayout = klona(layout);
+            if (LayoutService.findParentAndResize(newLayout, path, delta)) {
+                Object.assign(layout, newLayout);
+            }
+        }
+
+        function setDraggedPanel(panelId: string | null): void {
+            draggedPanelId.value = panelId;
+        }
+
+        function setDropTarget(target: DropTarget | null): void {
+            dropTarget.value = target;
+        }
+
+        function clearDragState(): void {
+            draggedPanelId.value = null;
+            dropTarget.value = null;
+        }
+
+        function executeMovePanel(): void {
+            if (!draggedPanelId.value || !dropTarget.value) return;
+            if (draggedPanelId.value === dropTarget.value.panelId) return;
+
+            const newLayout = klona(layout);
+            const panelToMove = LayoutService.findAndRemovePanel(newLayout, draggedPanelId.value);
+
+            if (panelToMove) {
+                if (
+                    LayoutService.findAndInsertPanel(
+                        newLayout,
+                        dropTarget.value.panelId,
+                        panelToMove,
+                        dropTarget.value.side
+                    )
+                ) {
+                    Object.assign(layout, newLayout);
+                }
+            }
+        }
+
+        return {
+            isEditMode,
+            layout,
+            draggedPanelId,
+            dropTarget,
+            toggleEditMode,
+            resetLayout,
+            resizePanel,
+            setDraggedPanel,
+            setDropTarget,
+            clearDragState,
+            executeMovePanel
+        };
     },
-  },
-  persist: {
-    filter: (state: LayoutState) => {
-      const { isEditMode, layout } = state;
-      return { isEditMode, layout };
-    },
-  },
-});
+    {
+        persist: {
+            paths: ['isEditMode', 'layout']
+        }
+    }
+);
