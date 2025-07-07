@@ -1,6 +1,9 @@
-import { useCanvasStore, type CanvasInstanceState } from '../canvasStore';
-import { getComponentDefinition } from '@/entities/UiComponent/model/registry';
 import { klona } from 'klona/lite';
+
+import { getComponentDefinition } from '@/entities/UiComponent/model/registry';
+
+import { useCanvasStore, type CanvasInstanceState } from '../canvasStore';
+
 import type { CommandHandler } from './types';
 
 interface AddComponentPayload {

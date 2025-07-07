@@ -1,7 +1,23 @@
-import { dispatchCommand } from './commands/commandBus';
-import type { ComponentScript, CanvasInstanceState } from '@/entities/Canvas/model/types';
+import type { CanvasInstanceState, ComponentScript } from '@/entities/Canvas/model/types';
 
-export function useCanvasManager() {
+import { dispatchCommand } from './commands/commandBus';
+
+type CanvasManager = {
+  addComponent: (componentId: string) => void;
+  addComponentAt: (payload: { componentId: string; targetId: number; position: 'before' | 'after' }) => void;
+  updateComponentProps: (payload: { instanceId: number; newValues: Record<string, unknown> }) => void;
+  updateComponentStyles: (payload: { instanceId: number; newValues: Record<string, unknown> }) => void;
+  cloneComponent: (instanceId: number) => void;
+  deleteComponent: (instanceId: number) => void;
+  selectComponent: (instanceId: number | null) => void;
+  closeEditor: () => void;
+  setDraggableOrder: (newOrder: CanvasInstanceState[]) => void;
+  addScript: (instanceId: number) => void;
+  updateScript: (payload: { instanceId: number; script: ComponentScript }) => void;
+  deleteScript: (payload: { instanceId: number; scriptId: string }) => void;
+};
+
+export function useCanvasManager(): CanvasManager {
   return {
     addComponent: (componentId: string) => {
       dispatchCommand({ type: 'ADD_COMPONENT', payload: { componentId } });
@@ -38,6 +54,6 @@ export function useCanvasManager() {
     },
     deleteScript: (payload: { instanceId: number; scriptId: string }) => {
       dispatchCommand({ type: 'DELETE_SCRIPT', payload });
-    },
+    }
   };
 }

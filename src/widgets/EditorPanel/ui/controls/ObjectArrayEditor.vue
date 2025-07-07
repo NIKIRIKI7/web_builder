@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { klona } from 'klona/lite';
-import { DeleteIcon, AddIcon } from '@/shared/ui/icons';
+
 import type { EditorField } from '@/entities/UiComponent/model/types';
-import EditorControl from '../EditorControl.vue';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
+import { DeleteIcon, AddIcon } from '@/shared/ui/icons';
+
+import EditorControl from '../EditorControl.vue';
+
 
 type Item = { id: number; [key: string]: unknown };
 

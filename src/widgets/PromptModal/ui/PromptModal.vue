@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
+
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
+import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
 
 const props = defineProps<{
   title: string;

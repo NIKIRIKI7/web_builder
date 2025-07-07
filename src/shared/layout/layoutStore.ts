@@ -1,8 +1,11 @@
-import { defineStore } from 'pinia';
 import { klona } from 'klona/lite';
-import type { LayoutNode } from './types';
-import { LayoutService } from './layout.service';
+import { defineStore } from 'pinia';
+
 import { WIDGET_ID } from './constants';
+import { LayoutService } from './layout.service';
+
+import type { LayoutNode } from './types';
+
 
 interface DropTarget {
   panelId: string;

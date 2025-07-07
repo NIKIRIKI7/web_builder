@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { defineAsyncComponent, markRaw, computed, type Component } from 'vue';
-import type { LayoutNode, LayoutPanel, WidgetId } from '../types';
-import { useLayoutStore } from '../layoutStore';
-import { DND_LAYOUT_PANEL_ID_KEY } from '../dnd';
-import { WIDGET_ID } from '../constants';
+
 import { DragHandleIcon } from '@/shared/ui/icons';
+
+import { WIDGET_ID } from '../constants';
+import { DND_LAYOUT_PANEL_ID_KEY } from '../dnd';
+import { useLayoutStore } from '../layoutStore';
+
+import type { LayoutNode, LayoutPanel, WidgetId } from '../types';
+
 
 const props = defineProps<{
   panel: LayoutPanel;

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+
 import { usePreviewStore } from '@/shared/preview/previewStore';
+
 import Canvas from './Canvas.vue';
 
 const previewStore = usePreviewStore();

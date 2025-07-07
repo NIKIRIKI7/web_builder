@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { klona } from 'klona/lite';
-import { DeleteIcon, AddIcon } from '@/shared/ui/icons';
+
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
+import { DeleteIcon, AddIcon } from '@/shared/ui/icons';
 
 type Link = { id: number; text: string; url: string };
 

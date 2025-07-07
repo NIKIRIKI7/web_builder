@@ -1,7 +1,10 @@
 import { defineAsyncComponent, markRaw } from 'vue';
-import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
+
 import { HeroIcon } from '@/shared/ui/icons';
+
 import staticCss from './AppShowcaseHero.scss?inline';
+
+import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 
 const ID = 'app-showcase-hero-v1';
 

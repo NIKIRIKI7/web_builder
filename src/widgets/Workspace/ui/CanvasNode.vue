@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent } from 'vue';
 import draggable from 'vuedraggable';
+
 import type { FullRenderedComponent } from '@/features/Canvas/model/canvasStore';
-import { useCanvasState } from '@/features/Canvas/model/useCanvasState';
 import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
+import { useCanvasState } from '@/features/Canvas/model/useCanvasState';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 import { CloneIcon, DeleteIcon, DragHandleIcon, EditIcon } from '@/shared/ui/icons';
 

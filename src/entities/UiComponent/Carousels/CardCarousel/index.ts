@@ -1,8 +1,11 @@
 import { defineAsyncComponent, markRaw } from 'vue';
-import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
+
 import { CarouselIcon } from '@/shared/ui/icons';
-import staticCss from './CardCarousel.scss?inline';
+
 import runtimeScript from './CardCarousel.script.js?raw';
+import staticCss from './CardCarousel.scss?inline';
+
+import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 
 const ID = 'card-carousel-v1';
 

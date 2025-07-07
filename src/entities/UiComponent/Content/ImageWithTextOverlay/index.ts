@@ -1,7 +1,10 @@
 import { defineAsyncComponent, markRaw } from 'vue';
-import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
+
 import { DefaultPreviewIcon } from '@/shared/ui/icons';
+
 import staticCss from './ImageWithTextOverlay.scss?inline';
+
+import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 
 const ID = 'image-with-text-overlay-v1';
 

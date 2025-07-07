@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import ProjectList from '@/widgets/ProjectList/ui/ProjectList.vue';
-import DropdownMenu from '@/shared/ui/DropdownMenu/DropdownMenu.vue';
-import { useThemeManager } from '@/shared/theme/useThemeManager';
+
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
 import { themeOptions } from '@/shared/theme/defaults';
 import type { Theme } from '@/shared/theme/types';
-import { useI18nManager } from '@/shared/i18n/useI18nManager';
+import { useThemeManager } from '@/shared/theme/useThemeManager';
+import DropdownMenu from '@/shared/ui/DropdownMenu/DropdownMenu.vue';
+import ProjectList from '@/widgets/ProjectList/ui/ProjectList.vue';
 
 const { t, currentLocale, localeOptions } = useI18nManager();
 const { theme, setTheme } = useThemeManager();

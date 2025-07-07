@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+
 import BuilderPage from '@/pages/builder/ui/BuilderPage.vue';
 import DashboardPage from '@/pages/dashboard/ui/DashboardPage.vue';
 

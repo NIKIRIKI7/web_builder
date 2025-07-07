@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { AddIcon } from '@/shared/ui/icons';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
+import { AddIcon } from '@/shared/ui/icons';
 
 defineEmits<{
   create: [];

@@ -1,7 +1,10 @@
 import { defineAsyncComponent, markRaw } from 'vue';
-import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
+
 import { DefaultPreviewIcon } from '@/shared/ui/icons';
+
 import staticCss from './TextThenImage.scss?inline';
+
+import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 
 const ID = 'text-then-image-v1';
 

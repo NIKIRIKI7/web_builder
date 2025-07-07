@@ -1,5 +1,6 @@
-import type { ExportableComponent } from '../types';
 import { actionRegistry } from '@/features/ScriptActions/model/registry';
+
+import type { ExportableComponent } from '../types';
 
 export function generateJs(components: ExportableComponent[]): string {
   if (components.length === 0) {

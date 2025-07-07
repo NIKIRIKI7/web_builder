@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useProjectStore } from '@/features/ProjectManager/model/projectStore';
-import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
-import ProjectCard from '@/entities/Project/ui/ProjectCard.vue';
-import CreateProjectCard from '@/entities/Project/ui/CreateProjectCard.vue';
-import DashboardEmptyState from '@/widgets/DashboardEmptyState/ui/DashboardEmptyState.vue';
+
 import type { Project } from '@/entities/Project/model/types';
+import CreateProjectCard from '@/entities/Project/ui/CreateProjectCard.vue';
+import ProjectCard from '@/entities/Project/ui/ProjectCard.vue';
+import { useProjectStore } from '@/features/ProjectManager/model/projectStore';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
+import DashboardEmptyState from '@/widgets/DashboardEmptyState/ui/DashboardEmptyState.vue';
+import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
 
 const projectStore = useProjectStore();
 const modalStore = useModalStore();

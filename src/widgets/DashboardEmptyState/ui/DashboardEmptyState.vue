@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { RocketIcon } from '@/shared/ui/icons';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
+import { RocketIcon } from '@/shared/ui/icons';
 
 defineEmits<{
   create: [];

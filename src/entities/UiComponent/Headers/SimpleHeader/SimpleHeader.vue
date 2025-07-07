@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+
 import { BurgerIcon } from '@/shared/ui/icons';
 
 defineProps<{

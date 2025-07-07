@@ -1,7 +1,9 @@
-import { onMounted, onBeforeUnmount, type Ref } from 'vue';
+import { onBeforeUnmount, onMounted } from 'vue';
 
-export function useClickOutside(elementRef: Ref<HTMLElement | null>, callback: () => void) {
-  const handleClick = (event: MouseEvent) => {
+import type { Ref } from 'vue';
+
+export function useClickOutside(elementRef: Ref<HTMLElement | null>, callback: () => void): void {
+  const handleClick = (event: MouseEvent): void => {
     if (elementRef.value && !elementRef.value.contains(event.target as Node)) {
       callback();
     }

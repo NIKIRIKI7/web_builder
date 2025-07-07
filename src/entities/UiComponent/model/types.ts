@@ -1,5 +1,5 @@
-import type { Component } from 'vue';
 import type { EditorTarget } from './constants';
+import type { Component } from 'vue';
 
 export type { EditorTarget } from './constants';
 

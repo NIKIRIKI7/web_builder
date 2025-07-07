@@ -1,7 +1,10 @@
 import { defineAsyncComponent, markRaw } from 'vue';
-import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
+
 import { FooterIcon } from '@/shared/ui/icons';
+
 import staticCss from './FooterWithSocials.scss?inline';
+
+import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 
 const ID = 'footer-with-socials-v1';
 

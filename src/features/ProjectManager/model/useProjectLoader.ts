@@ -1,26 +1,32 @@
-import { watch, onBeforeUnmount, type Ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useProjectStore } from './projectStore';
-import { useCanvasStore } from '@/features/Canvas/model/canvasStore';
 import { klona } from 'klona/lite';
-import { debounce } from '@/shared/lib/utils';
+import { type Ref, onBeforeUnmount, watch } from 'vue';
+import { useRouter } from 'vue-router';
+
 import type { Project } from '@/entities/Project/model/types';
+import { useCanvasStore } from '@/features/Canvas/model/canvasStore';
+import { debounce } from '@/shared/lib/utils';
+
+import { useProjectStore } from './projectStore';
 
 function isValidCanvasState(data: unknown): data is Project['canvasState'] {
   if (!data || typeof data !== 'object') {
     return false;
   }
-  const hasInstances = 'componentInstances' in data && Array.isArray((data as Record<string, unknown>).componentInstances);
-  const hasSelectedId = 'selectedComponentInstanceId' in data && (typeof (data as Record<string, unknown>).selectedComponentInstanceId === 'number' || (data as Record<string, unknown>).selectedComponentInstanceId === null);
+  const hasInstances =
+      'componentInstances' in data && Array.isArray((data as Record<string, unknown>).componentInstances);
+  const hasSelectedId =
+      'selectedComponentInstanceId' in data &&
+      (typeof (data as Record<string, unknown>).selectedComponentInstanceId === 'number' ||
+          (data as Record<string, unknown>).selectedComponentInstanceId === null);
   return hasInstances && hasSelectedId;
 }
 
-export function useProjectLoader(projectId: Ref<string>) {
+export function useProjectLoader(projectId: Ref<string>): void {
   const projectStore = useProjectStore();
   const canvasStore = useCanvasStore();
   const router = useRouter();
 
-  const loadProjectData = (id: string) => {
+  const loadProjectData = (id: string): void => {
     const project = projectStore.findProject(id);
     const stateToLoad = project?.canvasState;
     if (isValidCanvasState(stateToLoad)) {
@@ -28,7 +34,7 @@ export function useProjectLoader(projectId: Ref<string>) {
     } else {
       console.error(`Project with id ${id} not found or has invalid canvasState.`);
       canvasStore.resetState();
-      router.push({ name: 'Dashboard' });
+      void router.push({ name: 'Dashboard' });
     }
   };
 
@@ -63,7 +69,7 @@ export function useProjectLoader(projectId: Ref<string>) {
           const fullState = {
             componentInstances: newState,
             selectedComponentInstanceId: canvasStore.selectedComponentInstanceId,
-            isEditorOpen: canvasStore.isEditorOpen,
+            isEditorOpen: canvasStore.isEditorOpen
           };
           projectStore.updateProjectCanvas(projectId.value, fullState);
           updateThumbnail();

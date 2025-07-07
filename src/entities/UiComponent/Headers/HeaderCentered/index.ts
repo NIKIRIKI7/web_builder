@@ -1,8 +1,11 @@
 import { defineAsyncComponent, markRaw } from 'vue';
-import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
+
 import { HeaderIcon } from '@/shared/ui/icons';
-import staticCss from './HeaderCentered.scss?inline';
+
 import runtimeScript from './HeaderCentered.script.js?raw';
+import staticCss from './HeaderCentered.scss?inline';
+
+import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 
 const ID = 'header-centered-v1';
 

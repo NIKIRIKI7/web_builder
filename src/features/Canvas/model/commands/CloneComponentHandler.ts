@@ -1,5 +1,7 @@
-import { useCanvasStore } from '../canvasStore';
 import { klona } from 'klona/lite';
+
+import { useCanvasStore } from '../canvasStore';
+
 import type { CommandHandler } from './types';
 
 interface CloneComponentPayload {

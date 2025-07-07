@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 import type { ProjectTemplate } from '@/shared/lib/project-templates';
 

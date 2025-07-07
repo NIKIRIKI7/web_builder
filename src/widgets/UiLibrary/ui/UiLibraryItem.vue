@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { UiComponentPreview } from '@/entities/UiComponent/model/types';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
 import { DND_COMPONENT_ID_KEY } from '@/shared/lib/dnd/keys';
 import { DefaultPreviewIcon } from '@/shared/ui/icons';
-import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 const props = defineProps<{
   componentInfo: UiComponentPreview;

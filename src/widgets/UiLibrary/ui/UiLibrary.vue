@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
 import { useVirtualizer } from '@tanstack/vue-virtual';
+import { ref, computed } from 'vue';
+
 import { useFilterableLibraryStore, type LibraryListItem } from '@/features/FilterableUiLibrary/model/store';
-import { useI18nManager } from '@/shared/i18n/useI18nManager';
 import FilterInput from '@/features/FilterableUiLibrary/ui/FilterInput.vue';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
+
 import UiLibraryItem from './UiLibraryItem.vue';
 
 const libraryStore = useFilterableLibraryStore();

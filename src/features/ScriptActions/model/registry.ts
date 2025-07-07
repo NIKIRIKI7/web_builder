@@ -1,7 +1,8 @@
-import type { ActionDefinition } from './types';
 import { alertAction } from '../actions/alert';
-import { toggleVisibilityAction } from '../actions/toggleVisibility';
 import { emitEventAction } from '../actions/emitEvent';
+import { toggleVisibilityAction } from '../actions/toggleVisibility';
+
+import type { ActionDefinition } from './types';
 
 export const actionRegistry: ActionDefinition[] = [
   alertAction,

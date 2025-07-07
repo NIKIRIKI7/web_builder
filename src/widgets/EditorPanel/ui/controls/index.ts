@@ -1,14 +1,14 @@
 import { controlRegistry } from '../../model/controlRegistry';
 
-import TextInput from './TextInput.vue';
-import TextareaInput from './TextareaInput.vue';
-import NumberInput from './NumberInput.vue';
-import ColorInput from './ColorInput.vue';
-import LinkArrayEditor from './LinkArrayEditor.vue';
 import CodeEditorInput from './CodeEditorInput.vue';
+import ColorInput from './ColorInput.vue';
 import ImageInput from './ImageInput.vue';
+import LinkArrayEditor from './LinkArrayEditor.vue';
+import NumberInput from './NumberInput.vue';
 import ObjectArrayEditor from './ObjectArrayEditor.vue';
 import SelectInput from './SelectInput.vue';
+import TextareaInput from './TextareaInput.vue';
+import TextInput from './TextInput.vue';
 
 controlRegistry.register({ type: 'text', component: TextInput });
 controlRegistry.register({ type: 'textarea', component: TextareaInput });

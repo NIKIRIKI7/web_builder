@@ -1,8 +1,11 @@
 import { defineAsyncComponent, markRaw } from 'vue';
-import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
+
 import { HeaderIcon } from '@/shared/ui/icons';
-import staticCss from './SimpleHeader.scss?inline';
+
 import runtimeScript from './SimpleHeader.script.js?raw';
+import staticCss from './SimpleHeader.scss?inline';
+
+import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 
 const ID = 'simple-header-v1';
 

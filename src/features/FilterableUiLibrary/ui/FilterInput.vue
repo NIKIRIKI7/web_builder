@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+
 import { useFilterableLibraryStore } from '@/features/FilterableUiLibrary/model/store';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 

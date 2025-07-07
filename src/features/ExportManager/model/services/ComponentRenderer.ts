@@ -1,5 +1,6 @@
-import { createSSRApp } from 'vue';
 import { renderToString } from '@vue/server-renderer';
+import { createSSRApp } from 'vue';
+
 import type { ExportableComponent } from '../types';
 
 export async function renderComponentsToHtml(

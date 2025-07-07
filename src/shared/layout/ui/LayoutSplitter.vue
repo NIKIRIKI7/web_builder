@@ -11,17 +11,17 @@ const emit = defineEmits<{
 
 const isDragging = ref(false);
 
-function onMouseDown(startEvent: MouseEvent) {
+function onMouseDown(startEvent: MouseEvent): void {
   isDragging.value = true;
   startEvent.preventDefault();
 
-  const onMouseMove = (moveEvent: MouseEvent) => {
+  const onMouseMove = (moveEvent: MouseEvent): void => {
     if (!isDragging.value) return;
     const delta = props.type === 'row' ? moveEvent.movementX : moveEvent.movementY;
     emit('resize', delta);
   };
 
-  const onMouseUp = () => {
+  const onMouseUp = (): void => {
     isDragging.value = false;
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
@@ -34,14 +34,14 @@ function onMouseDown(startEvent: MouseEvent) {
 
 <template>
   <div
-      class="splitter"
-      :class="`splitter--${type}`"
+      class="layout-splitter"
+      :class="`layout-splitter--${type}`"
       @mousedown.stop="onMouseDown"
   ></div>
 </template>
 
 <style scoped lang="scss">
-.splitter {
+.layout-splitter {
   flex-shrink: 0;
   background-color: var(--color-bg-primary);
   transition: background-color 0.2s;

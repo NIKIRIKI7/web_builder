@@ -1,8 +1,11 @@
 import { defineAsyncComponent, markRaw } from 'vue';
-import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
+
 import { ProductIcon } from '@/shared/ui/icons';
-import staticCss from './ProductGridWithFilters.scss?inline';
+
 import runtimeScript from './ProductGridWithFilters.script.js?raw';
+import staticCss from './ProductGridWithFilters.scss?inline';
+
+import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 
 const ID = 'product-grid-with-filters-v1';
 

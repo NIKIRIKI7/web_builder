@@ -1,6 +1,7 @@
-import type { ExportableComponent } from '../types';
 import { getComponentDefinition } from '@/entities/UiComponent/model/registry';
 import { stylesObjectToString } from '@/shared/lib/utils';
+
+import type { ExportableComponent } from '../types';
 
 function generateDynamicCss(components: ExportableComponent[]): { css: string, classMap: Map<number, string> } {
   const classMap = new Map<number, string>();

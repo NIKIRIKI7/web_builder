@@ -1,12 +1,14 @@
-import { computed, watchEffect, ref, type Ref } from 'vue';
+import { type ComputedRef, computed, type Ref, ref, watchEffect } from 'vue';
+
+import type { CanvasInstanceState, FullRenderedComponent } from '@/entities/Canvas/model/types';
+import { getCachedComponentDefinition, getComponentDefinition } from '@/entities/UiComponent/model/registry';
+
 import { useCanvasStore } from './canvasStore';
-import type { FullRenderedComponent, CanvasInstanceState } from '@/entities/Canvas/model/types';
-import { getComponentDefinition, getCachedComponentDefinition } from '@/entities/UiComponent/model/registry';
 
 async function processInstances(instances: CanvasInstanceState[]): Promise<FullRenderedComponent[]> {
   const definitionsToLoad = new Set<string>();
 
-  function findDefs(insts: CanvasInstanceState[]) {
+  function findDefs(insts: CanvasInstanceState[]): void {
     for (const instance of insts) {
       if (!getCachedComponentDefinition(instance.componentId)) {
         definitionsToLoad.add(instance.componentId);
@@ -21,9 +23,11 @@ async function processInstances(instances: CanvasInstanceState[]): Promise<FullR
 
   if (definitionsToLoad.size > 0) {
     await Promise.all(
-      [...definitionsToLoad].map(id => getComponentDefinition(id).catch(err => {
-        console.error(`Failed to load definition for component ID "${id}":`, err);
-      }))
+        [...definitionsToLoad].map((id) =>
+            getComponentDefinition(id).catch((err) => {
+              console.error(`Failed to load definition for component ID "${id}":`, err);
+            })
+        )
     );
   }
 
@@ -38,7 +42,7 @@ async function processInstances(instances: CanvasInstanceState[]): Promise<FullR
           props: instance.props,
           styles: instance.styles,
           scripts: instance.scripts || [],
-          children: instance.children ? await buildRenderedTree(instance.children) : [],
+          children: instance.children ? await buildRenderedTree(instance.children) : []
         };
         renderedList.push(renderedComponent);
       }
@@ -64,12 +68,21 @@ function findComponentInTree(tree: FullRenderedComponent[], instanceId: number):
   return null;
 }
 
-export function useCanvasState() {
+interface UseCanvasStateReturn {
+  renderedComponents: Ref<FullRenderedComponent[]>;
+  selectedComponent: ComputedRef<FullRenderedComponent | null>;
+  selectedComponentInstanceId: ComputedRef<number | null>;
+  isEditorOpen: ComputedRef<boolean>;
+}
+
+export function useCanvasState(): UseCanvasStateReturn {
   const store = useCanvasStore();
   const renderedComponents: Ref<FullRenderedComponent[]> = ref([]);
 
-  watchEffect(async () => {
-    renderedComponents.value = await processInstances(store.componentInstances);
+  watchEffect(() => {
+    void (async () => {
+      renderedComponents.value = await processInstances(store.componentInstances);
+    })();
   });
 
   const selectedComponent = computed((): FullRenderedComponent | null => {
@@ -83,6 +96,6 @@ export function useCanvasState() {
     renderedComponents,
     selectedComponent,
     selectedComponentInstanceId: computed(() => store.selectedComponentInstanceId),
-    isEditorOpen: computed(() => store.isEditorOpen),
+    isEditorOpen: computed(() => store.isEditorOpen)
   };
 }

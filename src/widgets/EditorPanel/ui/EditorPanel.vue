@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { ref, watch, shallowRef } from 'vue';
-import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
-import { useCanvasState } from '@/features/Canvas/model/useCanvasState';
+
+import { EDITOR_TARGET } from '@/entities/UiComponent/model/constants';
 import { getEditorConfig } from '@/entities/UiComponent/model/registry';
 import type { EditorConfiguration, EditorTarget } from '@/entities/UiComponent/model/types';
 import type { ComponentScript } from '@/features/Canvas/model/canvasStore';
-import { EDITOR_TARGET } from '@/entities/UiComponent/model/constants';
+import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
+import { useCanvasState } from '@/features/Canvas/model/useCanvasState';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
+import { SelectIcon, CloseIcon } from '@/shared/ui/icons';
+
 import EditorControl from './EditorControl.vue';
 import ScriptManager from './ScriptManager.vue';
-import { SelectIcon, CloseIcon } from '@/shared/ui/icons';
-import { useI18nManager } from '@/shared/i18n/useI18nManager';
 
 const { selectedComponent } = useCanvasState();
 const canvasManager = useCanvasManager();

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
+
+import TemplateCard from '@/entities/ProjectTemplate/ui/TemplateCard.vue';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 import { projectTemplates } from '@/shared/lib/project-templates';
-import TemplateCard from '@/entities/ProjectTemplate/ui/TemplateCard.vue';
 import { ArrowLeftIcon, ArrowRightIcon } from '@/shared/ui/icons';
+import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
 
 const modalStore = useModalStore();
 const { t } = useI18nManager();

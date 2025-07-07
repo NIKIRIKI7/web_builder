@@ -1,4 +1,5 @@
 import { useCanvasStore } from '../canvasStore';
+
 import type { CommandHandler } from './types';
 
 export const CloseEditorHandler: CommandHandler<object> = {

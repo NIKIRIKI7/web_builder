@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { LayoutNode, LayoutItem } from '../types';
+
 import { useLayoutStore } from '../layoutStore';
+
 import LayoutPanel from './LayoutPanel.vue';
-import Splitter from './Splitter.vue';
+import LayoutSplitter from './LayoutSplitter.vue';
+
+import type { LayoutItem, LayoutNode } from '../types';
+
 
 const props = defineProps<{
   node: LayoutNode;
@@ -12,19 +16,19 @@ const props = defineProps<{
 
 const layoutStore = useLayoutStore();
 
-function handleResize(child: LayoutItem, delta: number) {
+function handleResize(child: LayoutItem, delta: number): void {
   const newPath = [...(props.path || []), props.node.id, child.id];
   const totalSize = props.node.type === 'row' ? window.innerWidth : window.innerHeight;
   const relativeDelta = (delta / totalSize) * 100;
   layoutStore.resizePanel(newPath, relativeDelta);
 }
 
-const isDropTarget = computed(() => (childId: string, side: 'before' | 'after') => {
+const isDropTarget = computed(() => (childId: string, side: 'before' | 'after'): boolean => {
   if (!layoutStore.dropTarget || !layoutStore.draggedPanelId) return false;
   return layoutStore.dropTarget.panelId === childId && layoutStore.dropTarget.side === side;
 });
 
-const shouldShowSplitter = (index: number) => {
+const shouldShowSplitter = (index: number): boolean => {
   if (!layoutStore.isEditMode || index >= props.node.children.length - 1) return false;
 
   const currentChild = props.node.children[index];
@@ -39,19 +43,19 @@ const shouldShowSplitter = (index: number) => {
 
 <template>
   <div
-    class="layout-manager"
-    :class="`layout-manager--${node.type}`"
+      class="layout-manager"
+      :class="`layout-manager--${node.type}`"
   >
     <template v-for="(child, index) in node.children" :key="child.id">
       <div
-        v-if="isDropTarget(child.id, 'before')"
-        class="layout-manager__placeholder"
-        :class="`layout-manager__placeholder--${node.type}`"
+          v-if="isDropTarget(child.id, 'before')"
+          class="layout-manager__placeholder"
+          :class="`layout-manager__placeholder--${node.type}`"
       />
 
       <div
-        class="layout-manager__child"
-        :style="{ flexBasis: `${child.size}%` }"
+          class="layout-manager__child"
+          :style="{ flexBasis: `${child.size}%` }"
       >
         <template v-if="child.type === 'panel'">
           <LayoutPanel :panel="child" :parent-type="node.type" />
@@ -62,15 +66,15 @@ const shouldShowSplitter = (index: number) => {
       </div>
 
       <div
-        v-if="isDropTarget(child.id, 'after')"
-        class="layout-manager__placeholder"
-        :class="`layout-manager__placeholder--${node.type}`"
+          v-if="isDropTarget(child.id, 'after')"
+          class="layout-manager__placeholder"
+          :class="`layout-manager__placeholder--${node.type}`"
       />
 
-      <Splitter
-        v-if="shouldShowSplitter(index)"
-        :type="node.type"
-        @resize="handleResize(child, $event)"
+      <LayoutSplitter
+          v-if="shouldShowSplitter(index)"
+          :type="node.type"
+          @resize="handleResize(child, $event)"
       />
     </template>
   </div>

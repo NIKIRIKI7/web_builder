@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useCanvasState } from '@/features/Canvas/model/useCanvasState';
-import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
-import { DND_COMPONENT_ID_KEY } from '@/shared/lib/dnd/keys';
-import { useI18nManager } from '@/shared/i18n/useI18nManager';
+
 import type { FullRenderedComponent, CanvasInstanceState } from '@/features/Canvas/model/canvasStore';
+import { useCanvasManager } from '@/features/Canvas/model/useCanvasManager';
+import { useCanvasState } from '@/features/Canvas/model/useCanvasState';
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
+import { DND_COMPONENT_ID_KEY } from '@/shared/lib/dnd/keys';
+
 import CanvasNode from './CanvasNode.vue';
 
 const canvasState = useCanvasState();

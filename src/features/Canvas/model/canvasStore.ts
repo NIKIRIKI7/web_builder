@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+
 import type { CanvasState, CanvasInstanceState, ComponentScript, FullRenderedComponent } from '@/entities/Canvas/model/types';
 
 export type { CanvasState, CanvasInstanceState, ComponentScript, FullRenderedComponent };

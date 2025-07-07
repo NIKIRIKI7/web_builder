@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { klona } from 'klona/lite';
+import { computed } from 'vue';
+
 import type { ComponentScript } from '@/entities/Canvas/model/types';
 import { actionRegistry, actionRegistryMap } from '@/features/ScriptActions/model/registry';
-import EditorControl from './EditorControl.vue';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 import { DeleteIcon, AddIcon } from '@/shared/ui/icons';
+
+import EditorControl from './EditorControl.vue';
 
 defineProps<{
   scripts: ComponentScript[] | undefined;

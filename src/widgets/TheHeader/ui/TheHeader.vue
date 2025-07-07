@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { useCanvasState } from '@/features/Canvas/model/useCanvasState';
+
 import type { FullRenderedComponent } from '@/entities/Canvas/model/types';
+import { useCanvasState } from '@/features/Canvas/model/useCanvasState';
 import { exportPage } from '@/features/ExportManager/model';
 import { HtmlExportStrategy } from '@/features/ExportManager/model/strategies/HtmlExportStrategy';
 import type { ExportableComponent } from '@/features/ExportManager/model/types';
-import { useThemeManager } from '@/shared/theme/useThemeManager';
-import { themeOptions } from '@/shared/theme/defaults';
-import type { Theme } from '@/shared/theme/types';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
 import { useLayoutStore } from '@/shared/layout/layoutStore';
 import { usePreviewStore } from '@/shared/preview/previewStore';
+import { themeOptions } from '@/shared/theme/defaults';
+import type { Theme } from '@/shared/theme/types';
+import { useThemeManager } from '@/shared/theme/useThemeManager';
 import DropdownMenu from '@/shared/ui/DropdownMenu/DropdownMenu.vue';
 import {
   DesktopIcon,

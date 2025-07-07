@@ -1,11 +1,13 @@
 import { createApp } from 'vue';
-import { router } from './providers/router';
-import { pinia } from './providers/pinia';
-import { i18n } from '@/shared/i18n';
-import App from './App.vue';
-import './styles/style.scss';
+
 import { initializeCommandHandlers } from '@/features/Canvas/model/commands';
+import { i18n } from '@/shared/i18n';
 import '@/widgets/EditorPanel/ui/controls';
+
+import App from './App.vue';
+import { pinia } from './providers/pinia';
+import { router } from './providers/router';
+import './styles/style.scss';
 
 initializeCommandHandlers();
 

@@ -1,6 +1,7 @@
+import Fuse from 'fuse.js';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
-import Fuse from 'fuse.js';
+
 import { libraryPreviews } from '@/entities/UiComponent/model/registry';
 import type { UiComponentPreview } from '@/entities/UiComponent/model/types';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';

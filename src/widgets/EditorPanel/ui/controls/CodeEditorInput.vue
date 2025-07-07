@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { Codemirror } from 'vue-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { oneDark } from '@codemirror/theme-one-dark';
+import { Codemirror } from 'vue-codemirror';
+
 import { debounce } from '@/shared/lib/utils';
 
 defineProps<{ modelValue: string }>();

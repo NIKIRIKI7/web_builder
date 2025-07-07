@@ -1,18 +1,18 @@
-import { registerCommandHandler } from './commandBus';
-import { AddComponentHandler } from './AddComponentHandler';
 import { AddComponentAtHandler } from './AddComponentAtHandler';
-import { UpdatePropsHandler } from './UpdatePropsHandler';
-import { UpdateStylesHandler } from './UpdateStylesHandler';
-import { DeleteComponentHandler } from './DeleteComponentHandler';
-import { CloneComponentHandler } from './CloneComponentHandler';
-import { SelectComponentHandler } from './SelectComponentHandler';
-import { CloseEditorHandler } from './CloseEditorHandler';
+import { AddComponentHandler } from './AddComponentHandler';
 import { AddScriptHandler } from './AddScriptHandler';
-import { UpdateScriptHandler } from './UpdateScriptHandler';
+import { CloneComponentHandler } from './CloneComponentHandler';
+import { CloseEditorHandler } from './CloseEditorHandler';
+import { registerCommandHandler } from './commandBus';
+import { DeleteComponentHandler } from './DeleteComponentHandler';
 import { DeleteScriptHandler } from './DeleteScriptHandler';
+import { SelectComponentHandler } from './SelectComponentHandler';
 import { SetComponentOrderHandler } from './SetComponentOrderHandler';
+import { UpdatePropsHandler } from './UpdatePropsHandler';
+import { UpdateScriptHandler } from './UpdateScriptHandler';
+import { UpdateStylesHandler } from './UpdateStylesHandler';
 
-export function initializeCommandHandlers() {
+export function initializeCommandHandlers(): void {
   registerCommandHandler('ADD_COMPONENT', AddComponentHandler);
   registerCommandHandler('ADD_COMPONENT_AT', AddComponentAtHandler);
   registerCommandHandler('UPDATE_PROPS', UpdatePropsHandler);

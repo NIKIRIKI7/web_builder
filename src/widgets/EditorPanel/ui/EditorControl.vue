@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+
 import type { EditorField } from '@/entities/UiComponent/model/types';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
+
 import { controlRegistry } from '../model/controlRegistry';
 
 interface Props {

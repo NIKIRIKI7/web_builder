@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import type { Project } from '../model/types';
+
+import { useI18nManager } from '@/shared/i18n/useI18nManager';
 import { useClickOutside } from '@/shared/lib/hooks/useClickOutside';
 import { EditIcon, MoreHorizontalIcon, DeleteIcon } from '@/shared/ui/icons';
-import { useI18nManager } from '@/shared/i18n/useI18nManager';
+
+import type { Project } from '../model/types';
 
 const props = defineProps<{
   project: Project;

@@ -1,4 +1,4 @@
-export function downloadFile(filename: string, content: string, mimeType: string = 'text/html') {
+export function downloadFile(filename: string, content: string, mimeType = 'text/html'): void {
   const element = document.createElement('a');
   element.setAttribute('href', `data:${mimeType};charset=utf-8,` + encodeURIComponent(content));
   element.setAttribute('download', filename);

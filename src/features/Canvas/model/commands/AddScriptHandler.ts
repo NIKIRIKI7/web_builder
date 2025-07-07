@@ -1,4 +1,5 @@
 import { useCanvasStore, type ComponentScript } from '../canvasStore';
+
 import type { CommandHandler } from './types';
 
 interface AddScriptPayload {

@@ -1,5 +1,6 @@
-import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from './types';
 import { allPreviews, configLoaders } from '..';
+
+import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from './types';
 
 export const libraryPreviews: UiComponentPreview[] = allPreviews;
 

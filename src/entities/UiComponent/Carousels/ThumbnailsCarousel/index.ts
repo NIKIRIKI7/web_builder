@@ -1,8 +1,11 @@
 import { defineAsyncComponent, markRaw } from 'vue';
-import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
+
 import { CarouselIcon } from '@/shared/ui/icons';
-import staticCss from './ThumbnailsCarousel.scss?inline';
+
 import runtimeScript from './ThumbnailsCarousel.script.js?raw';
+import staticCss from './ThumbnailsCarousel.scss?inline';
+
+import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 
 const ID = 'thumbnails-carousel-v1';
 

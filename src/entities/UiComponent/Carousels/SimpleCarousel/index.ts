@@ -1,8 +1,11 @@
 import { defineAsyncComponent, markRaw } from 'vue';
-import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
+
 import { CarouselIcon } from '@/shared/ui/icons';
-import staticCss from './SimpleCarousel.scss?inline';
+
 import runtimeScript from './SimpleCarousel.script.js?raw';
+import staticCss from './SimpleCarousel.scss?inline';
+
+import type { UiComponentDefinition, UiComponentPreview, EditorConfiguration } from '../../model/types';
 
 const ID = 'simple-carousel-v1';
 

@@ -1,68 +1,103 @@
 import js from '@eslint/js';
-import ts from 'typescript-eslint';
-import pluginVue from 'eslint-plugin-vue';
 import eslintConfigPrettier from 'eslint-config-prettier';
-import vueParser from 'vue-eslint-parser';
+import pluginImport from 'eslint-plugin-import';
+import pluginVue from 'eslint-plugin-vue';
 import globals from 'globals';
+import ts from 'typescript-eslint';
+import vueParser from 'vue-eslint-parser';
 
 export default ts.config(
     js.configs.recommended,
-    ...ts.configs.recommended,
-    ...pluginVue.configs['flat/recommended'],
+    ...ts.configs.recommendedTypeChecked,
+    ...pluginVue.configs['flat/strongly-recommended'],
 
     {
         languageOptions: {
             globals: {
                 ...globals.browser,
                 ...globals.node,
-                ...globals.es2021,
+                ...globals.es2021
             },
             parser: vueParser,
             parserOptions: {
                 parser: ts.parser,
+                project: ['./tsconfig.app.json', './tsconfig.node.json'],
+                tsconfigRootDir: import.meta.dirname,
                 sourceType: 'module',
                 ecmaVersion: 'latest',
-                extraFileExtensions: ['.vue'],
-            },
+                extraFileExtensions: ['.vue']
+            }
+        },
+
+        plugins: {
+            import: pluginImport
         },
 
         settings: {
             'import/resolver': {
-                typescript: true,
-                node: true,
-            },
+                typescript: {
+                    project: ['./tsconfig.app.json', './tsconfig.node.json']
+                },
+                node: true
+            }
         },
 
         rules: {
-            'quotes': ['error', 'single'],
-            'semi': ['error', 'always'],
-            'indent': ['error', 2, { SwitchCase: 1 }],
-            'no-console': ['warn', { allow: ['warn', 'error'] }],
-            'no-debugger': 'warn',
-            'no-unused-vars': 'error',
-
-            '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', ignoreRestSiblings: true }],
-            '@typescript-eslint/no-explicit-any': 'warn',
-
+            quotes: ['error', 'single', { avoidEscape: true }],
+            semi: ['error', 'always'],
+            indent: 'off',
+            'no-console': ['error', { allow: ['warn', 'error'] }],
+            'no-debugger': 'error',
+            eqeqeq: ['error', 'always'],
+            '@typescript-eslint/no-unused-vars': [
+                'error',
+                { argsIgnorePattern: '^_', varsIgnorePattern: '^_', ignoreRestSiblings: true }
+            ],
+            '@typescript-eslint/no-explicit-any': 'error',
+            '@typescript-eslint/explicit-module-boundary-types': 'error',
+            '@typescript-eslint/no-floating-promises': 'error',
+            '@typescript-eslint/no-misused-promises': 'error',
+            '@typescript-eslint/consistent-type-imports': 'error',
             'vue/html-indent': ['error', 2],
-            'vue/multi-word-component-names': 'off',
-            'vue/max-attributes-per-line': ['warn', { singleline: { max: 3 }, multiline: { max: 1 } }],
+            'vue/multi-word-component-names': 'error',
+            'vue/max-attributes-per-line': 'off',
             'vue/component-name-in-template-casing': ['error', 'PascalCase'],
             'vue/define-props-declaration': ['error', 'type-based'],
             'vue/define-emits-declaration': ['error', 'type-literal'],
-            'vue/no-v-html': 'off',
-            'vue/require-toggle-inside-transition': 'off',
-        },
+            'vue/no-v-html': 'warn',
+            'vue/require-toggle-inside-transition': 'error',
+            'vue/no-mutating-props': 'error',
+            'vue/attribute-hyphenation': ['error', 'always'],
+            'vue/v-on-event-hyphenation': ['error', 'always', { autofix: true }],
+            'import/order': [
+                'error',
+                {
+                    groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'],
+                    pathGroups: [
+                        {
+                            pattern: '@/**',
+                            group: 'internal',
+                            position: 'after'
+                        }
+                    ],
+                    'newlines-between': 'always',
+                    alphabetize: { order: 'asc', caseInsensitive: true }
+                }
+            ],
+            'import/no-unresolved': 'error'
+        }
     },
 
     eslintConfigPrettier,
 
     {
-        ignores: [
-            'dist/',
-            'node_modules/',
-            '.tmp/',
-            '**/*.d.ts',
-        ],
+        files: ['**/*.d.ts'],
+        rules: {
+            '@typescript-eslint/no-unused-vars': 'off'
+        }
+    },
+
+    {
+        ignores: ['dist/', 'node_modules/', '.tmp/', 'coverage/', '.vscode/', '.idea/', '**/*.script.js']
     }
 );

@@ -1,46 +1,66 @@
-// Headers
-import { simpleHeaderPreview } from './Headers/SimpleHeader';
-import { simpleFooterPreview } from './Footers/SimpleFooter';
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 
-// Хедеры
-import { headerCenteredPreview } from './Headers/HeaderCentered';
-import { headerWithSearchPreview } from './Headers/HeaderWithSearch';
-import { headerTransparentPreview } from './Headers/HeaderTransparent';
-import { headerMegaMenuPreview } from './Headers/HeaderMegaMenu';
-
-// Футеры
-import { footerWithSocialsPreview } from './Footers/FooterWithSocials';
-import { footerDetailedPreview } from './Footers/FooterDetailed';
-import { footerWithNewsletterPreview } from './Footers/FooterWithNewsletter';
-import { footerMinimalistPreview } from './Footers/FooterMinimalist';
-
-// Контент
+import { cardCarouselPreview } from './Carousels/CardCarousel';
+import { fullwidthCarouselPreview } from './Carousels/FullwidthCarousel';
+import { simpleCarouselPreview } from './Carousels/SimpleCarousel';
+import { testimonialsCarouselPreview } from './Carousels/TestimonialsCarousel';
+import { thumbnailsCarouselPreview } from './Carousels/ThumbnailsCarousel';
 import { imageTextSplitPreview } from './Content/ImageTextSplit';
 import { imageTextSplitReversedPreview } from './Content/ImageTextSplitReversed';
-import { textThenImagePreview } from './Content/TextThenImage';
 import { imageWithTextOverlayPreview } from './Content/ImageWithTextOverlay';
+import { textThenImagePreview } from './Content/TextThenImage';
 import { textWithSideImagePreview } from './Content/TextWithSideImage';
-
-// Карусели
-import { simpleCarouselPreview } from './Carousels/SimpleCarousel';
-import { thumbnailsCarouselPreview } from './Carousels/ThumbnailsCarousel';
-import { fullwidthCarouselPreview } from './Carousels/FullwidthCarousel';
-import { testimonialsCarouselPreview } from './Carousels/TestimonialsCarousel';
-import { cardCarouselPreview } from './Carousels/CardCarousel';
-
-// Heros
-import { ecommerceHeroPreview } from './Heros/EcommerceHero';
-import { centeredHeroPreview } from './Heros/CenteredHero';
-import { videoBackgroundHeroPreview } from './Heros/VideoBackgroundHero';
-import { heroWithFormPreview } from './Heros/HeroWithForm';
+import { footerDetailedPreview } from './Footers/FooterDetailed';
+import { footerMinimalistPreview } from './Footers/FooterMinimalist';
+import { footerWithNewsletterPreview } from './Footers/FooterWithNewsletter';
+import { footerWithSocialsPreview } from './Footers/FooterWithSocials';
+import { simpleFooterPreview } from './Footers/SimpleFooter';
+import { headerCenteredPreview } from './Headers/HeaderCentered';
+import { headerMegaMenuPreview } from './Headers/HeaderMegaMenu';
+import { headerTransparentPreview } from './Headers/HeaderTransparent';
+import { headerWithSearchPreview } from './Headers/HeaderWithSearch';
+import { simpleHeaderPreview } from './Headers/SimpleHeader';
 import { appShowcaseHeroPreview } from './Heros/AppShowcaseHero';
-
-// Товары
+import { centeredHeroPreview } from './Heros/CenteredHero';
+import { ecommerceHeroPreview } from './Heros/EcommerceHero';
+import { heroWithFormPreview } from './Heros/HeroWithForm';
+import { videoBackgroundHeroPreview } from './Heros/VideoBackgroundHero';
 import { featuredProductsGridPreview } from './Products/FeaturedProductsGrid';
 import { horizontalProductCardPreview } from './Products/HorizontalProductCard';
 import { productCardWithActionsPreview } from './Products/ProductCardWithActions';
 import { productGridWithFiltersPreview } from './Products/ProductGridWithFilters';
 import { salesGridPreview } from './Products/SalesGrid';
+
+type AppShowcaseHeroModule = typeof import('./Heros/AppShowcaseHero');
+type CardCarouselModule = typeof import('./Carousels/CardCarousel');
+type CenteredHeroModule = typeof import('./Heros/CenteredHero');
+type EcommerceHeroModule = typeof import('./Heros/EcommerceHero');
+type FeaturedProductsGridModule = typeof import('./Products/FeaturedProductsGrid');
+type FooterDetailedModule = typeof import('./Footers/FooterDetailed');
+type FooterMinimalistModule = typeof import('./Footers/FooterMinimalist');
+type FooterWithNewsletterModule = typeof import('./Footers/FooterWithNewsletter');
+type FooterWithSocialsModule = typeof import('./Footers/FooterWithSocials');
+type FullwidthCarouselModule = typeof import('./Carousels/FullwidthCarousel');
+type HeaderCenteredModule = typeof import('./Headers/HeaderCentered');
+type HeaderMegaMenuModule = typeof import('./Headers/HeaderMegaMenu');
+type HeaderTransparentModule = typeof import('./Headers/HeaderTransparent');
+type HeaderWithSearchModule = typeof import('./Headers/HeaderWithSearch');
+type HeroWithFormModule = typeof import('./Heros/HeroWithForm');
+type HorizontalProductCardModule = typeof import('./Products/HorizontalProductCard');
+type ImageTextSplitModule = typeof import('./Content/ImageTextSplit');
+type ImageTextSplitReversedModule = typeof import('./Content/ImageTextSplitReversed');
+type ImageWithTextOverlayModule = typeof import('./Content/ImageWithTextOverlay');
+type ProductCardWithActionsModule = typeof import('./Products/ProductCardWithActions');
+type ProductGridWithFiltersModule = typeof import('./Products/ProductGridWithFilters');
+type SalesGridModule = typeof import('./Products/SalesGrid');
+type SimpleCarouselModule = typeof import('./Carousels/SimpleCarousel');
+type SimpleFooterModule = typeof import('./Footers/SimpleFooter');
+type SimpleHeaderModule = typeof import('./Headers/SimpleHeader');
+type TestimonialsCarouselModule = typeof import('./Carousels/TestimonialsCarousel');
+type TextThenImageModule = typeof import('./Content/TextThenImage');
+type TextWithSideImageModule = typeof import('./Content/TextWithSideImage');
+type ThumbnailsCarouselModule = typeof import('./Carousels/ThumbnailsCarousel');
+type VideoBackgroundHeroModule = typeof import('./Heros/VideoBackgroundHero');
 
 export const allPreviews = [
   simpleHeaderPreview,
@@ -72,43 +92,38 @@ export const allPreviews = [
   footerWithSocialsPreview,
   footerDetailedPreview,
   footerWithNewsletterPreview,
-  footerMinimalistPreview,
+  footerMinimalistPreview
 ];
 
 export const configLoaders = {
-  [simpleHeaderPreview.id]: () => import('./Headers/SimpleHeader'),
-  [headerCenteredPreview.id]: () => import('./Headers/HeaderCentered'),
-  [headerWithSearchPreview.id]: () => import('./Headers/HeaderWithSearch'),
-  [headerTransparentPreview.id]: () => import('./Headers/HeaderTransparent'),
-  [headerMegaMenuPreview.id]: () => import('./Headers/HeaderMegaMenu'),
-
-  [ecommerceHeroPreview.id]: () => import('./Heros/EcommerceHero'),
-  [centeredHeroPreview.id]: () => import('./Heros/CenteredHero'),
-  [videoBackgroundHeroPreview.id]: () => import('./Heros/VideoBackgroundHero'),
-  [heroWithFormPreview.id]: () => import('./Heros/HeroWithForm'),
-  [appShowcaseHeroPreview.id]: () => import('./Heros/AppShowcaseHero'),
-
-  [featuredProductsGridPreview.id]: () => import('./Products/FeaturedProductsGrid'),
-  [horizontalProductCardPreview.id]: () => import('./Products/HorizontalProductCard'),
-  [productCardWithActionsPreview.id]: () => import('./Products/ProductCardWithActions'),
-  [productGridWithFiltersPreview.id]: () => import('./Products/ProductGridWithFilters'),
-  [salesGridPreview.id]: () => import('./Products/SalesGrid'),
-
-  [imageTextSplitPreview.id]: () => import('./Content/ImageTextSplit'),
-  [imageTextSplitReversedPreview.id]: () => import('./Content/ImageTextSplitReversed'),
-  [textThenImagePreview.id]: () => import('./Content/TextThenImage'),
-  [imageWithTextOverlayPreview.id]: () => import('./Content/ImageWithTextOverlay'),
-  [textWithSideImagePreview.id]: () => import('./Content/TextWithSideImage'),
-
-  [simpleCarouselPreview.id]: () => import('./Carousels/SimpleCarousel'),
-  [thumbnailsCarouselPreview.id]: () => import('./Carousels/ThumbnailsCarousel'),
-  [fullwidthCarouselPreview.id]: () => import('./Carousels/FullwidthCarousel'),
-  [testimonialsCarouselPreview.id]: () => import('./Carousels/TestimonialsCarousel'),
-  [cardCarouselPreview.id]: () => import('./Carousels/CardCarousel'),
-
-  [simpleFooterPreview.id]: () => import('./Footers/SimpleFooter'),
-  [footerWithSocialsPreview.id]: () => import('./Footers/FooterWithSocials'),
-  [footerDetailedPreview.id]: () => import('./Footers/FooterDetailed'),
-  [footerWithNewsletterPreview.id]: () => import('./Footers/FooterWithNewsletter'),
-  [footerMinimalistPreview.id]: () => import('./Footers/FooterMinimalist'),
+  [simpleHeaderPreview.id]: (): Promise<SimpleHeaderModule> => import('./Headers/SimpleHeader'),
+  [headerCenteredPreview.id]: (): Promise<HeaderCenteredModule> => import('./Headers/HeaderCentered'),
+  [headerWithSearchPreview.id]: (): Promise<HeaderWithSearchModule> => import('./Headers/HeaderWithSearch'),
+  [headerTransparentPreview.id]: (): Promise<HeaderTransparentModule> => import('./Headers/HeaderTransparent'),
+  [headerMegaMenuPreview.id]: (): Promise<HeaderMegaMenuModule> => import('./Headers/HeaderMegaMenu'),
+  [ecommerceHeroPreview.id]: (): Promise<EcommerceHeroModule> => import('./Heros/EcommerceHero'),
+  [centeredHeroPreview.id]: (): Promise<CenteredHeroModule> => import('./Heros/CenteredHero'),
+  [videoBackgroundHeroPreview.id]: (): Promise<VideoBackgroundHeroModule> => import('./Heros/VideoBackgroundHero'),
+  [heroWithFormPreview.id]: (): Promise<HeroWithFormModule> => import('./Heros/HeroWithForm'),
+  [appShowcaseHeroPreview.id]: (): Promise<AppShowcaseHeroModule> => import('./Heros/AppShowcaseHero'),
+  [featuredProductsGridPreview.id]: (): Promise<FeaturedProductsGridModule> => import('./Products/FeaturedProductsGrid'),
+  [horizontalProductCardPreview.id]: (): Promise<HorizontalProductCardModule> => import('./Products/HorizontalProductCard'),
+  [productCardWithActionsPreview.id]: (): Promise<ProductCardWithActionsModule> => import('./Products/ProductCardWithActions'),
+  [productGridWithFiltersPreview.id]: (): Promise<ProductGridWithFiltersModule> => import('./Products/ProductGridWithFilters'),
+  [salesGridPreview.id]: (): Promise<SalesGridModule> => import('./Products/SalesGrid'),
+  [imageTextSplitPreview.id]: (): Promise<ImageTextSplitModule> => import('./Content/ImageTextSplit'),
+  [imageTextSplitReversedPreview.id]: (): Promise<ImageTextSplitReversedModule> => import('./Content/ImageTextSplitReversed'),
+  [textThenImagePreview.id]: (): Promise<TextThenImageModule> => import('./Content/TextThenImage'),
+  [imageWithTextOverlayPreview.id]: (): Promise<ImageWithTextOverlayModule> => import('./Content/ImageWithTextOverlay'),
+  [textWithSideImagePreview.id]: (): Promise<TextWithSideImageModule> => import('./Content/TextWithSideImage'),
+  [simpleCarouselPreview.id]: (): Promise<SimpleCarouselModule> => import('./Carousels/SimpleCarousel'),
+  [thumbnailsCarouselPreview.id]: (): Promise<ThumbnailsCarouselModule> => import('./Carousels/ThumbnailsCarousel'),
+  [fullwidthCarouselPreview.id]: (): Promise<FullwidthCarouselModule> => import('./Carousels/FullwidthCarousel'),
+  [testimonialsCarouselPreview.id]: (): Promise<TestimonialsCarouselModule> => import('./Carousels/TestimonialsCarousel'),
+  [cardCarouselPreview.id]: (): Promise<CardCarouselModule> => import('./Carousels/CardCarousel'),
+  [simpleFooterPreview.id]: (): Promise<SimpleFooterModule> => import('./Footers/SimpleFooter'),
+  [footerWithSocialsPreview.id]: (): Promise<FooterWithSocialsModule> => import('./Footers/FooterWithSocials'),
+  [footerDetailedPreview.id]: (): Promise<FooterDetailedModule> => import('./Footers/FooterDetailed'),
+  [footerWithNewsletterPreview.id]: (): Promise<FooterWithNewsletterModule> => import('./Footers/FooterWithNewsletter'),
+  [footerMinimalistPreview.id]: (): Promise<FooterMinimalistModule> => import('./Footers/FooterMinimalist')
 };
