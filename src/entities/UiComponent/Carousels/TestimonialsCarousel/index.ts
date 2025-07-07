@@ -20,9 +20,9 @@ export const testimonialsCarouselDefinition: UiComponentDefinition = {
   runtimeScript,
   defaultProps: {
     testimonials: [
-      { id: 1, avatarUrl: 'https://source.unsplash.com/random/100x100?person,woman', quote: 'This product has completely changed the way we work. It\'s intuitive, powerful, and the support is outstanding.', authorName: 'Jane Doe', authorTitle: 'CEO, Innovate Inc.' },
-      { id: 2, avatarUrl: 'https://source.unsplash.com/random/100x100?person,man', quote: 'A fantastic tool that streamlined our entire workflow. I can\'t imagine going back to the old way.', authorName: 'John Smith', authorTitle: 'Project Manager, Tech Solutions' },
-      { id: 3, avatarUrl: 'https://source.unsplash.com/random/100x100?person,professional', quote: 'The best investment we\'ve made this year. The ROI was almost immediate. Highly recommended!', authorName: 'Emily White', authorTitle: 'Marketing Director, Growth Co.' },
+      { id: 1, avatarUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', quote: 'This product has completely changed the way we work. It\'s intuitive, powerful, and the support is outstanding.', authorName: 'Jane Doe', authorTitle: 'CEO, Innovate Inc.' },
+      { id: 2, avatarUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', quote: 'A fantastic tool that streamlined our entire workflow. I can\'t imagine going back to the old way.', authorName: 'John Smith', authorTitle: 'Project Manager, Tech Solutions' },
+      { id: 3, avatarUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', quote: 'The best investment we\'ve made this year. The ROI was almost immediate. Highly recommended!', authorName: 'Emily White', authorTitle: 'Marketing Director, Growth Co.' },
     ],
   },
   defaultStyles: {

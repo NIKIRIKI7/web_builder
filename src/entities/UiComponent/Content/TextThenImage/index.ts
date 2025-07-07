@@ -19,7 +19,7 @@ export const textThenImageDefinition: UiComponentDefinition = {
   defaultProps: {
     title: 'Designed for Impact',
     text: 'We believe in clean aesthetics and powerful functionality. Our design philosophy centers around user experience, ensuring that every interaction is both beautiful and intuitive.',
-    imageUrl: 'https://source.unsplash.com/random/1200x600?architecture,minimal',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s',
   },
   defaultStyles: {
     backgroundColor: '#ffffff',

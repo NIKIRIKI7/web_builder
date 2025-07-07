@@ -20,10 +20,10 @@ export const thumbnailsCarouselDefinition: UiComponentDefinition = {
   runtimeScript,
   defaultProps: {
     slides: [
-      { id: 1, imageUrl: 'https://source.unsplash.com/random/800x450?product,watch', altText: 'Watch' },
-      { id: 2, imageUrl: 'https://source.unsplash.com/random/800x450?product,shoes', altText: 'Shoes' },
-      { id: 3, imageUrl: 'https://source.unsplash.com/random/800x450?product,camera', altText: 'Camera' },
-      { id: 4, imageUrl: 'https://source.unsplash.com/random/800x450?product,headphone', altText: 'Headphone' },
+      { id: 1, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', altText: 'Watch' },
+      { id: 2, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', altText: 'Shoes' },
+      { id: 3, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', altText: 'Camera' },
+      { id: 4, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', altText: 'Headphone' },
     ],
   },
   defaultStyles: {

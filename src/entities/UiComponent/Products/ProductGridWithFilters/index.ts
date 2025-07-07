@@ -27,12 +27,12 @@ export const productGridWithFiltersDefinition: UiComponentDefinition = {
       { key: 'accessories', label: 'Accessories' },
     ],
     products: [
-      { id: 1, imageUrl: 'https://source.unsplash.com/random/400x400?product,laptop', name: 'Laptop Pro', price: 1499, category: 'tech' },
-      { id: 2, imageUrl: 'https://source.unsplash.com/random/400x400?product,tshirt', name: 'Classic T-Shirt', price: 25, category: 'apparel' },
-      { id: 3, imageUrl: 'https://source.unsplash.com/random/400x400?product,mouse', name: 'Gaming Mouse', price: 89, category: 'tech' },
-      { id: 4, imageUrl: 'https://source.unsplash.com/random/400x400?product,sunglasses', name: 'Aviator Sunglasses', price: 120, category: 'accessories' },
-      { id: 5, imageUrl: 'https://source.unsplash.com/random/400x400?product,hoodie', name: 'Cozy Hoodie', price: 65, category: 'apparel' },
-      { id: 6, imageUrl: 'https://source.unsplash.com/random/400x400?product,watch', name: 'Smart Watch', price: 299, category: 'accessories' },
+      { id: 1, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', name: 'Laptop Pro', price: 1499, category: 'tech' },
+      { id: 2, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', name: 'Classic T-Shirt', price: 25, category: 'apparel' },
+      { id: 3, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', name: 'Gaming Mouse', price: 89, category: 'tech' },
+      { id: 4, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', name: 'Aviator Sunglasses', price: 120, category: 'accessories' },
+      { id: 5, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', name: 'Cozy Hoodie', price: 65, category: 'apparel' },
+      { id: 6, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', name: 'Smart Watch', price: 299, category: 'accessories' },
     ],
   },
   defaultStyles: {

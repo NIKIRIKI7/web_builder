@@ -21,9 +21,9 @@ export const simpleCarouselDefinition: UiComponentDefinition = {
   defaultProps: {
     height: '400px',
     slides: [
-      { id: 1, imageUrl: 'https://source.unsplash.com/random/1200x400?landscape,nature', altText: 'Nature Landscape' },
-      { id: 2, imageUrl: 'https://source.unsplash.com/random/1200x400?landscape,city', altText: 'City Landscape' },
-      { id: 3, imageUrl: 'https://source.unsplash.com/random/1200x400?landscape,ocean', altText: 'Ocean Landscape' },
+      { id: 1, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', altText: 'Nature Landscape' },
+      { id: 2, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', altText: 'City Landscape' },
+      { id: 3, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', altText: 'Ocean Landscape' },
     ],
   },
   defaultStyles: {

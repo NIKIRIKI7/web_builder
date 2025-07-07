@@ -19,7 +19,7 @@ export const imageTextSplitReversedDefinition: UiComponentDefinition = {
   defaultProps: {
     title: 'Streamline Your Workflow',
     text: 'Embrace efficiency with our intuitive tools. We help you automate repetitive tasks, allowing you to focus on what truly matters for your business growth.',
-    imageUrl: 'https://source.unsplash.com/random/800x600?technology,desk',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s',
     ctaText: 'Get Started',
     ctaUrl: '#',
   },

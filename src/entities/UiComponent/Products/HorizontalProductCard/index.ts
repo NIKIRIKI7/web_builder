@@ -17,7 +17,7 @@ export const horizontalProductCardDefinition: UiComponentDefinition = {
   component: markRaw(defineAsyncComponent(() => import('./HorizontalProductCard.vue'))),
   staticCss,
   defaultProps: {
-    imageUrl: 'https://source.unsplash.com/random/400x400?product,laptop',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s',
     category: 'Electronics',
     name: 'UltraBook Pro X1',
     description: 'The new generation of performance in a sleek, lightweight package. Perfect for professionals on the go.',

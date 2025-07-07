@@ -20,9 +20,9 @@ export const fullwidthCarouselDefinition: UiComponentDefinition = {
   runtimeScript,
   defaultProps: {
     slides: [
-      { id: 1, imageUrl: 'https://source.unsplash.com/random/1920x1080?business', title: 'Empowering Your Business', subtitle: 'Innovative solutions for the modern enterprise.', ctaText: 'Discover More', ctaUrl: '#' },
-      { id: 2, imageUrl: 'https://source.unsplash.com/random/1920x1080?technology', title: 'The Future of Tech', subtitle: 'Experience the next generation of technology today.', ctaText: 'Learn How', ctaUrl: '#' },
-      { id: 3, imageUrl: 'https://source.unsplash.com/random/1920x1080?creative', title: 'Unleash Creativity', subtitle: 'Tools that inspire and empower your creative process.', ctaText: 'Get Started', ctaUrl: '#' },
+      { id: 1, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', title: 'Empowering Your Business', subtitle: 'Innovative solutions for the modern enterprise.', ctaText: 'Discover More', ctaUrl: '#' },
+      { id: 2, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', title: 'The Future of Tech', subtitle: 'Experience the next generation of technology today.', ctaText: 'Learn How', ctaUrl: '#' },
+      { id: 3, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', title: 'Unleash Creativity', subtitle: 'Tools that inspire and empower your creative process.', ctaText: 'Get Started', ctaUrl: '#' },
     ],
   },
   defaultStyles: {},

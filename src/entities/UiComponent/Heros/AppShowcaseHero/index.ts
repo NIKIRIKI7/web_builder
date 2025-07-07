@@ -23,7 +23,7 @@ export const appShowcaseHeroDefinition: UiComponentDefinition = {
     ctaPrimaryUrl: '#',
     ctaSecondaryText: 'Request a Demo',
     ctaSecondaryUrl: '#',
-    imageUrl: 'https://source.unsplash.com/random/1200x800?app,dashboard',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s',
   },
   defaultStyles: {
     backgroundColor: '#ffffff',

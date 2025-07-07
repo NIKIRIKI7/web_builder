@@ -19,7 +19,7 @@ export const imageTextSplitDefinition: UiComponentDefinition = {
   defaultProps: {
     title: 'Discover Our Features',
     text: 'Our platform provides a comprehensive suite of tools designed to boost your productivity. From advanced analytics to seamless integrations, we have everything you need to succeed.',
-    imageUrl: 'https://source.unsplash.com/random/800x600?nature,water',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s',
     ctaText: 'Learn More',
     ctaUrl: '#',
   },

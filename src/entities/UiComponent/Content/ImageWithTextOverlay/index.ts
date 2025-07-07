@@ -19,7 +19,7 @@ export const imageWithTextOverlayDefinition: UiComponentDefinition = {
   defaultProps: {
     title: 'Boldly Go',
     subtitle: 'Explore new horizons with our cutting-edge solutions.',
-    imageUrl: 'https://source.unsplash.com/random/1200x800?space,stars',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s',
   },
   defaultStyles: {
     paddingTop: '120px',

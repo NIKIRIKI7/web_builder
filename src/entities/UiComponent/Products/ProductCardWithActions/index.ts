@@ -17,7 +17,7 @@ export const productCardWithActionsDefinition: UiComponentDefinition = {
   component: markRaw(defineAsyncComponent(() => import('./ProductCardWithActions.vue'))),
   staticCss,
   defaultProps: {
-    imageUrl: 'https://source.unsplash.com/random/400x400?product,backpack',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s',
     name: 'Adventure Backpack',
     price: 79,
     url: '#',

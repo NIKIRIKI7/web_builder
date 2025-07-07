@@ -21,10 +21,10 @@ export const featuredProductsGridDefinition: UiComponentDefinition = {
     viewAllText: 'View All',
     viewAllUrl: '#',
     products: [
-      { id: 1, imageUrl: 'https://source.unsplash.com/random/400x400?product,headphone', name: 'BLACK HEADPHONE ONE', price: 29, badgeText: 'NEW', url: '#' },
-      { id: 2, imageUrl: 'https://source.unsplash.com/random/400x400?product,speaker', name: 'SPEAKER BEATS PILL', price: 199, badgeText: 'NEW', url: '#' },
-      { id: 3, imageUrl: 'https://source.unsplash.com/random/400x400?product,airpods', name: 'APPLE AIR PODS', price: 122, badgeText: 'NEW', url: '#' },
-      { id: 4, imageUrl: 'https://source.unsplash.com/random/400x400?product,smartwatch', name: 'SMART WATCH F9 NEGRO', price: 99, badgeText: 'NEW', url: '#' },
+      { id: 1, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', name: 'BLACK HEADPHONE ONE', price: 29, badgeText: 'NEW', url: '#' },
+      { id: 2, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', name: 'SPEAKER BEATS PILL', price: 199, badgeText: 'NEW', url: '#' },
+      { id: 3, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', name: 'APPLE AIR PODS', price: 122, badgeText: 'NEW', url: '#' },
+      { id: 4, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', name: 'SMART WATCH F9 NEGRO', price: 99, badgeText: 'NEW', url: '#' },
     ]
   },
   defaultStyles: {

@@ -19,10 +19,10 @@ export const salesGridDefinition: UiComponentDefinition = {
   defaultProps: {
     title: 'Hot Deals!',
     products: [
-      { id: 1, imageUrl: 'https://source.unsplash.com/random/400x400?product,shoes', name: 'Running Shoes', originalPrice: 120, salePrice: 89, url: '#' },
-      { id: 2, imageUrl: 'https://source.unsplash.com/random/400x400?product,camera', name: 'DSLR Camera Kit', originalPrice: 899, salePrice: 649, url: '#' },
-      { id: 3, imageUrl: 'https://source.unsplash.com/random/400x400?product,jeans', name: 'Designer Jeans', originalPrice: 95, salePrice: 49, url: '#' },
-      { id: 4, imageUrl: 'https://source.unsplash.com/random/400x400?product,headphone,white', name: 'Wireless Headphones', originalPrice: 199, salePrice: 149, url: '#' },
+      { id: 1, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', name: 'Running Shoes', originalPrice: 120, salePrice: 89, url: '#' },
+      { id: 2, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', name: 'DSLR Camera Kit', originalPrice: 899, salePrice: 649, url: '#' },
+      { id: 3, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', name: 'Designer Jeans', originalPrice: 95, salePrice: 49, url: '#' },
+      { id: 4, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', name: 'Wireless Headphones', originalPrice: 199, salePrice: 149, url: '#' },
     ],
   },
   defaultStyles: {

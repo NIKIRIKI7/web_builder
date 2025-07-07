@@ -20,11 +20,11 @@ export const cardCarouselDefinition: UiComponentDefinition = {
   runtimeScript,
   defaultProps: {
     cards: [
-      { id: 1, imageUrl: 'https://source.unsplash.com/random/400x300?article,tech', category: 'Technology', title: 'The Future of AI in Web Development', url: '#' },
-      { id: 2, imageUrl: 'https://source.unsplash.com/random/400x300?article,design', category: 'Design', title: '10 Principles of Modern UI/UX', url: '#' },
-      { id: 3, imageUrl: 'https://source.unsplash.com/random/400x300?article,business', category: 'Business', title: 'How to Scale Your Startup Effectively', url: '#' },
-      { id: 4, imageUrl: 'https://source.unsplash.com/random/400x300?article,code', category: 'Programming', title: 'A Deep Dive into Serverless Architecture', url: '#' },
-      { id: 5, imageUrl: 'https://source.unsplash.com/random/400x300?article,marketing', category: 'Marketing', title: 'Content is King: A 2025 Guide', url: '#' },
+      { id: 1, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', category: 'Technology', title: 'The Future of AI in Web Development', url: '#' },
+      { id: 2, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', category: 'Design', title: '10 Principles of Modern UI/UX', url: '#' },
+      { id: 3, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', category: 'Business', title: 'How to Scale Your Startup Effectively', url: '#' },
+      { id: 4, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', category: 'Programming', title: 'A Deep Dive into Serverless Architecture', url: '#' },
+      { id: 5, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s', category: 'Marketing', title: 'Content is King: A 2025 Guide', url: '#' },
     ],
   },
   defaultStyles: {

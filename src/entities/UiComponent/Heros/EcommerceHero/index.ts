@@ -21,7 +21,7 @@ export const ecommerceHeroDefinition: UiComponentDefinition = {
     subText: 'ARRIVALS',
     ctaText: 'GO SHOPPING',
     ctaUrl: '#',
-    imageUrl: 'https://source.unsplash.com/random/600x800?fashion,model',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd7ZNvEgS3zsUfFgu20Q_99R_qh_EHrhdhUA&s',
   },
   defaultStyles: {
     backgroundColor: '#f9f9f9',
