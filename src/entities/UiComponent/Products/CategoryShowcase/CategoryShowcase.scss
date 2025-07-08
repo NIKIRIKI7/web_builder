@@ -1,0 +1,65 @@
+.category-showcase {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: sans-serif;
+    &__title {
+        text-align: center;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 2.5rem;
+    }
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+    &__card {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 250px;
+        border-radius: 8px;
+        overflow: hidden;
+        text-decoration: none;
+        color: white;
+        transition: transform 0.3s;
+        @include on-event {
+            transform: scale(1.03);
+        }
+    }
+    &__background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        transition: transform 0.4s ease;
+        .category-showcase__card:hover & {
+            transform: scale(1.1);
+        }
+    }
+    &__scrim {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+        transition: background-color 0.3s;
+        z-index: 1;
+        .category-showcase__card:hover & {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+    }
+    &__name {
+        position: relative;
+        z-index: 2;
+        font-size: 1.8rem;
+        font-weight: 600;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+    }
+}

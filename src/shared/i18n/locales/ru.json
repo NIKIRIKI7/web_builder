@@ -113,6 +113,7 @@
       "products": "Товары",
       "productName": "Название товара",
       "price": "Цена",
+      "priceAsText": "Цена (как текст)",
       "badgeText": "Текст значка",
       "description": "Описание",
       "filters": "Фильтры",
@@ -128,7 +129,16 @@
       "topBarBgColor": "Цвет фона верхней панели",
       "topBarTextColor": "Цвет текста верхней панели",
       "utilityNavLinks": "Служебные ссылки",
-      "mainNavLinks": "Основные ссылки"
+      "mainNavLinks": "Основные ссылки",
+      "features": "Характеристики",
+      "featureName": "Название характеристики",
+      "productsToCompare": "Товары для сравнения",
+      "featureValues": "Значения характеристик",
+      "featureValue": "Значение характеристики",
+      "productFeatures": "Характеристики товара",
+      "featureText": "Текст характеристики",
+      "productCategories": "Категории товаров",
+      "categoryName": "Название категории"
     },
     "buttons": {
       "delete": "Удалить компонент",
@@ -190,7 +200,12 @@
       "horizontalProductCard": "Горизонтальная карточка товара",
       "productCardWithActions": "Карточка с быстрыми действиями",
       "productGridWithFilters": "Сетка товаров с фильтрами",
-      "salesGrid": "Сетка товаров с распродажей"
+      "salesGrid": "Сетка товаров с распродажей",
+      "productComparisonTable": "Таблица сравнения товаров",
+      "singleFeaturedProduct": "Выделенный товар",
+      "productListView": "Список товаров",
+      "categoryShowcase": "Витрина категорий",
+      "bestsellersCarousel": "Карусель бестселлеров"
     }
   },
   "buttons": {

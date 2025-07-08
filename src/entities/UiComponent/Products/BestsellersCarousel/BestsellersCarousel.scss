@@ -1,0 +1,103 @@
+.bestsellers-carousel {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 4rem;
+    font-family: sans-serif;
+
+    &__title {
+        text-align: center;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 2.5rem;
+    }
+
+    &__viewport {
+        overflow: hidden;
+    }
+
+    &__track {
+        display: flex;
+        gap: 1.5rem;
+        transition: transform 0.5s ease;
+    }
+
+    &__slide {
+        flex: 0 0 calc(25% - 1.125rem);
+        min-width: 0;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    &__card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    &__image-wrapper {
+        background-color: var(--color-bg-primary);
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+
+    &__image {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1/1;
+        object-fit: contain;
+        transition: transform 0.3s;
+        .bestsellers-carousel__slide:hover & {
+            transform: scale(1.05);
+        }
+    }
+
+    &__details {
+        text-align: center;
+    }
+
+    &__name {
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    &__price {
+        font-size: 1rem;
+        color: inherit;
+        opacity: 0.8;
+    }
+
+    &__btn {
+        @include carousel-arrow-button;
+        &--prev {
+            left: 0;
+        }
+        &--next {
+            right: 0;
+        }
+    }
+}
+
+@include responsive($laptop) {
+    .bestsellers-carousel__slide {
+        flex-basis: calc(33.333% - 1rem);
+    }
+}
+
+@include responsive($tablet) {
+    .bestsellers-carousel__slide {
+        flex-basis: calc(50% - 0.75rem);
+    }
+}
+
+@include responsive($mobile) {
+    .bestsellers-carousel {
+        padding: 0 2.5rem;
+    }
+    .bestsellers-carousel__slide {
+        flex-basis: 100%;
+    }
+}

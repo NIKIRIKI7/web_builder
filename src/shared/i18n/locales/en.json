@@ -113,6 +113,7 @@
       "products": "Products",
       "productName": "Product Name",
       "price": "Price",
+      "priceAsText": "Price (as text)",
       "badgeText": "Badge Text",
       "description": "Description",
       "filters": "Filters",
@@ -128,7 +129,16 @@
       "topBarBgColor": "Top Bar BG Color",
       "topBarTextColor": "Top Bar Text Color",
       "utilityNavLinks": "Utility Nav Links",
-      "mainNavLinks": "Main Nav Links"
+      "mainNavLinks": "Main Nav Links",
+      "features": "Features",
+      "featureName": "Feature Name",
+      "productsToCompare": "Products to Compare",
+      "featureValues": "Feature Values",
+      "featureValue": "Feature Value",
+      "productFeatures": "Product Features",
+      "featureText": "Feature Text",
+      "productCategories": "Product Categories",
+      "categoryName": "Category Name"
     },
     "buttons": {
       "delete": "Delete Component",
@@ -190,7 +200,12 @@
       "horizontalProductCard": "Horizontal Product Card",
       "productCardWithActions": "Product Card With Actions",
       "productGridWithFilters": "Product Grid With Filters",
-      "salesGrid": "Sales Grid"
+      "salesGrid": "Sales Grid",
+      "productComparisonTable": "Product Comparison Table",
+      "singleFeaturedProduct": "Single Featured Product",
+      "productListView": "Product List View",
+      "categoryShowcase": "Category Showcase",
+      "bestsellersCarousel": "Bestsellers Carousel"
     }
   },
   "buttons": {
