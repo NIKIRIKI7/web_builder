@@ -89,9 +89,4 @@ export const useLayoutStore = defineStore(
             executeMovePanel
         };
     },
-    {
-        persist: {
-            paths: ['isEditMode', 'layout']
-        }
-    }
 );
