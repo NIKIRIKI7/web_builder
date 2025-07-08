@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineProps<{
+  isOpen: boolean;
+}>();
+
 defineEmits<{
   close: [];
 }>();
@@ -6,11 +10,13 @@ defineEmits<{
 
 <template>
   <Teleport to="body">
-    <div class="base-modal" @mousedown.self="$emit('close')">
-      <div class="base-modal__container">
-        <slot></slot>
+    <Transition name="modal-fade">
+      <div v-if="isOpen" class="base-modal" @mousedown.self="$emit('close')">
+        <div class="base-modal__container">
+          <slot></slot>
+        </div>
       </div>
-    </div>
+    </Transition>
   </Teleport>
 </template>
 
@@ -36,5 +42,25 @@ defineEmits<{
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   padding: 24px 32px;
   overflow: visible;
+}
+
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+}
+
+.modal-fade-enter-active .base-modal__container,
+.modal-fade-leave-active .base-modal__container {
+  transition: transform 0.3s ease;
+}
+
+.modal-fade-enter-from .base-modal__container,
+.modal-fade-leave-to .base-modal__container {
+  transform: translateY(-20px) scale(0.98);
 }
 </style>

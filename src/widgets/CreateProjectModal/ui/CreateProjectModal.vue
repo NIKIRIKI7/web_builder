@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
 
 import TemplateCard from '@/entities/ProjectTemplate/ui/TemplateCard.vue';
 import { useI18nManager } from '@/shared/i18n/useI18nManager';
@@ -10,6 +10,7 @@ import { useModalStore } from '@/widgets/ModalManager/model/modalStore';
 const modalStore = useModalStore();
 const { t } = useI18nManager();
 const projectName = ref(t('dashboard.prompts.newProjectDefaultName'));
+const projectNameInput = ref<HTMLInputElement | null>(null);
 
 const allSelections = computed(() => [
   { id: null, name: t('dashboard.templates.blank'), canvasState: { componentInstances: [], selectedComponentInstanceId: null, isEditorOpen: false } },
@@ -22,6 +23,11 @@ const totalSelections = computed(() => allSelections.value.length);
 const currentSelection = computed(() => allSelections.value[currentIndex.value]);
 
 const isDisabled = computed(() => !projectName.value.trim());
+
+onMounted(async () => {
+  await nextTick();
+  projectNameInput.value?.focus();
+});
 
 function nextTemplate() {
   currentIndex.value = (currentIndex.value + 1) % totalSelections.value;
@@ -54,39 +60,39 @@ const handleCancel = () => {
       <div class="create-project-modal__section">
         <label class="create-project-modal__label" for="project-name-input">{{ t('dashboard.prompts.newProjectTitle') }}</label>
         <input
-          id="project-name-input"
-          v-model="projectName"
-          class="create-project-modal__input"
-          type="text"
-          autofocus
+            id="project-name-input"
+            ref="projectNameInput"
+            v-model="projectName"
+            class="create-project-modal__input"
+            type="text"
         />
       </div>
 
       <div class="create-project-modal__section">
         <div class="template-selector">
           <button
-            type="button"
-            class="template-selector__arrow-btn"
-            aria-label="Previous template"
-            @click="prevTemplate">
+              type="button"
+              class="template-selector__arrow-btn"
+              aria-label="Previous template"
+              @click="prevTemplate">
             <ArrowLeftIcon />
           </button>
           <div class="template-selector__card-container">
             <Transition name="fade" mode="out-in">
               <TemplateCard
-                :key="currentSelection.id ?? 'blank'"
-                :template="currentSelection.id === null ? null : currentSelection"
-                :is-active="true"
-                preview-height="120px"
-                class="template-selector__card"
+                  :key="currentSelection.id ?? 'blank'"
+                  :template="currentSelection.id === null ? null : currentSelection"
+                  :is-active="true"
+                  preview-height="120px"
+                  class="template-selector__card"
               />
             </Transition>
           </div>
           <button
-            type="button"
-            class="template-selector__arrow-btn"
-            aria-label="Next template"
-            @click="nextTemplate">
+              type="button"
+              class="template-selector__arrow-btn"
+              aria-label="Next template"
+              @click="nextTemplate">
             <ArrowRightIcon />
           </button>
         </div>

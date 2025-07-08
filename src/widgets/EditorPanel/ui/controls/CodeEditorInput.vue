@@ -1,25 +1,37 @@
 <script setup lang="ts">
 import { javascript } from '@codemirror/lang-javascript';
 import { oneDark } from '@codemirror/theme-one-dark';
+import { ref, watch } from 'vue';
 import { Codemirror } from 'vue-codemirror';
 
 import { debounce } from '@/shared/lib/utils';
 
-defineProps<{ modelValue: string }>();
+const props = defineProps<{ modelValue: string }>();
 const emit = defineEmits<{
   'update:modelValue': [value: string]
 }>();
 
+const localCode = ref(props.modelValue);
 const codeExtensions = [javascript(), oneDark];
 
 const debouncedCodeUpdate = debounce((code: string) => {
   emit('update:modelValue', code);
 }, 400);
+
+watch(localCode, (newCode) => {
+  debouncedCodeUpdate(newCode);
+});
+
+watch(() => props.modelValue, (newCode) => {
+  if (newCode !== localCode.value) {
+    localCode.value = newCode;
+  }
+});
 </script>
 
 <template>
   <Codemirror
-      :model-value="modelValue"
+      v-model="localCode"
       placeholder="Code goes here..."
       :style="{ height: '200px' }"
       :autofocus="true"
@@ -27,7 +39,6 @@ const debouncedCodeUpdate = debounce((code: string) => {
       :tab-size="2"
       :extensions="codeExtensions"
       class="code-editor-instance"
-      @update:model-value="debouncedCodeUpdate"
   />
 </template>
 

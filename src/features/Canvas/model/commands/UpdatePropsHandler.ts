@@ -12,7 +12,7 @@ export const UpdatePropsHandler: CommandHandler<UpdatePropsPayload> = {
     const canvasStore = useCanvasStore();
     const component = canvasStore.componentInstances.find(c => c.instanceId === payload.instanceId);
     if (component) {
-      component.props = { ...component.props, ...payload.newValues };
+      Object.assign(component.props, payload.newValues);
     }
   },
 };

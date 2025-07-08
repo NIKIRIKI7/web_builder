@@ -12,7 +12,7 @@ export const UpdateStylesHandler: CommandHandler<UpdateStylesPayload> = {
     const canvasStore = useCanvasStore();
     const component = canvasStore.componentInstances.find(c => c.instanceId === payload.instanceId);
     if (component) {
-      component.styles = { ...component.styles, ...payload.newValues };
+      Object.assign(component.styles, payload.newValues);
     }
   },
 };

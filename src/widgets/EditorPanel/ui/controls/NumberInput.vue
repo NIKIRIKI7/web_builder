@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue';
+
 import { debounce } from '@/shared/lib/utils';
 
 const props = withDefaults(defineProps<{
@@ -13,17 +15,28 @@ const emit = defineEmits<{
   'update:modelValue': [value: number]
 }>();
 
-const onInput = debounce((event: Event) => {
-  emit('update:modelValue', parseFloat((event.target as HTMLInputElement).value) || 0);
+const localValue = ref(props.modelValue);
+
+const debouncedUpdate = debounce((value: number) => {
+  emit('update:modelValue', value || 0);
 }, 300);
+
+watch(localValue, (newValue) => {
+  debouncedUpdate(newValue);
+});
+
+watch(() => props.modelValue, (newValue) => {
+  if (newValue !== localValue.value) {
+    localValue.value = newValue;
+  }
+});
 </script>
 <template>
   <div class="number-input-wrapper">
     <input
-        :value="props.modelValue"
+        v-model.number="localValue"
         type="number"
         class="editor-control__input number-input-wrapper__field"
-        @input="onInput"
     />
     <span v-if="unit" class="number-input-wrapper__unit">{{ unit }}</span>
   </div>
