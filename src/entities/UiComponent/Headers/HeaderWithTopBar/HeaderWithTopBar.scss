@@ -1,0 +1,116 @@
+.header-with-top-bar {
+  width: 100%;
+  font-family: sans-serif;
+
+  &__top-bar {
+    padding: 8px 16px;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  &__main {
+    border-top: 1px solid var(--color-border);
+  }
+
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    height: 60px;
+  }
+
+  &__logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  &__nav {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  &__link {
+    color: inherit;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+    @include on-event {
+      color: var(--color-accent);
+    }
+  }
+
+  &__cta {
+    padding: 0.5rem 1rem;
+    background-color: var(--color-accent);
+    color: var(--color-text-secondary);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    @include on-event {
+      background-color: var(--color-accent-hover);
+    }
+  }
+
+  &__burger-btn,
+  &__nav-mobile {
+    display: none;
+  }
+}
+
+@include responsive($tablet) {
+  .header-with-top-bar {
+    &__nav,
+    &__cta {
+      display: none;
+    }
+    &__burger-btn {
+      display: flex;
+      z-index: 101;
+      color: inherit;
+    }
+    &__nav-mobile {
+      display: flex;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(var(--color-bg-secondary-rgb), 0.95);
+      backdrop-filter: blur(5px);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      gap: 2rem;
+      z-index: 100;
+
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-100%);
+      transition: all $transition-duration ease;
+
+      &--is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .header-with-top-bar__link {
+        font-size: 1.5rem;
+      }
+      .header-with-top-bar__cta {
+        display: block;
+        font-size: 1.2rem;
+        padding: 0.75rem 1.5rem;
+      }
+    }
+  }
+}

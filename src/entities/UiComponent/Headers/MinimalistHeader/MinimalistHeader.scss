@@ -1,0 +1,66 @@
+.minimalist-header {
+    width: 100%;
+    font-family: sans-serif;
+
+    &__container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        height: 70px;
+    }
+
+    &__logo {
+        font-size: 1.8rem;
+        font-weight: 500;
+        letter-spacing: 1px;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    &__burger-btn {
+        display: flex;
+        z-index: 101;
+        color: inherit;
+        padding: 0.5rem;
+    }
+
+    &__nav-mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(var(--color-bg-secondary-rgb), 0.95);
+        backdrop-filter: blur(8px);
+        z-index: 100;
+        transition: all $transition-duration ease;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-100%);
+
+        &--is-open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+    }
+
+    &__link {
+        font-size: 2rem;
+        font-weight: 300;
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.3s;
+        @include on-event {
+            color: var(--color-accent);
+        }
+    }
+}
